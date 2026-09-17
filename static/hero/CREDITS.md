@@ -10,8 +10,8 @@ rebuild (`cd design-system && npm run build`). `.jpg`, `.jpeg`, `.png` and `.web
 actually uses.
 
 ## 01_revise — currently on the homepage
-- Earth’s curvature from 130,000 ft, shot from the EXCITE balloon; retouched to clear the balloon
-  and the payload arm out of the sky, leaving the horizon and the gondola deck
+- Earth’s curvature from 130,000 ft, shot from the EXCITE balloon; retouched down to a bare
+  horizon — the balloon, the payload arm and the gondola deck are all cleared away
 - Credit: NASA/GSFC (EXCITE, Kyle Helson), public domain; retouched
 - NASA ID: `GSFC2024EXCITEsViewSpace0001` — 1672×941 PNG, retouched from 01 below
 

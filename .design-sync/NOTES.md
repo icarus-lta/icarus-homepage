@@ -60,12 +60,14 @@
   default. To change the photo: edit SELECTED.txt, rebuild, re-sync.
 - SELECTED.txt names the file **without its extension**; the build resolves `.jpg`/`.jpeg`/`.png`/`.webp`, so a
   retouched PNG can replace a JPG without touching any code.
-- Currently `01_revise` - the user's retouch of `01-excite-balloon-stratosphere` (NASA/GSFC, EXCITE, Kyle Helson):
-  the balloon and the payload arm are painted out of the sky, leaving the diagonal horizon and the gondola deck.
-  Its `credits.json` entry sets `"position": "center bottom"` (the 2.28:1 band can hold either the top-right horizon
-  or the deck, not both - anchoring at the bottom keeps the deck and throws away only empty black sky) and
-  `"note": "retouched"`, which the build appends to the footer credit so an edited frame is never passed off as
-  NASA's own. Any entry can carry either field; `Hero` also takes `imagePosition` directly.
+- Currently `01_revise` - the user's retouch of `01-excite-balloon-stratosphere` (NASA/GSFC, EXCITE, Kyle Helson),
+  painted down to a bare horizon: balloon, payload arm and gondola deck all gone, so the frame is one diagonal limb
+  from bottom-left to top-right with black sky filling the left half. Its `credits.json` entry sets
+  `"position": "center"` - the diagonal runs corner to corner, so a symmetric slice of the 2.28:1 band is the only
+  crop that keeps the whole line - and `"note": "retouched"`, which the build appends to the footer credit so an
+  edited frame is never passed off as NASA's own. Any entry can carry either field; `Hero` also takes
+  `imagePosition` directly. (An earlier revision kept the deck and wanted `"center bottom"`; re-check the anchor
+  whenever the file is replaced, because the right answer follows the composition.)
 - Hero encoding: native width (no downscale), WebP quality 90. Quality 72 banded visibly on the dark sky gradient.
 - **Resolution ceiling**: `01_revise` is 1672px wide - fine to ~1700px, upscaled 1.15x at 1920 and 1.5x at 2560, which
   is mostly invisible on this frame because the sky is a smooth gradient and only the deck carries fine detail. If a
