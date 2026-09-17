@@ -27,7 +27,9 @@ const { SiteHeader, Hero, AltitudeScrollSection, EnduranceScrollSection,
 
 **That list is the whole homepage.** It comes from the customer's own signed-off wireframe (six sections: hero, the two scroll scenes, missions, roadmap, closing), so don't add to it. Nothing sits between the hero photograph and the first scroll scene either - no figure row, no eyebrow, no caption. `StatBar` and `TechCards` still ship for subpages and campaign pages; neither belongs on the homepage.
 
-Both scroll sections lead with their heading **above** the animation frame, full width - the heading introduces the scene, it does not sit beside it.
+Both scroll sections lead with their heading **above** the animation frame, full width - the heading introduces the scene, it does not sit beside it. `AltitudeScrollSection` carries no eyebrow: it is the first thing under the hero, so its title is the page's second display heading and stands alone.
+
+The hero photograph does not end on an edge - it fades over its bottom 224-288px into `space-900`, the navy `AltitudeScrollSection` paints, so the two meet seamlessly. If you ever change the tone of the section directly under the hero, change that fade with it.
 
 Subpages (Info, Technology, Career, Contact) use the same shell with `PageHero` in place of `Hero`, then `Section` blocks, then `ContactCTA` and `SiteFooter`.
 

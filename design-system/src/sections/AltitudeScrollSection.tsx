@@ -122,7 +122,7 @@ function CloudMark({ flip = false }: { flip?: boolean }) {
  */
 export function AltitudeScrollSection({
   id = 'why-20km',
-  eyebrow = 'WHY 20 KM',
+  eyebrow,
   title = 'The layer between orbit and the ground',
   description = 'Solve Communication Bottleneck between LEO and ground',
   rowLabels = DEFAULT_ROW_LABELS,
@@ -147,10 +147,11 @@ export function AltitudeScrollSection({
 
   const scene = (
     <div className={containerClass}>
-      {/* the heading introduces the scene, so it sits above the frame rather than beside it */}
-      <div className="max-w-4xl">
+      {/* The display heading the photograph runs into: it introduces the scene, so it sits above
+          the frame, and it carries no eyebrow - it is the first thing under the hero. */}
+      <div className="max-w-6xl">
         {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">{title}</h2>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight">{title}</h2>
         {description ? <p className="mt-4 text-base md:text-lg text-mist leading-relaxed">{description}</p> : null}
       </div>
 

@@ -85,8 +85,10 @@ export function Hero({
           on wide screens, up from the bottom once the crop is too narrow to keep sky beside it. */}
       <div className="md:hidden absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-space-950 via-space-950/80 to-transparent" />
       <div className="hidden md:block absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-space-950 via-space-950/50 to-transparent" />
-      {/* the image dissolves into the page rather than ending on a hard edge */}
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-space-950" />
+      {/* The photograph dissolves into the band that follows it rather than ending on an edge.
+          It fades to space-900, the navy the first scroll section paints, so the two meet with
+          no seam - keep that in step if the section under the hero ever changes tone. */}
+      <div className="absolute inset-x-0 bottom-0 h-56 md:h-72 bg-gradient-to-b from-transparent via-space-950/80 to-space-900" />
       <div
         className={cx(
           containerClass,
