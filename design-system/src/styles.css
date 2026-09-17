@@ -54,7 +54,7 @@
 @source inline("{border,border-0,border-2,border-t,border-b,border-l,border-r,border-t-2,border-t-4,border-b-2,border-l-2,divide-y,ring-1}");
 
 @source inline("{static,relative,absolute,fixed,sticky,inset-0,inset-x-0,top-0,right-0,bottom-0,left-0,top-4,right-4,bottom-4,left-4,top-1/2,left-1/2,-translate-x-1/2,-translate-y-1/2,z-0,z-10,z-20,z-40,z-50}");
-@source inline("{overflow-hidden,overflow-x-hidden,overflow-y-auto,overflow-x-auto,object-cover,object-contain,object-center,pointer-events-none,cursor-pointer,backdrop-blur-sm,backdrop-blur-md,backdrop-blur-lg,mix-blend-screen}");
+@source inline("{overflow-hidden,overflow-x-clip,overflow-x-hidden,overflow-y-auto,overflow-x-auto,object-cover,object-contain,object-top,object-bottom,object-center,pointer-events-none,cursor-pointer,backdrop-blur-sm,backdrop-blur-md,backdrop-blur-lg,mix-blend-screen}");
 
 @source inline("{transition,transition-all,transition-colors,transition-opacity,transition-transform,transition-none}");
 @source inline("duration-{150,300,500,700,1000}");

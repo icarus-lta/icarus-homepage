@@ -5,12 +5,13 @@ ICARUS LTA builds uncrewed airships that hold station at 20 km. The system is **
 ## Setup
 - No provider or wrapper. `styles.css` sets the page: `bg-space-950`, `text-mist`, Pretendard, smooth scrolling.
 - Every section component paints its own background. If you build a bare block of your own, put it on `bg-space-950` (or `bg-space-900`) so white text stays readable.
+- **Never wrap a page in `overflow-x-hidden` (or any `overflow-hidden` ancestor).** It turns the wrapper into a scroll container, which silently stops `position: sticky` from pinning, and the scroll-driven sections then slide past instead of animating. Use `overflow-x-clip`.
 - `SiteHeader` is `position="fixed"` and floats over the page, so the first section must clear it: `Hero` and `PageHero` already carry that top padding. Any other first section needs `pt-32`.
 
 ```jsx
 const { SiteHeader, Hero, StatBar, AltitudeScrollSection, EnduranceScrollSection,
         TechCards, MissionGrid, RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
-<div className="overflow-x-hidden">
+<div className="overflow-x-clip">
   <SiteHeader />
   <Hero />
   <StatBar />
@@ -28,7 +29,7 @@ Subpages (Info, Technology, Career, Contact) use the same shell with `PageHero` 
 
 ## Motion
 - **Entrance**: wrap anything in `Reveal` - it fades and lifts the content when it scrolls into view. Stagger a row with `delay={0|100|200}`. `TechCards`, `MissionGrid` and `RoadmapTimeline` already do this internally.
-- **Scroll-driven scenes**: `useScrollProgress()` returns `{ref, progress}` - attach `ref` to a tall section and drive anything from `progress` (0 to 1). `ramp(progress, from, to)` gives an eased 0..1 slice of it. That is how both scroll sections work.
+- **Scroll-driven scenes**: `useScrollProgress()` returns `{ref, progress}` - attach `ref` to a tall section and drive anything from `progress` (0 to 1). `ramp(progress, from, to)` gives an eased 0..1 slice of it. That is how both scroll sections work: a tall `<section>` holding a `sticky top-0 h-screen` scene. Keep the sticky box exactly `h-screen` (a sticky element taller than the viewport never pins) and keep every ancestor free of `overflow-hidden`.
 - Both scroll sections accept `progress={0..1}`, which freezes one frame instead of following the scroll - use it for a static mock-up, never on a live page.
 - Keep motion restrained: opacity and small translations, `duration-500`/`700`, `ease-out`. The only looping animation is the airship's slow `animate-float`.
 

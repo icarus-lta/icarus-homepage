@@ -10,7 +10,7 @@ export interface AltitudeScrollSectionProps {
   eyebrow?: ReactNode;
   title?: ReactNode;
   description?: ReactNode;
-  /** The four beats of the animation, in order. */
+  /** Optional captions beside the scene, one per beat. Empty by default - the scene speaks for itself. */
   steps?: Array<{ label: string; caption: string }>;
   /** Labels on the three altitude rows. */
   rowLabels?: { leo: string; icarus: string; ground: string };
@@ -28,13 +28,6 @@ export interface AltitudeScrollSectionProps {
   /** Extra classes appended to the <section>. */
   className?: string;
 }
-
-const DEFAULT_STEPS = [
-  { label: 'Satellites talk straight to the ground', caption: 'Every bit crosses 500 km and back.' },
-  { label: 'That long hop is the bottleneck', caption: 'Latency, power and cost all scale with distance.' },
-  { label: 'ICARUS enters at 20 km', caption: 'A relay station that holds its position.' },
-  { label: 'Laser up, radio down', caption: 'Optical link to the satellite, RF link to the ground.' },
-];
 
 const DEFAULT_ROW_LABELS = { leo: '500 KM · LEO SATELLITE', icarus: '20 KM · ICARUS', ground: '0 KM · GROUND STATION' };
 const DEFAULT_LINK_LABELS = { direct: 'DIRECT LINK', laser: 'LASER LINK', radio: 'RF LINK' };
@@ -84,7 +77,7 @@ export function AltitudeScrollSection({
   eyebrow = 'WHY 20 KM',
   title = 'The layer between orbit and the ground',
   description = 'Solve Communication Bottleneck between LEO and ground',
-  steps = DEFAULT_STEPS,
+  steps = [],
   rowLabels = DEFAULT_ROW_LABELS,
   linkLabels = DEFAULT_LINK_LABELS,
   progress,
@@ -118,38 +111,40 @@ export function AltitudeScrollSection({
           {eyebrow ? <Eyebrow className="mb-5">{eyebrow}</Eyebrow> : null}
           <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">{title}</h2>
           {description ? <p className="mt-6 text-base text-mist leading-relaxed">{description}</p> : null}
-          <ol className="mt-10 space-y-4">
-            {steps.map((step, i) => (
-              <li key={step.label} className="flex gap-4">
-                <span
-                  className={cx(
-                    'font-mono text-xs pt-1 tabular-nums transition-colors duration-500',
-                    i === activeStep ? 'text-ice' : 'text-mist-dim/60',
-                  )}
-                >
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span>
+          {steps.length ? (
+            <ol className="mt-10 space-y-4">
+              {steps.map((step, i) => (
+                <li key={step.label} className="flex gap-4">
                   <span
                     className={cx(
-                      'block text-sm font-medium transition-colors duration-500',
-                      i === activeStep ? 'text-white' : 'text-mist-dim',
+                      'font-mono text-xs pt-1 tabular-nums transition-colors duration-500',
+                      i === activeStep ? 'text-ice' : 'text-mist-dim/60',
                     )}
                   >
-                    {step.label}
+                    {String(i + 1).padStart(2, '0')}
                   </span>
-                  <span
-                    className={cx(
-                      'block text-sm mt-1 transition-opacity duration-500',
-                      i === activeStep ? 'text-mist opacity-100' : 'text-mist-dim opacity-50',
-                    )}
-                  >
-                    {step.caption}
+                  <span>
+                    <span
+                      className={cx(
+                        'block text-sm font-medium transition-colors duration-500',
+                        i === activeStep ? 'text-white' : 'text-mist-dim',
+                      )}
+                    >
+                      {step.label}
+                    </span>
+                    <span
+                      className={cx(
+                        'block text-sm mt-1 transition-opacity duration-500',
+                        i === activeStep ? 'text-mist opacity-100' : 'text-mist-dim opacity-50',
+                      )}
+                    >
+                      {step.caption}
+                    </span>
                   </span>
-                </span>
-              </li>
-            ))}
-          </ol>
+                </li>
+              ))}
+            </ol>
+          ) : null}
         </div>
 
         <div className="relative rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[440px] md:h-[540px]">
@@ -289,7 +284,9 @@ export function AltitudeScrollSection({
 
   return (
     <section id={id} ref={ref} className={cx('relative bg-space-900', className)} style={{ height: trackHeight }}>
-      <div className="sticky top-0 min-h-screen flex items-center py-24">{scene}</div>
+      {/* h-screen, not min-h-screen: a sticky box taller than the viewport never pins at the top.
+          The page wrapper must not be a scroll container either - use overflow-x-clip, never -hidden. */}
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">{scene}</div>
     </section>
   );
 }

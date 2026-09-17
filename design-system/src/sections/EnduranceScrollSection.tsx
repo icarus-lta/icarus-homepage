@@ -10,7 +10,7 @@ export interface EnduranceScrollSectionProps {
   eyebrow?: ReactNode;
   title?: ReactNode;
   description?: ReactNode;
-  /** The four beats of the animation, in order. */
+  /** Optional captions beside the scene, one per beat. Empty by default - the scene speaks for itself. */
   steps?: Array<{ label: string; caption: string }>;
   /** Duration ladder under the battery. */
   ladder?: string[];
@@ -63,7 +63,7 @@ export function EnduranceScrollSection({
   eyebrow = 'ENDURANCE',
   title = 'It charges itself, and stays',
   description = 'Above the weather the sun is reliable. Solar arrays charge by day, batteries fly it through the night, and the loop repeats without refuelling.',
-  steps = DEFAULT_STEPS,
+  steps = [],
   ladder = DEFAULT_LADDER,
   progress,
   trackHeight = '300vh',
@@ -90,7 +90,7 @@ export function EnduranceScrollSection({
           {eyebrow ? <Eyebrow className="mb-5">{eyebrow}</Eyebrow> : null}
           <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">{title}</h2>
           {description ? <p className="mt-6 text-base text-mist leading-relaxed">{description}</p> : null}
-          <ol className="mt-10 space-y-4">
+          <ol className={cx('mt-10 space-y-4', !steps.length && 'hidden')}>
             {steps.map((step, i) => (
               <li key={step.label} className="flex gap-4">
                 <span
@@ -218,7 +218,8 @@ export function EnduranceScrollSection({
 
   return (
     <section id={id} ref={ref} className={cx('relative bg-space-950', className)} style={{ height: trackHeight }}>
-      <div className="sticky top-0 min-h-screen flex items-center py-24">{scene}</div>
+      {/* h-screen, not min-h-screen: a sticky box taller than the viewport never pins at the top. */}
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">{scene}</div>
     </section>
   );
 }
