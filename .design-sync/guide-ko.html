@@ -102,9 +102,7 @@ ReactDOM.createRoot(document.getElementById(<span class="k">'ds-root'</span>)).r
 <div class="note stop"><strong>페이지를 <code>overflow-x-hidden</code>으로 감싸지 마세요.</strong> 그 클래스는 감싼 요소를 스크롤 컨테이너로 바꿔 버리고, 그러면 <code>position: sticky</code>가 조용히 동작을 멈춥니다. 스크롤 애니메이션 두 개가 그냥 지나가 버리는데 에러는 하나도 안 납니다. 반드시 <code>overflow-x-clip</code>을 쓰세요. 중간에 <code>overflow-hidden</code>이 들어간 부모가 하나라도 있으면 같은 증상이 납니다.</div>
 <div class="note"><strong>좌우 여백은 페이지 전체가 하나로 통일되어 있습니다.</strong> 모든 띠는 화면 끝까지 꽉 차고, 그 안의 내용만 공통 여백선에 맞춥니다. 그 여백이 <code>window.IcarusDS.containerClass</code>(<code>w-full mx-auto px-6 md:px-10 lg:px-16 2xl:px-24</code>)입니다. 직접 만드는 띠에도 이 클래스를 넣으면 헤더·히어로 제목·사진과 같은 선에 맞습니다. <code>max-w-6xl</code> 같은 좁은 칸으로 다시 가운데 정렬하지 마세요 — 넓은 화면에서 글자만 가운데 몰려 사진과 어긋나 보입니다.</div>
 <div class="note warn"><strong>위 목록이 홈페이지 전부입니다.</strong> 확정된 와이어프레임의 6개 섹션(히어로 · 스크롤 애니메이션 2개 · 임무 · 로드맵 · 마무리) 그대로이며, 여기에 섹션을 더하지 않습니다. 히어로 사진과 첫 애니메이션 사이도 비워 둡니다 — 수치 띠도, 라벨도, 설명 문장도 넣지 않습니다. <code>StatBar</code>와 <code>TechCards</code>는 여전히 제공되지만 자리는 서브페이지·캠페인 페이지이지 홈페이지가 아닙니다.</div>
-<div class="note"><strong>두 애니메이션 섹션은 제목이 프레임 <u>위</u>에 옵니다.</strong> 제목이 그 장면을 설명하는 대제목이고, 그 아래 전체 폭 프레임에서 애니메이션이 재생됩니다. 옆에 나란히 두지 마세요. <code>AltitudeScrollSection</code>에는 eyebrow를 붙이지 않습니다 — 히어로 사진 바로 아래 오는 페이지의 두 번째 대제목이라 단독으로 섭니다.</div>
-<div class="note"><strong>히어로 사진은 선으로 끊기지 않습니다.</strong> 아래쪽 224~288px가 <code>space-900</code>(바로 다음 섹션의 남색)으로 서서히 녹아들어 이음매가 보이지 않습니다. 히어로 바로 밑 섹션의 배경색을 바꾸면 이 그라데이션도 같이 바꿔야 합니다.</div>
-<p>서브페이지(Info, Technology, Career, Contact)는 같은 껍데기에서 <code>Hero</code> 자리에 <code>PageHero</code>를 넣고, 그 아래 <code>Section</code> 블록들을 쌓은 뒤 <code>ContactCTA</code>와 <code>SiteFooter</code>로 닫습니다.</p>
+<div class="note"><strong>두 애니메이션 섹션은 제목이 프레임 <u>위</u>에 옵니다.</strong> 제목이 그 장면을 설명하는 대제목이고, 그 아래 전체 폭 프레임에서 애니메이션이 재생됩니다. 옆에 나란히 두지 마세요. <code>AltitudeScrollSection</code>에는 eyebrow를 붙이지 않습니다 — 히어로 사진 바로 아래 오는 페이지의 두 번째 대제목이라 단독으로 섭니다.</div><p>서브페이지(Info, Technology, Career, Contact)는 같은 껍데기에서 <code>Hero</code> 자리에 <code>PageHero</code>를 넣고, 그 아래 <code>Section</code> 블록들을 쌓은 뒤 <code>ContactCTA</code>와 <code>SiteFooter</code>로 닫습니다.</p>
 </section>
 
 <section>
