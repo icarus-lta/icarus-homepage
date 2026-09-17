@@ -31,6 +31,11 @@
   `generated/assets/` (mtime-cached; the 21.5 MB about_img.gif takes ~55 s cold), esbuild inlines them as data URLs into
   `dist/index.js`, tsc emits `.d.ts`, the Tailwind CLI compiles `dist/styles.css`.
 - Converter: `node .ds-sync/package-build.mjs --config .design-sync/config.json --node-modules design-system/node_modules --out ./ds-bundle`.
+- **`.design-sync/guide-ko.html` is the Korean guide the Design project shows** (the user reads this, not `README.md`).
+  It is NOT produced by the converter: copy it in and upload it by hand every time the English docs change -
+  `cp .design-sync/guide-ko.html "ds-bundle/ICARUS 디자인시스템 가이드.html"`, then `write_files` that path. It drifted
+  once already (still described the old hero, the centred `Section`, and `overflow-x-hidden`), so re-read it against
+  `ds-bundle/README.md` whenever conventions.md or a component's JSDoc changes.
 - Re-sync driver: `node .ds-sync/resync.mjs --config .design-sync/config.json --node-modules design-system/node_modules
   --out ./ds-bundle --remote <anchor>`. `--node-modules` must point at `design-system/node_modules` (react lives there);
   `.ds-sync/node_modules` only holds the harness and fails with "react not found under --node-modules".

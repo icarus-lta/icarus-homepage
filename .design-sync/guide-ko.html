@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICARUS 디자인 시스템 가이드 (한글)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--space-950:#02030a;--space-900:#050a18;--space-800:#071331;--space-700:#0e2a5e;--ice:#8fd8ff;--ice-100:#eef6ff;--ice-600:#4aa8e0;--mist:#b9c9e2;--mist-dim:#8095b5;--sans:Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--space-950);color:var(--mist);font-family:var(--sans);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+.wrap{max-width:900px;margin:0 auto;padding:56px 24px 96px}
+a{color:var(--ice);text-decoration:none;border-bottom:1px solid rgba(143,216,255,.35)}
+a:hover{color:var(--ice-100);border-bottom-color:var(--ice-100)}
+.lab{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--ice)}
+h1{margin:14px 0 0;font-size:clamp(30px,5vw,44px);line-height:1.15;font-weight:700;color:#fff;letter-spacing:-.02em}
+.sub{margin:18px 0 0;font-size:17px;max-width:60ch}
+h2{margin:0 0 20px;font-size:clamp(21px,3vw,26px);font-weight:700;color:#fff;letter-spacing:-.01em}
+h3{margin:32px 0 10px;font-size:16px;font-weight:600;color:#fff}
+section{margin-top:64px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1)}
+p{margin:0 0 14px;max-width:70ch}
+ul{margin:0 0 14px;padding-left:20px;max-width:70ch}
+li{margin-bottom:8px}
+li::marker{color:var(--mist-dim)}
+code{font-family:var(--mono);font-size:.88em;color:var(--ice-100);background:rgba(255,255,255,.07);border-radius:5px;padding:2px 6px;overflow-wrap:anywhere}
+pre{margin:18px 0;padding:20px;background:var(--space-900);border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow-x:auto}
+pre code{background:none;padding:0;color:var(--mist);font-size:13px;line-height:1.7;color:#d8e4f5}
+pre .c{color:var(--mist-dim)}
+pre .k{color:var(--ice)}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+th{text-align:left;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--mist-dim);font-weight:500;padding:0 14px 10px 0;border-bottom:1px solid rgba(255,255,255,.15)}
+td{padding:12px 14px 12px 0;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top;overflow-wrap:anywhere}
+td:first-child{white-space:nowrap}
+td.n{font-family:var(--mono);font-size:13px;color:#fff}
+.note{margin:18px 0;padding:18px 20px;border:1px solid rgba(143,216,255,.3);background:rgba(143,216,255,.07);border-radius:14px;font-size:15px}
+.note strong{color:var(--ice-100)}
+.warn{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04)}
+.stop{border-color:rgba(255,160,160,.35);background:rgba(255,160,160,.07)}
+.stop strong{color:#ffd9d9}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px;margin:24px 0}
+.card{padding:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);border-radius:16px}
+.card .t{color:#fff;font-weight:600;font-size:15px;margin-bottom:6px}
+.card p{margin:0;font-size:14px;color:var(--mist)}
+.sw{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--mist)}
+.dot{width:16px;height:16px;border-radius:99px;border:1px solid rgba(255,255,255,.2);flex:none}
+.en{color:var(--mist-dim);font-size:13px;font-family:var(--mono)}
+footer{margin-top:72px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:var(--mist-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="lab">ICARUS DESIGN SYSTEM · 한글 안내서</div>
+<h1>ICARUS 디자인 시스템으로<br>페이지 만들기</h1>
+<p class="sub">이 프로젝트에 들어 있는 영문 문서(<code>README.md</code>, 각 컴포넌트의 <code>.prompt.md</code>, <code>.d.ts</code>)를 한글로 정리한 문서입니다. 코드·클래스·컴포넌트 이름은 실제로 그렇게 입력해야 동작하므로 원문 그대로 두었습니다.</p>
+</header>
+
+<section>
+<h2>0. 먼저 알아야 할 네 가지</h2>
+<div class="cards">
+<div class="card"><div class="t">다크 전용</div><p>거의 검정에 가까운 우주 배경 하나만 씁니다. 라이트 테마는 없고, 색을 반전시키면 안 됩니다.</p></div>
+<div class="card"><div class="t">액센트는 아이스 블루 하나</div><p>강조색은 <code>ice</code> 계열 하나뿐입니다. 다른 색을 새로 만들지 않습니다.</p></div>
+<div class="card"><div class="t">영문 카피가 기본</div><p>컴포넌트 기본 문구는 모두 영어입니다. 한글 카피는 요청이 있을 때만 넣습니다.</p></div>
+<div class="card"><div class="t">섹션이 배경을 스스로 칠함</div><p>모든 섹션 컴포넌트는 자기 배경을 가집니다. 직접 만든 블록은 <code>bg-space-950</code> 위에 올려야 흰 글씨가 읽힙니다.</p></div>
+</div>
+<p>서체는 본문 <strong style="color:#fff">Pretendard</strong>, 숫자·라벨은 <strong style="color:#fff">IBM Plex Mono</strong>입니다. 둘 다 스타일시트에서 CDN으로 불러오므로 따로 설치할 것이 없습니다.</p>
+<p class="en">회사 설명: ICARUS LTA는 고도 20 km 성층권에 머무르는 무인 비행선을 만듭니다.</p>
+</section>
+
+<section>
+<h2>1. 페이지에 붙이기</h2>
+<p>React가 먼저 로드된 페이지에 아래 두 줄만 추가합니다. 프로바이더나 래퍼 컴포넌트는 없습니다.</p>
+<pre><code>&lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;script src="_ds_bundle.js"&gt;&lt;/script&gt;</code></pre>
+<ul>
+<li><code>styles.css</code> 한 파일만 링크하면 됩니다. 토큰·폰트·컴포넌트 스타일(<code>_ds_bundle.css</code>)을 모두 <code>@import</code> 합니다.</li>
+<li>이 스타일시트가 페이지 기본값도 정합니다 — 배경 <code>bg-space-950</code>, 본문색 <code>text-mist</code>, Pretendard, 부드러운 스크롤.</li>
+<li>컴포넌트는 <code>window.IcarusDS.*</code>에 들어옵니다. 마운트는 호스트 페이지의 React 루트가 아니라 별도 노드(예: <code>&lt;div id="ds-root"&gt;</code>)에 하세요. 두 트리가 충돌합니다.</li>
+</ul>
+<pre><code><span class="c">// 컴포넌트 꺼내 쓰는 방법</span>
+<span class="k">const</span> { AltitudeScrollSection } = window.IcarusDS;
+ReactDOM.createRoot(document.getElementById(<span class="k">'ds-root'</span>)).render(&lt;AltitudeScrollSection /&gt;);</code></pre>
+<div class="note"><strong>SiteHeader는 페이지 위에 떠 있습니다.</strong> <code>SiteHeader</code>는 기본이 <code>position="fixed"</code>입니다. <code>Hero</code>는 이걸 전제로 만들어져 <strong>사진이 헤더 밑까지 올라갑니다</strong>(일부러 그렇게 둔 것이니 여백을 넣지 마세요). <code>PageHero</code>는 반대로 헤더를 피할 상단 여백을 자기가 가지고 있습니다. 그 둘이 아닌 다른 컴포넌트를 첫 섹션으로 쓸 때만 <code>pt-32</code>를 직접 넣습니다.</div>
+</section>
+
+<section>
+<h2>2. 홈페이지 조립 순서</h2>
+<p>기본 홈페이지는 이 순서로 쌓습니다.</p>
+<pre><code><span class="k">const</span> { SiteHeader, Hero, StatBar, AltitudeScrollSection, EnduranceScrollSection,
+        TechCards, MissionGrid, RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
+&lt;div className="overflow-x-clip"&gt;
+  &lt;SiteHeader /&gt;
+  &lt;Hero /&gt;
+  &lt;StatBar /&gt;
+  &lt;AltitudeScrollSection /&gt;      <span class="c">{/* 스크롤 연동: 비행선이 중간 layer로 진입해 중계 */}</span>
+  &lt;EnduranceScrollSection /&gt;     <span class="c">{/* 스크롤 연동: 주간 태양충전 / 야간 방전 / 수년간 체공 */}</span>
+  &lt;TechCards /&gt;
+  &lt;MissionGrid /&gt;
+  &lt;RoadmapTimeline /&gt;
+  &lt;ContactCTA /&gt;
+  &lt;SiteFooter /&gt;
+&lt;/div&gt;</code></pre>
+<div class="note stop"><strong>페이지를 <code>overflow-x-hidden</code>으로 감싸지 마세요.</strong> 그 클래스는 감싼 요소를 스크롤 컨테이너로 바꿔 버리고, 그러면 <code>position: sticky</code>가 조용히 동작을 멈춥니다. 스크롤 애니메이션 두 개가 그냥 지나가 버리는데 에러는 하나도 안 납니다. 반드시 <code>overflow-x-clip</code>을 쓰세요. 중간에 <code>overflow-hidden</code>이 들어간 부모가 하나라도 있으면 같은 증상이 납니다.</div>
+<div class="note"><strong>좌우 여백은 페이지 전체가 하나로 통일되어 있습니다.</strong> 모든 띠는 화면 끝까지 꽉 차고, 그 안의 내용만 공통 여백선에 맞춥니다. 그 여백이 <code>window.IcarusDS.containerClass</code>(<code>w-full mx-auto px-6 md:px-10 lg:px-16 2xl:px-24</code>)입니다. 직접 만드는 띠에도 이 클래스를 넣으면 헤더·히어로 제목·사진과 같은 선에 맞습니다. <code>max-w-6xl</code> 같은 좁은 칸으로 다시 가운데 정렬하지 마세요 — 넓은 화면에서 글자만 가운데 몰려 사진과 어긋나 보입니다.</div>
+<p>서브페이지(Info, Technology, Career, Contact)는 같은 껍데기에서 <code>Hero</code> 자리에 <code>PageHero</code>를 넣고, 그 아래 <code>Section</code> 블록들을 쌓은 뒤 <code>ContactCTA</code>와 <code>SiteFooter</code>로 닫습니다.</p>
+</section>
+
+<section>
+<h2>3. 컴포넌트 17개</h2>
+<h3>섹션 (sections)</h3>
+<table>
+<thead><tr><th>이름</th><th>역할</th></tr></thead>
+<tbody>
+<tr><td class="n">Hero</td><td>홈 첫 화면. 성층권 지평선 사진 한 장이 화면을 꽉 채우고, 큰 제목이 <strong style="color:#fff">사진 안쪽</strong> 빈 하늘에 놓입니다 — 넓은 화면에서는 지평선 왼쪽, 휴대폰에서는 사진 아래쪽. 제목 크기는 화면 폭에 비례해 변해서 어떤 창 크기에서도 지평선에 닿지 않습니다.</td></tr>
+<tr><td class="n">PageHero</td><td>서브페이지용 짧은 헤더. Info·Technology·Career·Contact에서 Hero 대신 씁니다. 페이지 라벨 + 제목 + 도입문이 어두운 띠 위에 놓이고, 고정 헤더를 피할 상단 여백을 자기가 가집니다.</td></tr>
+<tr><td class="n">StatBar</td><td>헤드라인 수치 띠(20 km / 30 days+ / 24/7). Hero 바로 아래 붙고, 첫 숫자가 페이지 공통 여백선에 딱 맞습니다.</td></tr>
+<tr><td class="n">AltitudeScrollSection</td><td>스크롤로 재생되는 "통신 병목" 장면. 처음에는 위성과 지상 기지국이 500 km를 사이에 두고 직접 통신하다가, ICARUS 비행선이 비어 있던 고도 20 km 층으로 들어와 경로를 넘겨받습니다 — 위성과는 <strong style="color:#fff">레이저</strong>, 지상과는 <strong style="color:#fff">전파(RF)</strong>.</td></tr>
+<tr><td class="n">EnduranceScrollSection</td><td>스크롤로 재생되는 체공 장면. 낮에는 태양광이 배터리를 채우고 밤에는 그 배터리로 버티며, 옆의 눈금이 1일에서 5년까지 올라갑니다.</td></tr>
+<tr><td class="n">TechCards</td><td>핵심 기술 3장 카드. 각 카드에 mono 번호·라벨·제목·본문.</td></tr>
+<tr><td class="n">MissionGrid</td><td>임무 유형 그리드. 각 항목은 얇은 상단 선 + 제목 + 한 줄 설명.</td></tr>
+<tr><td class="n">RoadmapTimeline</td><td>가로형 개발 일정. 얇은 트랙 위에 단계별 노드, 진행 중인 단계만 아이스색으로 점등.</td></tr>
+<tr><td class="n">ContactCTA</td><td>페이지를 닫는 문구 한 줄 + 연락 버튼. 별이 있는 네이비 띠 위에 가운데 정렬.</td></tr>
+</tbody>
+</table>
+<h3>기본 요소 (primitives)</h3>
+<table>
+<thead><tr><th>이름</th><th>역할</th></tr></thead>
+<tbody>
+<tr><td class="n">Section</td><td>사이트 공통 수직 리듬(<code>py-24</code>, <code>md:py-32</code>)을 가진 전체폭 띠. 내용은 페이지 공통 여백선에 맞춰지므로 헤더·사진과 같은 선에서 시작합니다. 새 섹션은 전부 이 안에 만드세요.</td></tr>
+<tr><td class="n">SectionHeading</td><td>섹션 머리 묶음 — 아이스색 eyebrow, 흰색 제목, 필요하면 설명 문단.</td></tr>
+<tr><td class="n">Eyebrow</td><td>제목 위에 붙는 작은 영문 대문자 모노 라벨(WHY 20KM, CORE TECHNOLOGY, ROADMAP 같은 것).</td></tr>
+<tr><td class="n">Button</td><td>알약 모양 버튼. <code>primary</code>(아이스 채움)가 화면의 주 행동, <code>secondary</code>(얇은 테두리)는 그 옆, <code>ghost</code>는 조용한 페이지 내 동작.</td></tr>
+<tr><td class="n">Reveal</td><td>감싼 내용이 화면에 들어올 때 살짝 올라오며 페이드인. 섹션이나 카드에 두르면 됩니다.</td></tr>
+</tbody>
+</table>
+<h3>레이아웃 · 미디어</h3>
+<table>
+<thead><tr><th>이름</th><th>역할</th></tr></thead>
+<tbody>
+<tr><td class="n">SiteHeader</td><td>반투명 상단바. 왼쪽 ICARUS 워드마크, 오른쪽 페이지 링크와 아이스색 연락 버튼. 기본이 고정(fixed)이라 페이지 위에 떠 있습니다.</td></tr>
+<tr><td class="n">SiteFooter</td><td>마무리 바. 왼쪽에 워드마크·법인명·주소, 오른쪽에 페이지 링크, 얇은 선 아래 저작권과 사진 크레딧 한 줄.</td></tr>
+<tr><td class="n">EarthLimb</td><td>고도 20 km에서 본 지구를 CSS로만 그린 전체폭 배경 — 검은 우주, 별, 지구의 어두운 테두리. <code>Hero</code>에 <code>backgroundImage={null}</code>을 주면 사진 대신 이것이 나옵니다.</td></tr>
+</tbody>
+</table>
+<div class="note">문구는 거의 다 props로 바꿀 수 있습니다. 제목은 <code>title</code>/<code>titleLines</code>, 라벨은 <code>eyebrow</code>, 목록형 데이터는 <code>items</code>/<code>steps</code>/<code>phases</code>입니다. 정확한 props와 예시는 <code>components/&lt;그룹&gt;/&lt;이름&gt;/&lt;이름&gt;.prompt.md</code>와 같은 폴더의 <code>.d.ts</code>에 있습니다.</div>
+</section>
+
+<section>
+<h2>4. 모션</h2>
+<ul>
+<li><strong style="color:#fff">등장</strong> — 무엇이든 <code>Reveal</code>로 감싸면 스크롤 진입 시 페이드되며 올라옵니다. 한 줄에 여러 개일 때는 <code>delay={0|100|200}</code>로 시차를 줍니다. <code>TechCards</code>, <code>MissionGrid</code>, <code>RoadmapTimeline</code>은 내부에서 이미 적용하고 있습니다.</li>
+<li><strong style="color:#fff">스크롤 연동 장면</strong> — <code>useScrollProgress()</code>가 <code>{ref, progress}</code>를 돌려줍니다. <code>ref</code>를 높이가 큰 섹션에 붙이고 <code>progress</code>(0~1)로 원하는 것을 움직입니다. <code>ramp(progress, from, to)</code>는 그 구간만 잘라 이징한 0~1 값을 줍니다. 두 스크롤 섹션이 이 방식으로 동작합니다 — 높이가 큰 <code>&lt;section&gt;</code> 안에 <code>sticky top-0 h-screen</code> 장면이 들어 있는 구조입니다.</li>
+<li><strong style="color:#fff">스크롤 장면을 직접 만들 때 두 가지</strong> — sticky 박스는 정확히 <code>h-screen</code>이어야 합니다(화면보다 높은 sticky 요소는 절대 고정되지 않습니다). 그리고 위쪽 조상 중 <code>overflow-hidden</code>이 하나도 없어야 합니다(2번 항목의 빨간 상자 참고).</li>
+<li><strong style="color:#fff">한 프레임 고정</strong> — 두 스크롤 섹션은 <code>progress={0..1}</code>를 받으면 스크롤을 따라가지 않고 그 지점에서 멈춥니다. 정적 목업용이며, 실제 페이지에서는 쓰지 마세요.</li>
+<li><strong style="color:#fff">절제</strong> — 투명도와 짧은 이동만, <code>duration-500</code>/<code>duration-700</code>, <code>ease-out</code>. 반복 애니메이션은 비행선의 느린 <code>animate-float</code> 하나뿐입니다.</li>
+</ul>
+</section>
+
+<section>
+<h2>5. 스타일링: Tailwind CSS v4 + 브랜드 팔레트</h2>
+<p>직접 쓰는 글루 마크업은 아래 클래스로만 스타일하세요. 인라인 스타일이나 새 CSS는 쓰지 않습니다.</p>
+<div class="note warn"><strong>중요.</strong> 스타일시트는 미리 컴파일되어 있어서 <em>여기 있는 단계만</em> 존재합니다. <code>w-[37rem]</code> 같은 임의값, 팔레트에 없는 색, <code>p-7</code>처럼 없는 단계는 아무 스타일도 적용되지 않습니다. <code>sm:</code>/<code>md:</code>/<code>lg:</code> 접두사는 레이아웃·여백·<code>w-full</code>·분수 너비·<code>max-w-*</code>·글자 크기·정렬에만 붙습니다.</div>
+<table>
+<thead><tr><th>용도</th><th>클래스</th></tr></thead>
+<tbody>
+<tr><td>우주 배경</td><td><code>bg-space-{950,900,800,700,600}</code> (950이 페이지 기본), <code>bg-gradient-to-b from-space-950 via-space-900 to-space-950</code></td></tr>
+<tr><td>액센트</td><td><code>text-ice</code>, <code>bg-ice</code>, <code>border-ice</code>, <code>text-ice-{100,300,600}</code>, <code>bg-ice/{10,20,30}</code>, <code>border-ice/{20,30,40}</code></td></tr>
+<tr><td>글자</td><td><code>text-white</code>, <code>text-mist</code>(본문), <code>text-mist-dim</code>(캡션), <code>text-white/{60,70,80,90}</code></td></tr>
+<tr><td>표면</td><td><code>bg-white/{5,10,20}</code>, <code>border-white/{10,15,20}</code>, <code>rounded-{xl,2xl,3xl,full}</code>, <code>shadow-{md,lg,xl,2xl}</code>, <code>backdrop-blur-{sm,md,lg}</code></td></tr>
+<tr><td>레이아웃</td><td><code>flex</code>, <code>grid</code>, <code>grid-cols-{1,2,3,4,5,6,12}</code>, <code>gap-{0,1,2,3,4,5,6,8,10,12,16,20,24}</code>, <code>items-center</code>, <code>justify-between</code>, <code>hidden md:flex</code></td></tr>
+<tr><td>여백</td><td><code>p</code>/<code>px</code>/<code>py</code>/<code>pt</code>/<code>pb</code>/<code>pl</code>/<code>pr</code> <code>-{0,1,2,3,4,5,6,8,10,12,16,20,24,28,32,40,48}</code>, <code>m</code>/<code>mx</code>/<code>my</code>/<code>mt</code>/<code>mb</code>는 <code>-32</code>까지, <code>mx-auto</code>, <code>space-y-{1,2,3,4,6,8,10,12}</code></td></tr>
+<tr><td>크기</td><td><code>max-w-{xs..7xl}</code>, <code>w-full</code>, <code>h-full</code>, <code>min-h-screen</code>, <code>aspect-{square,video}</code>, <code>w</code>/<code>h</code>/<code>size</code> <code>-{4,5,6,8,10,12,16,20,24,32,40,48,56,64,72,80,96}</code></td></tr>
+<tr><td>타이포</td><td><code>text-{xs..9xl}</code>, <code>font-{light,normal,medium,semibold,bold,extrabold}</code>, <code>font-mono</code>(라벨·수치), <code>leading-{tight,snug,relaxed}</code>, <code>tracking-{tight,wide,wider,widest}</code>, <code>tabular-nums</code></td></tr>
+<tr><td>모션</td><td><code>transition-{all,colors,opacity,transform}</code>, <code>duration-{150,300,500,700,1000}</code>, <code>delay-{100,150,200,300,500,700}</code>, <code>ease-out</code>, <code>opacity-{0,20,40,60,80,100}</code>, <code>translate-y-{0,4,8,12}</code>, <code>hover:-translate-y-{0.5,1}</code>, <code>scale-{95,100,105}</code>, <code>animate-{float,drift,twinkle,pulse}</code></td></tr>
+</tbody>
+</table>
+<p>우주 느낌을 만드는 시스템 클래스가 두 개 있습니다. <code>ds-stars</code>는 별밭이고(어두운 박스 위에 <code>absolute inset-0 opacity-50</code>으로 덮으세요), <code>ds-aurora</code>는 부드러운 광채입니다. 다만 <code>Section</code>이 <code>stars</code>와 <code>tone="base|raised|deep|navy"</code>를 받으므로 직접 쓸 일은 드뭅니다.</p>
+<h3>색 값</h3>
+<div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px">
+<div class="sw"><span class="dot" style="background:#02030a"></span>space-950 #02030a</div>
+<div class="sw"><span class="dot" style="background:#050a18"></span>space-900 #050a18</div>
+<div class="sw"><span class="dot" style="background:#071331"></span>space-800 #071331</div>
+<div class="sw"><span class="dot" style="background:#0e2a5e"></span>space-700 #0e2a5e</div>
+<div class="sw"><span class="dot" style="background:#8fd8ff"></span>ice #8fd8ff</div>
+<div class="sw"><span class="dot" style="background:#4aa8e0"></span>ice-600 #4aa8e0</div>
+<div class="sw"><span class="dot" style="background:#b9c9e2"></span>mist #b9c9e2</div>
+<div class="sw"><span class="dot" style="background:#8095b5"></span>mist-dim #8095b5</div>
+</div>
+</section>
+
+<section>
+<h2>6. 하우스 스타일</h2>
+<p>직접 마크업을 쓸 때 이 조합을 그대로 따르면 사이트와 어긋나지 않습니다.</p>
+<table>
+<thead><tr><th>대상</th><th>클래스</th></tr></thead>
+<tbody>
+<tr><td>디스플레이 제목</td><td><code>text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight</code></td></tr>
+<tr><td>본문</td><td><code>text-base text-mist leading-relaxed</code></td></tr>
+<tr><td>캡션</td><td><code>text-sm text-mist-dim</code></td></tr>
+<tr><td>라벨</td><td><code>font-mono text-xs uppercase tracking-[0.18em] text-ice</code> — <code>Eyebrow</code>가 그려 주는 것과 동일</td></tr>
+<tr><td>카드</td><td><code>rounded-2xl border border-white/10 bg-white/5 p-8</code></td></tr>
+<tr><td>띠의 좌우 여백</td><td><code>window.IcarusDS.containerClass</code> — 페이지 공통 여백선 (2번 참고)</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>7. 이미지</h2>
+<p><code>window.IcarusDS.images</code>에 들어 있는 것이 이 시스템이 제공하는 이미지 전부입니다. <strong style="color:#fff">이미지 URL을 새로 만들어 쓰지 마세요.</strong></p>
+<ul>
+<li><code>heroStratosphere</code> — 홈페이지가 열릴 때 보이는 지평선 사진</li>
+<li><code>airship3d</code> — ICARUS 비행선 렌더링</li>
+<li><code>logo</code>, <code>logoCircle</code> — 로고</li>
+<li>회사 사진 — <code>about</code>, <code>product</code>, <code>newsMaterial</code>, <code>newsAward</code>, <code>newsYtn</code>, <code>newsKepco</code></li>
+</ul>
+<p>지평선 사진은 퍼블릭 도메인 NASA 이미지(EXCITE 기구에서 고도 약 40 km에서 촬영)를 보정한 것입니다. 크레딧 문구는 <code>window.IcarusDS.heroCredit</code>에 들어 있고 <code>SiteFooter</code>가 기본으로 표시하므로 지우지 마세요. 보정본이라는 사실도 그 문구에 함께 적혀 있습니다.</p>
+</section>
+
+<section>
+<h2>8. 원문은 어디에 있나</h2>
+<table>
+<thead><tr><th>찾는 것</th><th>파일</th></tr></thead>
+<tbody>
+<tr><td>전체 영문 안내</td><td><code>README.md</code></td></tr>
+<tr><td>스타일 진입점</td><td><code>styles.css</code> → <code>_ds_bundle.css</code> (모르는 클래스는 여기서 확인)</td></tr>
+<tr><td>컴포넌트 번들</td><td><code>_ds_bundle.js</code> — 전부 <code>window.IcarusDS</code>로 올라갑니다</td></tr>
+<tr><td>컴포넌트별 예시</td><td><code>components/&lt;그룹&gt;/&lt;이름&gt;/&lt;이름&gt;.prompt.md</code></td></tr>
+<tr><td>컴포넌트별 props 타입</td><td>같은 폴더의 <code>&lt;이름&gt;.d.ts</code></td></tr>
+<tr><td>토큰</td><td>CSS 변수 168개가 <code>_ds_bundle.css</code> 안에 선언되어 있습니다 (색 63개, 타이포 18개, 반경 5개 등). 이름은 원본 패키지 그대로입니다.</td></tr>
+</tbody>
+</table>
+<p class="en">패키지: @icarus-lta/design-system@0.1.0 · 네임스페이스 IcarusDS · 컴포넌트 17개</p>
+</section>
+
+<footer>이 프로젝트는 코드 저장소에서 동기화된 읽기 전용 디자인 시스템입니다. 컴포넌트·스타일·영문 문서를 바꿔야 한다면 원본 저장소에서 수정한 뒤 다시 동기화해야 합니다. 이 한글 문서도 저장소의 <code>.design-sync/guide-ko.html</code>이 원본이며, 동기화할 때 함께 올라옵니다.</footer>
+</div>
+</body>
+</html>
