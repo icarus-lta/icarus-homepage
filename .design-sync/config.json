@@ -1,0 +1,27 @@
+{
+  "pkg": "@icarus-lta/design-system",
+  "globalName": "IcarusDS",
+  "projectId": "94cf9964-aac4-4591-925e-0f8c18252a6f",
+  "shape": "package",
+  "entry": "design-system/dist/index.js",
+  "buildCmd": "cd design-system && npm ci && npm run build",
+  "cssEntry": "dist/styles.css",
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "SiteHeader": { "cardMode": "single", "primaryStory": "OverHero", "viewport": "1280x800" },
+    "SiteFooter": { "cardMode": "column", "viewport": "1280x800" },
+    "Hero": { "cardMode": "column", "viewport": "1280x1100" },
+    "PageHero": { "cardMode": "column", "viewport": "1280x800" },
+    "StatBar": { "cardMode": "column", "viewport": "1280x600" },
+    "Section": { "cardMode": "column", "viewport": "1280x900" },
+    "SectionHeading": { "cardMode": "column", "viewport": "1100x700" },
+    "Reveal": { "cardMode": "column", "viewport": "1100x700" },
+    "EarthLimb": { "cardMode": "column", "viewport": "1280x900" },
+    "AltitudeScrollSection": { "cardMode": "column", "viewport": "1280x900" },
+    "EnduranceScrollSection": { "cardMode": "column", "viewport": "1280x900" },
+    "TechCards": { "cardMode": "column", "viewport": "1280x900" },
+    "MissionGrid": { "cardMode": "column", "viewport": "1280x1000" },
+    "RoadmapTimeline": { "cardMode": "column", "viewport": "1280x800" },
+    "ContactCTA": { "cardMode": "column", "viewport": "1280x800" }
+  }
+}

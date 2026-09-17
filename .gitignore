@@ -1,0 +1,12 @@
+# design-system package: dependencies and build output (rebuilt by `npm run build`)
+design-system/node_modules/
+design-system/dist/
+design-system/generated/
+design-system/src/generated/
+
+# design-sync (Claude Design): staged scripts, build output, machine state
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules

@@ -1,0 +1,175 @@
+/*
+ * ICARUS design system stylesheet (Tailwind CSS v4).
+ * Dark "stratosphere" theme: near-black space base, ice-blue accent, Pretendard type.
+ * Colors and type are taken from the 3c "Stratosphere Gradient" / 3a "Mission Dark" mockups
+ * in the "Icarus 비행선 홈페이지 개선안" design project.
+ */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import "tailwindcss" source(none);
+
+/* Classes used by the components. */
+@source "./";
+
+/* Everyday vocabulary for designs built with these components (the stylesheet is precompiled,
+   so a class nobody used at build time would not exist). */
+@source inline("{,sm:,md:,lg:}{block,inline-block,inline,flex,inline-flex,grid,hidden,contents}");
+@source inline("{,sm:,md:,lg:}{flex-row,flex-col,flex-wrap,flex-1,flex-none,shrink-0,grow}");
+@source inline("{,sm:,md:,lg:}{items-start,items-center,items-end,items-stretch,items-baseline,justify-start,justify-center,justify-end,justify-between,justify-around,justify-evenly,self-start,self-center,self-end,place-items-center}");
+@source inline("{,sm:,md:,lg:}grid-cols-{1,2,3,4,5,6,12}");
+@source inline("{,sm:,md:,lg:}col-span-{1,2,3,4,5,6,full}");
+@source inline("{,sm:,md:,lg:}order-{1,2,3,first,last}");
+@source inline("{,sm:,md:,lg:}gap{,-x,-y}-{0,1,2,3,4,5,6,8,10,12,16,20,24}");
+
+@source inline("{,sm:,md:,lg:}{p,px,py,pt,pb,pl,pr}-{0,1,2,3,4,5,6,8,10,12,16,20,24,28,32,40,48}");
+@source inline("{,sm:,md:,lg:}{m,mx,my,mt,mb,ml,mr}-{0,1,2,3,4,5,6,8,10,12,16,20,24,32}");
+@source inline("{mx-auto,ml-auto,mr-auto,my-auto}");
+@source inline("space-{x,y}-{1,2,3,4,6,8,10,12}");
+@source inline("scroll-mt-{16,20,24,32}");
+
+@source inline("{,sm:,md:,lg:}{w-full,w-auto,w-screen,w-fit,h-full,h-auto,h-screen,h-fit,min-h-screen,min-h-full}");
+@source inline("{,sm:,md:,lg:}max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,full,none}");
+@source inline("{w,h,size}-{4,5,6,8,10,12,16,20,24,32,40,48,56,64,72,80,96}");
+@source inline("{,sm:,md:,lg:}{w,basis}-{1/2,1/3,2/3,1/4,3/4}");
+@source inline("aspect-{square,video,auto}");
+
+@source inline("{,sm:,md:,lg:}text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,8xl,9xl}");
+@source inline("font-{sans,mono,light,normal,medium,semibold,bold,extrabold}");
+@source inline("leading-{none,tight,snug,normal,relaxed,loose}");
+@source inline("tracking-{tighter,tight,normal,wide,wider,widest}");
+@source inline("{,sm:,md:,lg:}text-{left,center,right}");
+@source inline("{uppercase,italic,underline,no-underline,truncate,whitespace-nowrap,whitespace-pre-line,break-keep,break-words,line-clamp-1,line-clamp-2,line-clamp-3,tabular-nums}");
+
+/* Brand palette: space (near-black -> navy), ice (accent), mist (muted text). */
+@source inline("{,hover:,group-hover:}{text,bg,border}-{white,black,transparent}");
+@source inline("{,hover:,group-hover:}{text,bg,border}-space-{950,900,800,700,600}");
+@source inline("{,hover:,group-hover:}{text,bg,border}-{ice,ice-100,ice-300,ice-600}");
+@source inline("{,hover:,group-hover:}{text,bg,border}-{mist,mist-dim}");
+@source inline("{,hover:,group-hover:}{text,bg}-{gray,blue}-{100,200,300,400,500,600,700,800,900}");
+@source inline("{bg-white/{5,10,20,40,60,80,90},bg-black/{20,40,60,80},border-white/{5,10,15,20,30},text-white/{50,60,70,80,90},bg-ice/{5,10,15,20,30},border-ice/{15,20,30,40},bg-space-950/{60,80,90}}");
+@source inline("{from,via,to}-{transparent,black,white,space-950,space-900,space-800,space-700,space-600,ice,ice-600}");
+@source inline("bg-gradient-to-{t,b,r,l,br,bl,tr,tl}");
+@source inline("{,hover:,group-hover:}shadow-{sm,md,lg,xl,2xl,none}");
+@source inline("rounded{,-md,-lg,-xl,-2xl,-3xl,-full}");
+@source inline("{border,border-0,border-2,border-t,border-b,border-l,border-r,border-t-2,border-t-4,border-b-2,border-l-2,divide-y,ring-1}");
+
+@source inline("{static,relative,absolute,fixed,sticky,inset-0,inset-x-0,top-0,right-0,bottom-0,left-0,top-4,right-4,bottom-4,left-4,top-1/2,left-1/2,-translate-x-1/2,-translate-y-1/2,z-0,z-10,z-20,z-40,z-50}");
+@source inline("{overflow-hidden,overflow-x-hidden,overflow-y-auto,overflow-x-auto,object-cover,object-contain,object-center,pointer-events-none,cursor-pointer,backdrop-blur-sm,backdrop-blur-md,backdrop-blur-lg,mix-blend-screen}");
+
+@source inline("{transition,transition-all,transition-colors,transition-opacity,transition-transform,transition-none}");
+@source inline("duration-{150,300,500,700,1000}");
+@source inline("delay-{0,100,150,200,300,500,700}");
+@source inline("ease-{linear,in,out,in-out}");
+@source inline("{,hover:,group-hover:}opacity-{0,20,40,50,60,80,100}");
+@source inline("{,hover:,group-hover:}{translate-y-0,translate-y-4,translate-y-8,translate-y-12,-translate-y-0.5,-translate-y-1,-translate-y-2,translate-x-0,translate-x-8,-translate-x-8}");
+@source inline("{,hover:,group-hover:}scale-{95,100,105}");
+@source inline("{animate-float,animate-drift,animate-twinkle,animate-pulse,animate-spin,animate-none,motion-reduce:animate-none,motion-reduce:transition-none}");
+@source inline("{group,scroll-smooth,snap-x,snap-y,snap-mandatory,snap-start,snap-center,will-change-transform}");
+
+@theme {
+  --font-sans: Pretendard, "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Space base: the page sits on space-950; bands step up to navy for depth. */
+  --color-space-950: #02030a;
+  --color-space-900: #050a18;
+  --color-space-800: #071331;
+  --color-space-700: #0e2a5e;
+  --color-space-600: #1c3f7d;
+
+  /* Ice: the single accent (links, active states, data highlights). */
+  --color-ice: #8fd8ff;
+  --color-ice-100: #eef6ff;
+  --color-ice-300: #b9dcff;
+  --color-ice-600: #4aa8e0;
+
+  /* Mist: body and secondary text on dark. */
+  --color-mist: #b9c9e2;
+  --color-mist-dim: #8095b5;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-twinkle: twinkle 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(0.3deg); }
+}
+@keyframes drift {
+  0%, 100% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: .35; }
+  50% { opacity: .9; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-space-950 text-mist font-sans antialiased;
+  }
+  ::selection {
+    background: var(--color-ice);
+    color: var(--color-space-950);
+  }
+}
+
+@layer components {
+  /* Star field for hero and full-bleed space bands. Pure CSS - no image to load. */
+  .ds-stars {
+    background-image:
+      radial-gradient(1.4px 1.4px at 12% 18%, rgba(255, 255, 255, .75), transparent 60%),
+      radial-gradient(1.2px 1.2px at 28% 62%, rgba(255, 255, 255, .5), transparent 60%),
+      radial-gradient(1.6px 1.6px at 47% 26%, rgba(255, 255, 255, .65), transparent 60%),
+      radial-gradient(1.1px 1.1px at 63% 74%, rgba(255, 255, 255, .45), transparent 60%),
+      radial-gradient(1.5px 1.5px at 78% 38%, rgba(255, 255, 255, .7), transparent 60%),
+      radial-gradient(1.2px 1.2px at 88% 66%, rgba(255, 255, 255, .5), transparent 60%),
+      radial-gradient(1.3px 1.3px at 36% 88%, rgba(255, 255, 255, .55), transparent 60%),
+      radial-gradient(1.1px 1.1px at 70% 12%, rgba(255, 255, 255, .45), transparent 60%);
+  }
+  /* Deep-space glow behind the hero subject. */
+  .ds-aurora {
+    background-image:
+      radial-gradient(60% 45% at 50% 42%, rgba(143, 216, 255, .16), transparent 70%),
+      radial-gradient(45% 35% at 22% 74%, rgba(28, 63, 125, .35), transparent 72%);
+  }
+  /* Hairline rule used between data rows and section bands. */
+  .ds-hairline {
+    border-color: rgba(255, 255, 255, .10);
+  }
+
+  /* Earth seen from the stratosphere: the planet's dark disc with a lit atmospheric limb.
+     Drawn in CSS so no photograph has to ship; EarthLimb swaps in a real image when given one. */
+  .ds-earth {
+    border-radius: 50%;
+    background:
+      radial-gradient(120% 80% at 50% 6%, rgba(66, 126, 204, .38) 0%, rgba(9, 24, 48, .92) 40%, #030914 68%),
+      #02060e;
+    box-shadow:
+      0 -8px 90px 26px rgba(86, 156, 255, .20),
+      inset 0 14px 70px rgba(143, 216, 255, .16);
+  }
+  /* The thin bright rim of atmosphere along the horizon. */
+  .ds-earth::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: radial-gradient(
+      closest-side,
+      transparent 97.2%,
+      rgba(176, 214, 250, .62) 98.2%,
+      rgba(143, 216, 255, .22) 99.1%,
+      transparent 100%
+    );
+  }
+  /* Haze that lifts off the limb into space. */
+  .ds-atmo {
+    background: radial-gradient(70% 100% at 50% 100%, rgba(116, 186, 255, .30), transparent 72%);
+  }
+}
