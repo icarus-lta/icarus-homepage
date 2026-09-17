@@ -38,5 +38,11 @@
   "caption": "Oblique view of Earth: cloud deck and curvature",
   "credit": "NASA/JPL-Caltech",
   "id": "PIA11066"
+ },
+ "09-clouds-curvature-rotated": {
+  "caption": "Oblique view of Earth: cloud deck and curvature, rotated 90° counter-clockwise",
+  "credit": "NASA/JPL-Caltech",
+  "id": "PIA11066",
+  "position": "top"
  }
 }

@@ -48,8 +48,12 @@
 - **Hero photograph is swappable.** `static/hero/` holds eight NASA (public domain) horizon photographs at full
   resolution, `_preview-bands.png` (all of them cropped to the homepage band), `CREDITS.md` and `credits.json`.
   `static/hero/SELECTED.txt` names the active one; `scripts/build.mjs` converts it to `hero-stratosphere.webp`, and
-  generates `src/generated/hero.ts` with the matching credit, which `SiteFooter` shows by default. To change the photo:
-  edit SELECTED.txt, rebuild, re-sync. Currently `05-dark-blue-limb` (NASA, ISS Expedition 68).
+  generates `src/generated/hero.ts` with the matching credit and crop anchor, which `SiteFooter` and `Hero` use by
+  default. To change the photo: edit SELECTED.txt, rebuild, re-sync.
+- Currently `09-clouds-curvature-rotated` - `08-clouds-and-curvature` (NASA/JPL-Caltech, PIA11066) turned 90° to the
+  left at the user's request. Because the rotation makes it portrait, its `credits.json` entry sets `"position": "top"`
+  so the band keeps the limb instead of centring on the cloud deck. Any photo entry can carry that field; `Hero` also
+  takes `imagePosition` per instance.
 - Only the selected photo ships in the bundle; the other seven live in the repo for swapping.
 - The user proposed two other photographs that were **rejected on rights grounds**: one with a `fotor` watermark, one
   credited "JPC VAN HEIJST". Do not use either without a licence.

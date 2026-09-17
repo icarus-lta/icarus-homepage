@@ -54,3 +54,8 @@ to the shape the homepage actually uses.
 - Credit: NASA/JPL-Caltech
 - NASA ID: `PIA11066` — 3060×2036, 455 KB
 - Source: http://images-assets.nasa.gov/image/PIA11066/PIA11066~orig.jpg
+
+## 09-clouds-curvature-rotated
+- Oblique view of Earth: cloud deck and curvature, rotated 90° counter-clockwise
+- Credit: NASA/JPL-Caltech
+- NASA ID: `PIA11066` — 2036×3060, rotated from 08-clouds-and-curvature.jpg

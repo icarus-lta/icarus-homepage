@@ -1,6 +1,7 @@
 import type * as React from 'react';
 import type { ReactNode } from 'react';
 import { images } from '../assets';
+import { heroPosition } from '../generated/hero';
 import { EarthLimb } from '../media/EarthLimb';
 import { Button } from '../primitives/Button';
 import { Eyebrow } from '../primitives/Eyebrow';
@@ -13,6 +14,8 @@ export interface HeroProps {
   backgroundImage?: string | null;
   /** Height of the image band. */
   imageHeight?: 'tall' | 'medium' | 'short';
+  /** Which part of the photograph stays in frame when it is cropped to the band. */
+  imagePosition?: 'top' | 'center' | 'bottom';
   /** Where the horizon sits when the CSS-drawn limb is used. */
   horizon?: string;
   /** Headline under the image, one entry per line. Three short lines read best. */
@@ -39,6 +42,12 @@ const IMAGE_HEIGHT = {
   short: 'h-[42vh] min-h-[260px]',
 } as const;
 
+const IMAGE_POSITION = {
+  top: 'object-top',
+  center: 'object-center',
+  bottom: 'object-bottom',
+} as const;
+
 /**
  * Opening view: a full-bleed stratospheric horizon photograph across the top, fading into
  * the page, with the display headline set left-aligned underneath it. The fixed SiteHeader
@@ -48,6 +57,7 @@ export function Hero({
   id = 'hero',
   backgroundImage = images.heroStratosphere,
   imageHeight = 'tall',
+  imagePosition = heroPosition,
   horizon = '72%',
   titleLines = ['Building Humanity’s', 'Next Infrastructure Layer', 'In the Stratosphere'],
   eyebrow,
@@ -64,7 +74,11 @@ export function Hero({
     <section id={id} className={cx('relative bg-space-950', className)}>
       <div className={cx('relative w-full overflow-hidden', IMAGE_HEIGHT[imageHeight])}>
         {backgroundImage ? (
-          <img src={backgroundImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <img
+            src={backgroundImage}
+            alt=""
+            className={cx('absolute inset-0 w-full h-full object-cover', IMAGE_POSITION[imagePosition])}
+          />
         ) : (
           <EarthLimb horizon={horizon} scrim={0.35} />
         )}

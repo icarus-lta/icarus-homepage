@@ -79,7 +79,9 @@ writeFileSync(
     `/** Credit line for the hero photograph currently in the bundle. */\n` +
     `export const heroCredit = ${JSON.stringify(`Hero photograph: ${heroInfo.credit}, public domain.`)};\n` +
     `/** File name (in static/hero/) of the photograph currently in the bundle. */\n` +
-    `export const heroPhotoName = ${JSON.stringify(selectedHero)};\n`,
+    `export const heroPhotoName = ${JSON.stringify(selectedHero)};\n` +
+    `/** Where this photograph should be anchored when cropped to the hero band. */\n` +
+    `export const heroPosition: 'top' | 'center' | 'bottom' = ${JSON.stringify(heroInfo.position ?? 'center')};\n`,
 );
 
 await build({
