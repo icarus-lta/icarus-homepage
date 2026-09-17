@@ -172,24 +172,32 @@ export function AltitudeScrollSection({
             className="absolute left-5 md:left-6"
             style={{ top: `${LEO_Y}%`, transform: 'translateY(-118%)' }}
           >
-            <div className="font-mono text-[10px] md:text-xs tracking-[0.22em] text-mist-dim">{rowLabels.leo}</div>
-            <div className="font-mono text-sm md:text-xl leading-tight text-mist tabular-nums">{rowLabels.leoAlt}</div>
+            <div className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-mist-dim">
+              {rowLabels.leo}
+            </div>
+            <div className="text-base md:text-2xl font-semibold tracking-tight leading-tight text-mist tabular-nums">
+              {rowLabels.leoAlt}
+            </div>
           </div>
           <div
             className="absolute left-5 md:left-6 transition-opacity duration-500"
             style={{ top: `${ICARUS_Y}%`, transform: 'translateY(-50%)', opacity: airshipIn }}
           >
-            <div className="font-mono text-[10px] md:text-xs tracking-[0.22em] text-ice/70">{rowLabels.icarus}</div>
-            <div className="font-mono text-sm md:text-xl leading-tight text-ice tabular-nums">{rowLabels.icarusAlt}</div>
+            <div className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-ice/70">
+              {rowLabels.icarus}
+            </div>
+            <div className="text-base md:text-2xl font-semibold tracking-tight leading-tight text-ice tabular-nums">
+              {rowLabels.icarusAlt}
+            </div>
           </div>
           <div
             className="absolute left-5 md:left-6"
             style={{ top: `${ATMO_Y}%`, transform: 'translateY(-118%)' }}
           >
-            <div className="font-mono text-[10px] md:text-xs tracking-[0.22em] text-mist-dim/70">
+            <div className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-mist-dim/70">
               {rowLabels.atmosphere}
             </div>
-            <div className="font-mono text-sm md:text-xl leading-tight text-mist-dim tabular-nums">
+            <div className="text-base md:text-2xl font-semibold tracking-tight leading-tight text-mist-dim tabular-nums">
               {rowLabels.atmosphereAlt}
             </div>
           </div>
@@ -337,7 +345,7 @@ export function AltitudeScrollSection({
             <GroundMark opacity={0.9} />
           </span>
           <span
-            className="absolute font-mono text-[10px] tracking-[0.14em] text-mist-dim whitespace-nowrap"
+            className="absolute text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-mist-dim whitespace-nowrap"
             style={{ left: `${AXIS_X}%`, top: `${GROUND_Y + 5}%`, transform: 'translateX(-50%)' }}
           >
             {rowLabels.ground}
