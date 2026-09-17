@@ -12,6 +12,10 @@ export interface AltitudeScrollSectionProps {
   description?: ReactNode;
   /** The four beats of the animation, in order. */
   steps?: Array<{ label: string; caption: string }>;
+  /** Labels on the three altitude rows. */
+  rowLabels?: { leo: string; icarus: string; ground: string };
+  /** Labels on the two links ICARUS relays. */
+  linkLabels?: { direct: string; laser: string; radio: string };
   /**
    * Freeze the animation at a point from 0 (start) to 1 (end) instead of following the scroll.
    * Use it for static frames; leave it out on a real page.
@@ -26,15 +30,18 @@ export interface AltitudeScrollSectionProps {
 }
 
 const DEFAULT_STEPS = [
-  { label: 'Satellites sit 500 km up', caption: 'Wide reach, but far away and expensive per bit.' },
-  { label: 'Ground towers stop at the coast', caption: 'Mountains and open sea stay dark.' },
-  { label: 'ICARUS enters at 20 km', caption: 'Above the weather, below the orbits.' },
-  { label: 'The middle layer closes the gap', caption: 'One airship holds station over a ~200 km area.' },
+  { label: 'Satellites talk straight to the ground', caption: 'Every bit crosses 500 km and back.' },
+  { label: 'That long hop is the bottleneck', caption: 'Latency, power and cost all scale with distance.' },
+  { label: 'ICARUS enters at 20 km', caption: 'A relay station that holds its position.' },
+  { label: 'Laser up, radio down', caption: 'Optical link to the satellite, RF link to the ground.' },
 ];
 
-function SatelliteMark({ dim }: { dim: number }) {
+const DEFAULT_ROW_LABELS = { leo: '500 KM · LEO SATELLITE', icarus: '20 KM · ICARUS', ground: '0 KM · GROUND STATION' };
+const DEFAULT_LINK_LABELS = { direct: 'DIRECT LINK', laser: 'LASER LINK', radio: 'RF LINK' };
+
+function SatelliteMark({ opacity }: { opacity: number }) {
   return (
-    <svg viewBox="0 0 64 28" className="w-16 h-8" style={{ opacity: dim }} aria-hidden="true">
+    <svg viewBox="0 0 64 28" className="w-16 h-8" style={{ opacity }} aria-hidden="true">
       <rect x="26" y="9" width="12" height="10" rx="2" fill="#e8f2ff" />
       <rect x="4" y="11" width="18" height="6" rx="1" fill="#8fd8ff" opacity=".75" />
       <rect x="42" y="11" width="18" height="6" rx="1" fill="#8fd8ff" opacity=".75" />
@@ -43,9 +50,9 @@ function SatelliteMark({ dim }: { dim: number }) {
   );
 }
 
-function GroundMark({ dim }: { dim: number }) {
+function GroundMark({ opacity }: { opacity: number }) {
   return (
-    <svg viewBox="0 0 48 34" className="w-12 h-9" style={{ opacity: dim }} aria-hidden="true">
+    <svg viewBox="0 0 48 34" className="w-12 h-9" style={{ opacity }} aria-hidden="true">
       <path d="M24 2 L32 32 H16 Z" fill="none" stroke="#b9c9e2" strokeWidth="1.6" />
       <path d="M19 20 H29" stroke="#b9c9e2" strokeWidth="1.4" />
       <circle cx="24" cy="2" r="2.4" fill="#8fd8ff" />
@@ -53,28 +60,56 @@ function GroundMark({ dim }: { dim: number }) {
   );
 }
 
+/** Concentric arcs that read as a radio wave; drawn in its own square viewBox so it never distorts. */
+function RadioWaves({ opacity }: { opacity: number }) {
+  return (
+    <svg viewBox="0 0 40 40" className="w-10 h-10" style={{ opacity }} aria-hidden="true">
+      <g fill="none" stroke="#b9c9e2" strokeLinecap="round">
+        <path d="M14 26 A 10 10 0 0 1 26 14" strokeWidth="1.5" opacity=".9" />
+        <path d="M10 30 A 16 16 0 0 1 30 10" strokeWidth="1.3" opacity=".6" />
+        <path d="M6 34 A 22 22 0 0 1 34 6" strokeWidth="1.1" opacity=".35" />
+      </g>
+    </svg>
+  );
+}
+
 /**
- * The problem scene, driven by scroll: a satellite holds 500 km up, ground stations stop at
- * the horizon, and the ICARUS airship flies into the empty middle layer at 20 km until its
- * coverage spans the gap. Four captions track the scroll; `progress` freezes a single frame.
+ * The bottleneck scene, driven by scroll: a satellite and a ground station start out talking
+ * straight to each other across 500 km, then the ICARUS airship flies into the empty layer at
+ * 20 km and takes over the path - an optical laser link up to the satellite and an RF link down
+ * to the ground. `progress` freezes a single frame.
  */
 export function AltitudeScrollSection({
   id = 'why-20km',
   eyebrow = 'WHY 20 KM',
   title = 'The layer between orbit and the ground',
-  description = 'Satellites are too far and towers are too low. At 20 km one airship stays above the weather and covers what neither can.',
+  description = 'Solve Communication Bottleneck between LEO and ground',
   steps = DEFAULT_STEPS,
+  rowLabels = DEFAULT_ROW_LABELS,
+  linkLabels = DEFAULT_LINK_LABELS,
   progress,
-  trackHeight = '300vh',
+  trackHeight = '320vh',
   airshipSrc = images.airship3d,
   className,
 }: AltitudeScrollSectionProps) {
   const interactive = progress === undefined;
   const { ref, progress: p } = useScrollProgress({ frozen: progress });
 
-  const airshipIn = ramp(p, 0.18, 0.62);
-  const coverage = ramp(p, 0.62, 0.95);
-  const activeStep = p < 0.2 ? 0 : p < 0.45 ? 1 : p < 0.75 ? 2 : 3;
+  // 0.00-0.30  satellite and ground talk directly
+  // 0.30-0.62  the airship flies into the middle layer
+  // 0.62-1.00  the direct link gives way to laser up / RF down
+  const airshipIn = ramp(p, 0.3, 0.62);
+  const relay = ramp(p, 0.62, 0.92);
+  const directLink = 1 - relay;
+  const activeStep = p < 0.16 ? 0 : p < 0.34 ? 1 : p < 0.66 ? 2 : 3;
+
+  // scene geometry in the 0-100 space the overlay uses
+  const airshipX = 20 + airshipIn * 20; // flies in from the left
+  const satX = 82;
+  const satY = 17;
+  const groundX = 82;
+  const groundY = 83;
+  const relayY = 50;
 
   const scene = (
     <div className="w-full max-w-6xl mx-auto px-6">
@@ -117,76 +152,128 @@ export function AltitudeScrollSection({
           </ol>
         </div>
 
-        <div className="relative rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[420px] md:h-[520px]">
+        <div className="relative rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[440px] md:h-[540px]">
           <div className="ds-stars absolute inset-0 opacity-50" />
 
-          {/* 500 km - satellite */}
-          <div className="absolute inset-x-0 top-[12%] px-8">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[11px] tracking-[0.16em] text-mist-dim tabular-nums">500 KM · LEO</span>
-              <SatelliteMark dim={0.55 + 0.35 * (1 - airshipIn)} />
+          {/* altitude guides */}
+          {(
+            [
+              [satY, rowLabels.leo, 'text-mist-dim'],
+              [relayY, rowLabels.icarus, 'text-ice'],
+              [groundY, rowLabels.ground, 'text-mist-dim'],
+            ] as const
+          ).map(([y, label, tone]) => (
+            <div key={label} className="absolute inset-x-0 px-6" style={{ top: `${y}%` }}>
+              <div className={cx('font-mono text-[11px] tracking-[0.16em] tabular-nums mb-3', tone)}>{label}</div>
+              <div className={cx('border-t border-dashed', y === relayY ? 'border-ice/25' : 'border-white/10')} />
             </div>
-            <div className="mt-4 border-t border-dashed border-white/10" />
-          </div>
+          ))}
 
-          {/* 20 km - the airship flies in */}
-          <div className="absolute inset-x-0 top-[48%] px-8">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[11px] tracking-[0.16em] text-ice tabular-nums">20 KM · ICARUS</span>
-              <span
-                className="font-mono text-[11px] tracking-[0.16em] text-ice/80 transition-opacity duration-300"
-                style={{ opacity: coverage }}
-              >
-                ≈ 200 KM COVERAGE
-              </span>
-            </div>
-            <div className="relative mt-4">
-              <div className="border-t border-dashed border-ice/30" />
-              <div
-                className="absolute left-0 right-0 -top-px h-px bg-gradient-to-r from-transparent via-ice to-transparent origin-center transition-transform duration-300"
-                style={{ transform: `scaleX(${coverage})` }}
-              />
-              <img
-                src={airshipSrc}
-                alt="ICARUS airship"
-                className="absolute -top-16 md:-top-20 w-40 md:w-56 h-auto object-contain will-change-transform"
-                style={{
-                  left: `${8 + airshipIn * 34}%`,
-                  opacity: airshipIn,
-                  transform: `translateX(-50%) scale(${0.85 + airshipIn * 0.15})`,
-                }}
-              />
-            </div>
-          </div>
-
-          {/* 0 km - ground station */}
-          <div className="absolute inset-x-0 bottom-[10%] px-8">
-            <div className="border-b border-dashed border-white/10 mb-4" />
-            <div className="flex items-end justify-between">
-              <span className="font-mono text-[11px] tracking-[0.16em] text-mist-dim tabular-nums">0 KM · GROUND</span>
-              <GroundMark dim={0.9 - 0.3 * airshipIn} />
-            </div>
-          </div>
-
-          {/* the ground link reaching up to the airship once it is on station */}
+          {/* links */}
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none"
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
             aria-hidden="true"
           >
+            {/* the long direct hop, which fades as the relay takes over */}
             <line
-              x1="87"
-              y1="84"
-              x2={String(8 + airshipIn * 34)}
-              y2="54"
+              className="ds-flow"
+              x1={satX}
+              y1={satY + 4}
+              x2={groundX}
+              y2={groundY - 2}
+              stroke="#b9c9e2"
+              strokeWidth="1"
+              strokeDasharray="5 5"
+              vectorEffect="non-scaling-stroke"
+              opacity={directLink * 0.55}
+            />
+            {/* laser: satellite to airship, a clean solid beam */}
+            <line
+              x1={satX - 2}
+              y1={satY + 5}
+              x2={airshipX + 4}
+              y2={relayY - 4}
               stroke="#8fd8ff"
+              strokeWidth="3"
+              vectorEffect="non-scaling-stroke"
+              opacity={relay * 0.25}
+            />
+            <line
+              x1={satX - 2}
+              y1={satY + 5}
+              x2={airshipX + 4}
+              y2={relayY - 4}
+              stroke="#eef6ff"
               strokeWidth="1"
               vectorEffect="non-scaling-stroke"
-              strokeDasharray="4 4"
-              opacity={coverage * 0.8}
+              opacity={relay}
+            />
+            {/* radio: airship down to the ground station */}
+            <line
+              className="ds-flow"
+              x1={airshipX + 6}
+              y1={relayY + 4}
+              x2={groundX - 2}
+              y2={groundY - 3}
+              stroke="#b9c9e2"
+              strokeWidth="1"
+              strokeDasharray="3 4"
+              vectorEffect="non-scaling-stroke"
+              opacity={relay * 0.9}
             />
           </svg>
+
+          {/* link labels */}
+          <span
+            className="absolute font-mono text-[10px] tracking-[0.16em] text-mist-dim transition-opacity duration-500"
+            style={{ left: '86%', top: '46%', transform: 'translate(-50%, -50%)', opacity: directLink * 0.8 }}
+          >
+            {linkLabels.direct}
+          </span>
+          <span
+            className="absolute font-mono text-[10px] tracking-[0.16em] text-ice transition-opacity duration-500"
+            style={{ left: `${(satX + airshipX) / 2}%`, top: '28%', opacity: relay }}
+          >
+            {linkLabels.laser}
+          </span>
+          <span
+            className="absolute font-mono text-[10px] tracking-[0.16em] text-mist transition-opacity duration-500"
+            style={{ left: `${(groundX + airshipX) / 2}%`, top: '70%', opacity: relay }}
+          >
+            {linkLabels.radio}
+          </span>
+
+          {/* marks */}
+          <span className="absolute" style={{ left: `${satX}%`, top: `${satY}%`, transform: 'translate(-50%, -140%)' }}>
+            <SatelliteMark opacity={0.55 + 0.45 * (1 - relay * 0.4)} />
+          </span>
+          <span
+            className="absolute"
+            style={{ left: `${groundX}%`, top: `${groundY}%`, transform: 'translate(-50%, -10%)' }}
+          >
+            <GroundMark opacity={0.9} />
+          </span>
+          <span
+            className="absolute"
+            style={{ left: `${groundX - 12}%`, top: `${groundY - 6}%`, transform: 'translate(-50%, -50%)' }}
+          >
+            <RadioWaves opacity={relay} />
+          </span>
+
+          {/* the airship itself */}
+          <img
+            src={airshipSrc}
+            alt="ICARUS airship"
+            className="absolute w-40 md:w-56 h-auto object-contain will-change-transform"
+            style={{
+              left: `${airshipX}%`,
+              top: `${relayY}%`,
+              opacity: airshipIn,
+              transform: `translate(-50%, -78%) scale(${0.85 + airshipIn * 0.15})`,
+            }}
+          />
         </div>
       </div>
     </div>

@@ -24,11 +24,11 @@ export interface HeroProps {
   eyebrow?: ReactNode;
   /** Paragraph under the headline. Off by default. */
   subtitle?: ReactNode;
-  /** Ice pill label. Pass null to hide it. */
+  /** Ice pill label. Off by default; set it to show a call to action under the headline. */
   primaryLabel?: string | null;
   primaryHref?: string;
   onPrimaryClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
-  /** Outlined pill label. Pass null to hide it. */
+  /** Outlined pill label. Off by default. */
   secondaryLabel?: string | null;
   secondaryHref?: string;
   onSecondaryClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
@@ -62,10 +62,10 @@ export function Hero({
   titleLines = ['Building Humanity’s', 'Next Infrastructure Layer', 'In the Stratosphere'],
   eyebrow,
   subtitle,
-  primaryLabel = 'Company Profile (PDF)',
+  primaryLabel = null,
   primaryHref = '#company-profile',
   onPrimaryClick,
-  secondaryLabel = 'Contact',
+  secondaryLabel = null,
   secondaryHref = 'mailto:contact@icarus-airship.com',
   onSecondaryClick,
   className,

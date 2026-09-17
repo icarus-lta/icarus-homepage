@@ -105,6 +105,10 @@
   0%, 100% { opacity: .35; }
   50% { opacity: .9; }
 }
+/* dashes travelling along a link, so a communication path reads as active */
+@keyframes ds-flow {
+  to { stroke-dashoffset: -60; }
+}
 
 @layer base {
   html {
@@ -141,6 +145,16 @@
   /* Hairline rule used between data rows and section bands. */
   .ds-hairline {
     border-color: rgba(255, 255, 255, .10);
+  }
+
+  /* Put on a dashed SVG link to make the traffic on it visible. */
+  .ds-flow {
+    animation: ds-flow 3s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ds-flow {
+      animation: none;
+    }
   }
 
   /* Earth seen from the stratosphere: the planet's dark disc with a lit atmospheric limb.
