@@ -44,7 +44,14 @@ console.error(`  hero photo: ${selectedHero} (${heroInfo.credit})`);
 
 const images = [
   // NASA imagery, public domain; the credit travels with it into the footer.
-  { srcPath: heroPath, out: 'hero-stratosphere.webp', resize: { width: 1920 }, webp: { quality: 72 } },
+  // The hero fills the viewport width, so it keeps its native resolution and a high
+  // quality setting - dark sky gradients band badly at lower settings.
+  {
+    srcPath: heroPath,
+    out: 'hero-stratosphere.webp',
+    resize: { width: 2560 },
+    webp: { quality: 90, effort: 6, smartSubsample: true },
+  },
   { src: 'bg_rec.png', out: 'logo.webp', resize: { height: 96 }, webp: { quality: 90, alphaQuality: 100 } },
   { src: 'bg-white_circle.ico', out: 'logo-circle.webp', ico: true, resize: { width: 96, height: 96 }, webp: { quality: 90, alphaQuality: 100 } },
   { src: 'airship_3d.png', out: 'airship-3d.webp', resize: { width: 1024 }, webp: { quality: 82, alphaQuality: 90 } },

@@ -37,9 +37,9 @@ export interface HeroProps {
 }
 
 const IMAGE_HEIGHT = {
-  tall: 'h-[70vh] min-h-[420px]',
-  medium: 'h-[56vh] min-h-[340px]',
-  short: 'h-[42vh] min-h-[260px]',
+  tall: 'h-[78vh] min-h-[520px]',
+  medium: 'h-[60vh] min-h-[380px]',
+  short: 'h-[44vh] min-h-[280px]',
 } as const;
 
 const IMAGE_POSITION = {
