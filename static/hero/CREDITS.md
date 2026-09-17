@@ -1,11 +1,19 @@
 # Hero photograph options
 
-All of these are NASA imagery and in the public domain. Credit is requested, not required;
-the site footer shows the credit for whichever photo is selected.
+All of these start from NASA imagery, which is in the public domain. Credit is requested, not
+required; the site footer shows the credit for whichever photo is selected, and a retouched file
+says so in its credit line so the edit is never passed off as NASA's own frame.
 
-**To change the homepage photo:** put its file name (without `.jpg`) in `SELECTED.txt`, then rebuild
-(`cd design-system && npm run build`). `_preview-bands.png` in this folder shows all of them cropped
-to the shape the homepage actually uses.
+**To change the homepage photo:** put its file name (without the extension) in `SELECTED.txt`, then
+rebuild (`cd design-system && npm run build`). `.jpg`, `.jpeg`, `.png` and `.webp` all work.
+`_preview-bands.png` in this folder shows the original eight cropped to the shape the homepage
+actually uses.
+
+## 01_revise — currently on the homepage
+- Earth’s curvature from 130,000 ft, shot from the EXCITE balloon; retouched to clear the balloon
+  and the payload arm out of the sky, leaving the horizon and the gondola deck
+- Credit: NASA/GSFC (EXCITE, Kyle Helson), public domain; retouched
+- NASA ID: `GSFC2024EXCITEsViewSpace0001` — 1672×941 PNG, retouched from 01 below
 
 ## 01-excite-balloon-stratosphere
 - Earth’s curvature from 130,000 ft, shot from the EXCITE balloon
