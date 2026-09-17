@@ -55,6 +55,19 @@
   system fonts.
 - `.ds-stars`, `.ds-aurora`, `.ds-earth` are hand-written component classes in `@layer components` - the CSS-drawn
   Earth limb needs the `::after` rim, so it cannot be expressed in utilities alone.
+- **`AltitudeScrollSection` is ANIM A from the user's own wireframe** - Claude Design project
+  `dd005cee-2940-471e-9614-4a88f6f144fe`, file `Homepage Wireframes.dc.html`, block `8b` ("ANIM A 프레임").
+  That block is the spec; read it before touching the scene. Its rules: the LEO constellation, the cloud deck and
+  the ground station are drawn from the first frame and never move, the inter-satellite links pulse the whole way,
+  and **only the downlink changes** - orbit-only (Tbps) → a thin direct drop through the cloud (Mbps) → ICARUS on
+  the 20 km line relaying laser up / radio down (tens of Gbps, which the wireframe asks to be marked as a target,
+  so the default rate string says so). The wireframe also fixes the link colours; translated to the dark theme they
+  are ice `#8fd8ff` for laser, `#4aa8e0` for the radio relay and amber `#d9a441` for the weak direct drop. **The
+  amber is deliberately not a theme token** - it exists only inside this component so nothing else can reach for a
+  second accent hue. The drop is fully faded out before the relay lights (`directOut` ends at 0.68, `relay` starts
+  there) so the two never share the same segment, and their rate labels sit on opposite sides of the axis.
+- **`StatBar` is not on the homepage.** The wireframe runs the hero straight into ANIM A with nothing between, so
+  the page skeleton in conventions.md, guide-ko.html and `render-page.mjs` all drop it. The component still ships.
 - **`Hero` sets the headline into the photograph**, in the black sky left of the limb (bottom-anchored under `md`,
   with its own bottom-up scrim there). The room it has is a triangle: the limb runs corner to corner, so the sky
   beside the headline narrows in proportion to the window. Stepped breakpoint type (`md:text-6xl lg:text-7xl`) put

@@ -1,10 +1,10 @@
 import { AltitudeScrollSection } from '@icarus-lta/design-system';
 
-/** Start of the scroll: the satellite and the ground station talk straight to each other. */
-export const FrameDirectLink = () => <AltitudeScrollSection progress={0.08} />;
+/** Frame 1 — orbit only: Tbps runs between the satellites and never comes down. */
+export const FrameOrbitOnly = () => <AltitudeScrollSection progress={0.12} />;
 
-/** Mid-scroll: ICARUS flies into the empty layer at 20 km. */
-export const FrameAirshipArrives = () => <AltitudeScrollSection progress={0.5} />;
+/** Frame 2 — a direct drop to the ground appears, thin and slow, straight through the cloud. */
+export const FrameDirectDrop = () => <AltitudeScrollSection progress={0.5} />;
 
-/** End of the scroll: laser link up to the satellite, RF link down to the ground. */
+/** Frame 3 — ICARUS takes the empty layer at 20 km: laser up, radio down. */
 export const FrameRelayActive = () => <AltitudeScrollSection progress={1} />;
