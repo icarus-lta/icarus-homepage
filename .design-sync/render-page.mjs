@@ -27,7 +27,7 @@ const D = window.IcarusDS, h = React.createElement;
 const page = h('div', { className: 'overflow-x-clip' },
   h(D.SiteHeader), h(D.Hero),
   h(D.AltitudeScrollSection), h(D.EnduranceScrollSection),
-  h(D.TechCards), h(D.MissionGrid), h(D.RoadmapTimeline), h(D.ContactCTA), h(D.SiteFooter));
+  h(D.MissionGrid), h(D.RoadmapTimeline), h(D.ContactCTA), h(D.SiteFooter));
 ReactDOM.createRoot(document.getElementById('root')).render(page);
 </script></body></html>`;
 

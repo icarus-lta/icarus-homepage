@@ -88,13 +88,12 @@ ReactDOM.createRoot(document.getElementById(<span class="k">'ds-root'</span>)).r
 <h2>2. 홈페이지 조립 순서</h2>
 <p>기본 홈페이지는 이 순서로 쌓습니다.</p>
 <pre><code><span class="k">const</span> { SiteHeader, Hero, AltitudeScrollSection, EnduranceScrollSection,
-        TechCards, MissionGrid, RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
+        MissionGrid, RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
 &lt;div className="overflow-x-clip"&gt;
   &lt;SiteHeader /&gt;
   &lt;Hero /&gt;                       <span class="c">{/* 사진과 첫 애니메이션 사이에는 아무것도 넣지 않습니다 */}</span>
   &lt;AltitudeScrollSection /&gt;      <span class="c">{/* 스크롤 연동 3단: 궤도만 → 직접 하강 → ICARUS 중계 */}</span>
   &lt;EnduranceScrollSection /&gt;     <span class="c">{/* 스크롤 연동: 주간 태양충전 / 야간 방전 / 수년간 체공 */}</span>
-  &lt;TechCards /&gt;
   &lt;MissionGrid /&gt;
   &lt;RoadmapTimeline /&gt;
   &lt;ContactCTA /&gt;
@@ -102,7 +101,8 @@ ReactDOM.createRoot(document.getElementById(<span class="k">'ds-root'</span>)).r
 &lt;/div&gt;</code></pre>
 <div class="note stop"><strong>페이지를 <code>overflow-x-hidden</code>으로 감싸지 마세요.</strong> 그 클래스는 감싼 요소를 스크롤 컨테이너로 바꿔 버리고, 그러면 <code>position: sticky</code>가 조용히 동작을 멈춥니다. 스크롤 애니메이션 두 개가 그냥 지나가 버리는데 에러는 하나도 안 납니다. 반드시 <code>overflow-x-clip</code>을 쓰세요. 중간에 <code>overflow-hidden</code>이 들어간 부모가 하나라도 있으면 같은 증상이 납니다.</div>
 <div class="note"><strong>좌우 여백은 페이지 전체가 하나로 통일되어 있습니다.</strong> 모든 띠는 화면 끝까지 꽉 차고, 그 안의 내용만 공통 여백선에 맞춥니다. 그 여백이 <code>window.IcarusDS.containerClass</code>(<code>w-full mx-auto px-6 md:px-10 lg:px-16 2xl:px-24</code>)입니다. 직접 만드는 띠에도 이 클래스를 넣으면 헤더·히어로 제목·사진과 같은 선에 맞습니다. <code>max-w-6xl</code> 같은 좁은 칸으로 다시 가운데 정렬하지 마세요 — 넓은 화면에서 글자만 가운데 몰려 사진과 어긋나 보입니다.</div>
-<div class="note warn"><strong>히어로 사진과 첫 애니메이션 사이는 비워 둡니다.</strong> 수치 띠도, 라벨도, 설명 문장도 넣지 않습니다. <code>StatBar</code>는 여전히 제공되지만 자리는 서브페이지나 캠페인 페이지이지 홈 첫 화면 아래가 아닙니다 — 다시 넣지 마세요.</div>
+<div class="note warn"><strong>위 목록이 홈페이지 전부입니다.</strong> 확정된 와이어프레임의 6개 섹션(히어로 · 스크롤 애니메이션 2개 · 임무 · 로드맵 · 마무리) 그대로이며, 여기에 섹션을 더하지 않습니다. 히어로 사진과 첫 애니메이션 사이도 비워 둡니다 — 수치 띠도, 라벨도, 설명 문장도 넣지 않습니다. <code>StatBar</code>와 <code>TechCards</code>는 여전히 제공되지만 자리는 서브페이지·캠페인 페이지이지 홈페이지가 아닙니다.</div>
+<div class="note"><strong>두 애니메이션 섹션은 제목이 프레임 <u>위</u>에 옵니다.</strong> 제목이 그 장면을 설명하는 대제목이고, 그 아래 전체 폭 프레임에서 애니메이션이 재생됩니다. 옆에 나란히 두지 마세요.</div>
 <p>서브페이지(Info, Technology, Career, Contact)는 같은 껍데기에서 <code>Hero</code> 자리에 <code>PageHero</code>를 넣고, 그 아래 <code>Section</code> 블록들을 쌓은 뒤 <code>ContactCTA</code>와 <code>SiteFooter</code>로 닫습니다.</p>
 </section>
 
@@ -117,7 +117,7 @@ ReactDOM.createRoot(document.getElementById(<span class="k">'ds-root'</span>)).r
 <tr><td class="n">StatBar</td><td>헤드라인 수치 띠(20 km / 30 days+ / 24/7). 첫 숫자가 페이지 공통 여백선에 맞습니다. <strong style="color:#fff">홈페이지에는 쓰지 않습니다</strong> — 서브페이지·캠페인 페이지용.</td></tr>
 <tr><td class="n">AltitudeScrollSection</td><td>스크롤로 재생되는 "대역폭 병목" 장면, 3단 구성. LEO 위성·구름·지상 기지국은 처음부터 그 자리에 있고 위성 간 <span style="color:#ff9aa4">레이저(빨강)</span>는 내내 펄스하며, <strong style="color:#fff">바뀌는 것은 하강 링크뿐</strong>입니다. ① 궤도 안에서만 Tbps가 흐름 ② 지상으로 직접 내리면 구름층을 지나며 <span style="color:#d9a441">Mbps(주황)</span> ③ 고도 20 km에 ICARUS가 들어와 경로를 넘겨받음 — 위로는 <span style="color:#ff9aa4">레이저</span> Tbps, 아래로는 <span style="color:#4aa8e0">전파</span> 수십 Gbps(목표치). 왼쪽에 고도 눈금(LEO 400–700 km / ICARUS 20 km / 대기권 ~10 km)이 크게 붙습니다.</td></tr>
 <tr><td class="n">EnduranceScrollSection</td><td>스크롤로 재생되는 체공 장면. 낮에는 태양광이 배터리를 채우고 밤에는 그 배터리로 버티며, 옆의 눈금이 1일에서 5년까지 올라갑니다.</td></tr>
-<tr><td class="n">TechCards</td><td>핵심 기술 3장 카드. 각 카드에 mono 번호·라벨·제목·본문.</td></tr>
+<tr><td class="n">TechCards</td><td>핵심 기술 3장 카드. 각 카드에 mono 번호·라벨·제목·본문. <strong style="color:#fff">홈페이지에는 쓰지 않습니다</strong> — 확정 와이어프레임에 없는 섹션이라 서브페이지용입니다.</td></tr>
 <tr><td class="n">MissionGrid</td><td>임무 유형 그리드. 각 항목은 얇은 상단 선 + 제목 + 한 줄 설명.</td></tr>
 <tr><td class="n">RoadmapTimeline</td><td>가로형 개발 일정. 얇은 트랙 위에 단계별 노드, 진행 중인 단계만 아이스색으로 점등.</td></tr>
 <tr><td class="n">ContactCTA</td><td>페이지를 닫는 문구 한 줄 + 연락 버튼. 별이 있는 네이비 띠 위에 가운데 정렬.</td></tr>

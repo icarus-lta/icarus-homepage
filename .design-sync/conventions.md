@@ -12,13 +12,12 @@ ICARUS LTA builds uncrewed airships that hold station at 20 km. The system is **
 
 ```jsx
 const { SiteHeader, Hero, AltitudeScrollSection, EnduranceScrollSection,
-        TechCards, MissionGrid, RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
+        MissionGrid, RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
 <div className="overflow-x-clip">
   <SiteHeader />
   <Hero />                       {/* nothing between the photograph and the first scene */}
   <AltitudeScrollSection />      {/* scroll-driven: orbit only → direct drop → ICARUS relays */}
   <EnduranceScrollSection />     {/* scroll-driven: solar charge / night discharge / years */}
-  <TechCards />
   <MissionGrid />
   <RoadmapTimeline />
   <ContactCTA />
@@ -26,7 +25,9 @@ const { SiteHeader, Hero, AltitudeScrollSection, EnduranceScrollSection,
 </div>
 ```
 
-Nothing sits between the hero photograph and the first scroll scene - no figure row, no eyebrow, no caption. `StatBar` still ships, but it belongs on a subpage or a campaign page, not under the homepage hero; don't put it back.
+**That list is the whole homepage.** It comes from the customer's own signed-off wireframe (six sections: hero, the two scroll scenes, missions, roadmap, closing), so don't add to it. Nothing sits between the hero photograph and the first scroll scene either - no figure row, no eyebrow, no caption. `StatBar` and `TechCards` still ship for subpages and campaign pages; neither belongs on the homepage.
+
+Both scroll sections lead with their heading **above** the animation frame, full width - the heading introduces the scene, it does not sit beside it.
 
 Subpages (Info, Technology, Career, Contact) use the same shell with `PageHero` in place of `Hero`, then `Section` blocks, then `ContactCTA` and `SiteFooter`.
 

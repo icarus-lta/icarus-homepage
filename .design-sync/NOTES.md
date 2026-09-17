@@ -72,8 +72,16 @@
   the left edge (`LEO 400–700 km` / `ICARUS 20 km` / `ATMOSPHERE ~10 km`) is set large - which layer each hop lives
   in is the whole argument - and the LEO block sits above its row because the leftmost satellite reaches into that
   corner on a narrow frame.
-- **`StatBar` is not on the homepage.** The wireframe runs the hero straight into ANIM A with nothing between, so
-  the page skeleton in conventions.md, guide-ko.html and `render-page.mjs` all drop it. The component still ships.
+- **The homepage is exactly the six sections in wireframe 8a** (labelled 확정 구조): hero, ANIM A, ANIM B, missions,
+  roadmap, closing. `StatBar` and `TechCards` are not in it - both still ship for subpages. The skeleton lives in
+  three places that must agree: `conventions.md` (which becomes the uploaded README), `guide-ko.html`, and
+  `render-page.mjs`. **There is a fourth**: the local preview the user actually looks at, an `index.html` under the
+  session scratchpad's `preview/` directory served by a bare `python3 -m http.server 8801`. It is NOT generated from
+  anything - editing the skeleton without editing that file leaves the user staring at the old page and rightly
+  concluding nothing was fixed. That happened once. Find it with `ls -la /proc/<pid>/cwd` for the python process.
+- **Both scroll sections lead with the heading above the frame**, full width - the heading introduces the scene. The
+  frames are sized in `vh` with a `max-h` cap so heading plus frame always fit the sticky `h-screen` box, which
+  clips anything taller.
 - **`Hero` sets the headline into the photograph**, in the black sky left of the limb (bottom-anchored under `md`,
   with its own bottom-up scrim there). The room it has is a triangle: the limb runs corner to corner, so the sky
   beside the headline narrows in proportion to the window. Stepped breakpoint type (`md:text-6xl lg:text-7xl`) put

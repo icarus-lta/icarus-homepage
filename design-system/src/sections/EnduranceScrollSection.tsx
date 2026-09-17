@@ -86,12 +86,12 @@ export function EnduranceScrollSection({
 
   const scene = (
     <div className={containerClass}>
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
-        <div>
-          {eyebrow ? <Eyebrow className="mb-5">{eyebrow}</Eyebrow> : null}
-          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">{title}</h2>
-          {description ? <p className="mt-6 text-base text-mist leading-relaxed">{description}</p> : null}
-          <ol className={cx('mt-10 space-y-4', !steps.length && 'hidden')}>
+      {/* the heading introduces the scene, so it sits above the frame rather than beside it */}
+      <div className="max-w-4xl">
+        {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">{title}</h2>
+        {description ? <p className="mt-4 text-base md:text-lg text-mist leading-relaxed">{description}</p> : null}
+        <ol className={cx('mt-10 space-y-4', !steps.length && 'hidden')}>
             {steps.map((step, i) => (
               <li key={step.label} className="flex gap-4">
                 <span
@@ -125,7 +125,9 @@ export function EnduranceScrollSection({
           </ol>
         </div>
 
-        <div className="relative rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[420px] md:h-[520px] flex flex-col">
+      {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
+          always fit the sticky h-screen box, which clips whatever overflows. */}
+      <div className="mt-8 md:mt-10 relative w-full rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[44vh] min-h-[320px] md:h-[52vh] md:min-h-[380px] md:max-h-[520px] flex flex-col">
           <div className="ds-stars absolute inset-0 opacity-40" />
 
           {/* sky: the band warms at noon and goes dark at night */}
@@ -204,7 +206,6 @@ export function EnduranceScrollSection({
               ))}
             </div>
           </div>
-        </div>
       </div>
     </div>
   );

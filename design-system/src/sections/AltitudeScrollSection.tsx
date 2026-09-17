@@ -70,7 +70,6 @@ const ATMO_Y = 76;
 const GROUND_Y = 91;
 const AXIS_X = 50;
 const SAT_X = [18, 50, 82];
-const CLOUD_OFFSET = 13;
 
 function SatelliteMark({ opacity }: { opacity: number }) {
   return (
@@ -148,16 +147,16 @@ export function AltitudeScrollSection({
 
   const scene = (
     <div className={containerClass}>
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
-        <div>
-          {eyebrow ? <Eyebrow className="mb-5">{eyebrow}</Eyebrow> : null}
-          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">{title}</h2>
-          {description ? <p className="mt-6 text-base text-mist leading-relaxed">{description}</p> : null}
-        </div>
+      {/* the heading introduces the scene, so it sits above the frame rather than beside it */}
+      <div className="max-w-4xl">
+        {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">{title}</h2>
+        {description ? <p className="mt-4 text-base md:text-lg text-mist leading-relaxed">{description}</p> : null}
+      </div>
 
-        {/* the frame the whole scene plays inside - capped so the vertical schematic stays
-            readable instead of stretching into a thin column on a wide screen */}
-        <div className="relative w-full max-w-3xl lg:mx-auto rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[440px] md:h-[560px]">
+      {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
+          always fit the sticky h-screen box, which clips whatever overflows. */}
+      <div className="mt-8 md:mt-10 relative w-full rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[44vh] min-h-[320px] md:h-[52vh] md:min-h-[400px] md:max-h-[620px]">
           <div className="ds-stars absolute inset-0 opacity-50" />
 
           {/* the atmosphere the downlink has to cross - drawn from the first frame */}
@@ -279,20 +278,17 @@ export function AltitudeScrollSection({
             />
           </svg>
 
-          {/* two banks of cloud on the atmosphere line, one either side of the downlink, so the
-              link threads between them instead of disappearing behind one */}
-          <span
-            className="absolute"
-            style={{ left: `${AXIS_X - CLOUD_OFFSET}%`, top: `${ATMO_Y}%`, transform: 'translate(-50%, -58%)' }}
+          {/* Two banks of cloud on the atmosphere line, one either side of the downlink, so the
+              link threads between them instead of disappearing behind one. They are centred with
+              a fixed gap rather than placed at a percentage: a wide frame would otherwise push
+              them off to the sides and leave the link crossing nothing. */}
+          <div
+            className="absolute inset-x-0 flex items-center justify-center gap-20 md:gap-32"
+            style={{ top: `${ATMO_Y}%`, transform: 'translateY(-58%)' }}
           >
             <CloudMark />
-          </span>
-          <span
-            className="absolute"
-            style={{ left: `${AXIS_X + CLOUD_OFFSET}%`, top: `${ATMO_Y}%`, transform: 'translate(-50%, -58%)' }}
-          >
             <CloudMark flip />
-          </span>
+          </div>
 
           {/* rates */}
           <span
@@ -358,7 +354,6 @@ export function AltitudeScrollSection({
               transform: `translate(-50%, -50%) scale(${0.85 + airshipIn * 0.15})`,
             }}
           />
-        </div>
       </div>
     </div>
   );
