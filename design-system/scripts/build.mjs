@@ -49,6 +49,9 @@ const images = [
   {
     srcPath: heroPath,
     out: 'hero-stratosphere.webp',
+    // Honour the file's EXIF rotation, then drop the part a wide band can never show.
+    autoOrient: true,
+    cropTo: 2000,
     resize: { width: 2560 },
     webp: { quality: 90, effort: 6, smartSubsample: true },
   },
@@ -71,7 +74,19 @@ for (const img of images) {
     continue;
   }
   const input = img.ico ? icoPng(srcPath) : srcPath;
-  const info = await sharp(input, { animated: !!img.animated })
+  let pipeline = sharp(input, { animated: !!img.animated });
+  if (img.autoOrient) {
+    // sharp only applies EXIF orientation when rotate() is called with no angle.
+    const meta = await sharp(input).metadata();
+    const turned = (meta.orientation ?? 1) >= 5;
+    const width = turned ? meta.height : meta.width;
+    const height = turned ? meta.width : meta.height;
+    pipeline = pipeline.rotate();
+    if (img.cropTo && height > img.cropTo) {
+      pipeline = pipeline.extract({ left: 0, top: 0, width, height: img.cropTo });
+    }
+  }
+  const info = await pipeline
     .resize({ ...img.resize, withoutEnlargement: true })
     .webp(img.webp)
     .toFile(outPath);

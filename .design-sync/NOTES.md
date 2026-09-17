@@ -50,10 +50,14 @@
   `static/hero/SELECTED.txt` names the active one; `scripts/build.mjs` converts it to `hero-stratosphere.webp`, and
   generates `src/generated/hero.ts` with the matching credit and crop anchor, which `SiteFooter` and `Hero` use by
   default. To change the photo: edit SELECTED.txt, rebuild, re-sync.
-- Currently `09-clouds-curvature-rotated` - `08-clouds-and-curvature` (NASA/JPL-Caltech, PIA11066) turned 90° to the
-  left at the user's request. Because the rotation makes it portrait, its `credits.json` entry sets `"position": "top"`
-  so the band keeps the limb instead of centring on the cloud deck. Any photo entry can carry that field; `Hero` also
-  takes `imagePosition` per instance.
+- Currently `09` - the user's own copy of `08-clouds-and-curvature` (NASA/JPL-Caltech, PIA11066) turned 90° left by
+  setting the EXIF orientation flag, so the pixels were never re-encoded. The build calls sharp's `rotate()` with no
+  angle (`autoOrient: true`) to bake that flag in, then `cropTo: 2000` drops the part a wide band can never show.
+  Because the rotation makes it portrait, its `credits.json` entry sets `"position": "top"` so the band keeps the limb
+  instead of centring on the cloud deck. Any photo entry can carry that field; `Hero` also takes `imagePosition`.
+- Hero encoding: native width (no downscale), WebP quality 90. Quality 72 banded visibly on the dark sky gradient.
+- **Resolution ceiling**: rotated, this photo is 2036px wide, below the ~2880px a 1440px-wide layout wants on a 2x
+  display, so cloud detail stays slightly soft. Unrotated it is 3060px; photos 02-04 are 4928px (2768px rotated).
 - Only the selected photo ships in the bundle; the other seven live in the repo for swapping.
 - The user proposed two other photographs that were **rejected on rights grounds**: one with a `fotor` watermark, one
   credited "JPC VAN HEIJST". Do not use either without a licence.
