@@ -157,7 +157,7 @@ export function AltitudeScrollSection({
 
       {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
           always fit the sticky h-screen box, which clips whatever overflows. */}
-      <div className="mt-8 md:mt-10 relative w-full rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[44vh] min-h-[320px] md:h-[52vh] md:min-h-[400px] md:max-h-[620px]">
+      <div className="mt-8 md:mt-10 relative w-full max-w-5xl rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[52vh] min-h-[360px] md:h-[60vh] md:min-h-[440px] md:max-h-[680px]">
           <div className="ds-stars absolute inset-0 opacity-50" />
 
           {/* the atmosphere the downlink has to cross - drawn from the first frame */}
