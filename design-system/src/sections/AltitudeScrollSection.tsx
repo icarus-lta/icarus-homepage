@@ -69,7 +69,9 @@ const ICARUS_Y = 52;
 const ATMO_Y = 76;
 const GROUND_Y = 91;
 const AXIS_X = 50;
-const SAT_X = [18, 50, 82];
+// Pulled in from the edges: at 18% the outer satellites reached into the altitude scale on the
+// left and the crosslinks ran the full width of the frame for no reason.
+const SAT_X = [27, 50, 73];
 
 function SatelliteMark({ opacity }: { opacity: number }) {
   return (
@@ -157,7 +159,7 @@ export function AltitudeScrollSection({
 
       {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
           always fit the sticky h-screen box, which clips whatever overflows. */}
-      <div className="mt-8 md:mt-10 relative w-full max-w-5xl rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[52vh] min-h-[360px] md:h-[60vh] md:min-h-[440px] md:max-h-[680px]">
+      <div className="mt-8 md:mt-10 relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[52vh] min-h-[360px] md:h-[60vh] md:min-h-[440px] md:max-h-[680px]">
           <div className="ds-stars absolute inset-0 opacity-50" />
 
           {/* the atmosphere the downlink has to cross - drawn from the first frame */}
@@ -165,12 +167,26 @@ export function AltitudeScrollSection({
             <div className="border-t border-dashed border-white/10" />
           </div>
 
-          {/* The altitude scale down the left edge - the whole point of the scene is which layer
-              each hop lives in, so the figures are set large. The LEO block sits above its row
-              rather than beside it: the leftmost satellite reaches into that corner. */}
+          {/* The altitude axis. The whole point of the scene is which layer each hop lives in, so
+              the altitudes are a real scale - a rule down the left with a tick at every level -
+              rather than labels floating in the frame. Everything else stays clear of it. */}
           <div
-            className="absolute left-5 md:left-6"
-            style={{ top: `${LEO_Y}%`, transform: 'translateY(-118%)' }}
+            className="absolute left-5 md:left-6 w-px bg-white/15"
+            style={{ top: `${LEO_Y}%`, height: `${GROUND_Y - LEO_Y}%` }}
+          />
+          {[LEO_Y, ICARUS_Y, ATMO_Y, GROUND_Y].map((y) => (
+            <div
+              key={y}
+              className="absolute left-5 md:left-6 w-2.5 md:w-3 h-px bg-white/30"
+              style={{ top: `${y}%` }}
+            />
+          ))}
+
+          {/* The LEO block sits above its own tick rather than beside it - it is the widest label
+              and the frame has no room for it alongside the constellation. */}
+          <div
+            className="absolute left-10 md:left-12"
+            style={{ top: `${LEO_Y}%`, transform: 'translateY(-132%)' }}
           >
             <div className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-mist-dim">
               {rowLabels.leo}
@@ -179,11 +195,13 @@ export function AltitudeScrollSection({
               {rowLabels.leoAlt}
             </div>
           </div>
-          <div
-            className="absolute left-5 md:left-6 transition-opacity duration-500"
-            style={{ top: `${ICARUS_Y}%`, transform: 'translateY(-50%)', opacity: airshipIn }}
-          >
-            <div className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-ice/70">
+          {/* 20 km is on the scale from the first frame - the empty layer is the argument. Only
+              the ICARUS name arrives with the airship. */}
+          <div className="absolute left-10 md:left-12" style={{ top: `${ICARUS_Y}%`, transform: 'translateY(-50%)' }}>
+            <div
+              className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-ice/70 transition-opacity duration-500"
+              style={{ opacity: airshipIn }}
+            >
               {rowLabels.icarus}
             </div>
             <div className="text-base md:text-2xl font-semibold tracking-tight leading-tight text-ice tabular-nums">
@@ -191,7 +209,7 @@ export function AltitudeScrollSection({
             </div>
           </div>
           <div
-            className="absolute left-5 md:left-6"
+            className="absolute left-10 md:left-12"
             style={{ top: `${ATMO_Y}%`, transform: 'translateY(-118%)' }}
           >
             <div className="text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] text-mist-dim/70">

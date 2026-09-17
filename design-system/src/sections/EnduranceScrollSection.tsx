@@ -127,7 +127,7 @@ export function EnduranceScrollSection({
 
       {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
           always fit the sticky h-screen box, which clips whatever overflows. */}
-      <div className="mt-8 md:mt-10 relative w-full max-w-5xl rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[44vh] min-h-[320px] md:h-[52vh] md:min-h-[380px] md:max-h-[520px] flex flex-col">
+      <div className="mt-8 md:mt-10 relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950/70 overflow-hidden h-[44vh] min-h-[320px] md:h-[52vh] md:min-h-[380px] md:max-h-[520px] flex flex-col">
           <div className="ds-stars absolute inset-0 opacity-40" />
 
           {/* sky: the band warms at noon and goes dark at night */}
