@@ -1,5 +1,6 @@
 import type * as React from 'react';
 import { Button } from '../primitives/Button';
+import { containerClass } from '../primitives/container';
 import { cx } from '../utils';
 
 const POSITION = {
@@ -56,7 +57,7 @@ export function SiteHeader({
         className,
       )}
     >
-      <div className="max-w-6xl mx-auto px-6">
+      <div className={containerClass}>
         <div className="flex items-center justify-between h-16 md:h-20">
           <a
             href={homeHref}

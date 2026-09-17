@@ -1,6 +1,8 @@
 import type * as React from 'react';
 import type { ReactNode } from 'react';
 import { heroCredit } from '../generated/hero';
+import { containerClass } from '../primitives/container';
+import { cx } from '../utils';
 
 export interface SiteFooterProps {
   /** Wordmark text. */
@@ -35,7 +37,7 @@ export function SiteFooter({
 }: SiteFooterProps) {
   return (
     <footer className="bg-space-950 border-t border-white/10">
-      <div className="max-w-6xl mx-auto px-6 py-16">
+      <div className={cx(containerClass, 'py-16')}>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10">
           <div>
             <div className="text-white font-bold text-lg tracking-[0.2em]">{brand}</div>

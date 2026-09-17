@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { images } from '../assets';
 import { ramp, useScrollProgress } from '../hooks/useScrollProgress';
+import { containerClass } from '../primitives/container';
 import { Eyebrow } from '../primitives/Eyebrow';
 import { cx } from '../utils';
 
@@ -105,7 +106,7 @@ export function AltitudeScrollSection({
   const relayY = 50;
 
   const scene = (
-    <div className="w-full max-w-6xl mx-auto px-6">
+    <div className={containerClass}>
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
         <div>
           {eyebrow ? <Eyebrow className="mb-5">{eyebrow}</Eyebrow> : null}

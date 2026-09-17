@@ -4,6 +4,7 @@ import { images } from '../assets';
 import { heroPosition } from '../generated/hero';
 import { EarthLimb } from '../media/EarthLimb';
 import { Button } from '../primitives/Button';
+import { containerClass } from '../primitives/container';
 import { Eyebrow } from '../primitives/Eyebrow';
 import { cx } from '../utils';
 
@@ -84,7 +85,7 @@ export function Hero({
         {/* the image dissolves into the page rather than ending on a hard edge */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-space-950" />
       </div>
-      <div className="relative max-w-6xl mx-auto px-6 pt-10 md:pt-14 pb-20 md:pb-28">
+      <div className={cx(containerClass, 'relative pt-10 md:pt-14 pb-20 md:pb-28')}>
         {eyebrow ? <Eyebrow className="mb-6">{eyebrow}</Eyebrow> : null}
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] max-w-4xl">
           {titleLines.map((line, i) => (

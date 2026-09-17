@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { containerClass } from '../primitives/container';
 import { Eyebrow } from '../primitives/Eyebrow';
 import { cx } from '../utils';
 
@@ -36,7 +37,7 @@ export function PageHero({ id, eyebrow, title, description, backgroundImage, cla
       ) : (
         <div className="ds-stars absolute inset-0 opacity-40" />
       )}
-      <div className="relative max-w-6xl mx-auto px-6">
+      <div className={cx(containerClass, 'relative')}>
         {eyebrow ? <Eyebrow className="mb-5">{eyebrow}</Eyebrow> : null}
         <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight max-w-3xl">{title}</h1>
         {description ? <p className="mt-6 text-base md:text-lg text-mist max-w-2xl leading-relaxed">{description}</p> : null}

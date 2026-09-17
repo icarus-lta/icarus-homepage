@@ -2,6 +2,7 @@ export { images, type IcarusImages } from './assets';
 export { heroCredit, heroPhotoName } from './generated/hero';
 export { useScrollProgress, ramp, type ScrollProgressOptions } from './hooks/useScrollProgress';
 
+export { containerClass } from './primitives/container';
 export { Button, type ButtonProps } from './primitives/Button';
 export { Eyebrow, type EyebrowProps } from './primitives/Eyebrow';
 export { Reveal, type RevealProps } from './primitives/Reveal';

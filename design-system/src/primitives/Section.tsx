@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { containerClass } from './container';
 import { cx } from '../utils';
 
 const TONE = {
@@ -23,14 +24,15 @@ export interface SectionProps {
 }
 
 /**
- * Full-width band with the site's vertical rhythm (py-24, md:py-32) and centered
- * max-w-6xl column. Build every new page section inside one.
+ * Full-width band with the site's vertical rhythm (py-24, md:py-32) and the shared page
+ * gutter, so its content lines up with the header and the full-bleed photography.
+ * Build every new page section inside one.
  */
 export function Section({ id, tone = 'base', stars = false, bleed = false, children, className }: SectionProps) {
   return (
     <section id={id} className={cx('relative overflow-hidden py-24 md:py-32', TONE[tone], className)}>
       {stars ? <div className="ds-stars absolute inset-0 opacity-60 pointer-events-none animate-twinkle" /> : null}
-      <div className={cx('relative', !bleed && 'max-w-6xl mx-auto px-6')}>{children}</div>
+      <div className={cx('relative', !bleed && containerClass)}>{children}</div>
     </section>
   );
 }
