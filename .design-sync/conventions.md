@@ -7,7 +7,8 @@ ICARUS LTA builds uncrewed airships that hold station at 20 km. The system is **
 - Every section component paints its own background. If you build a bare block of your own, put it on `bg-space-950` (or `bg-space-900`) so white text stays readable.
 - **One page gutter.** Bands run full-bleed and their content sits on a shared margin - `window.IcarusDS.containerClass` (`w-full mx-auto px-6 md:px-10 lg:px-16 2xl:px-24`). Put it on any band you build so your text lines up with the header, the hero headline and the photography. Never re-centre content in a narrow `max-w-6xl` column; that leaves the copy stranded in the middle of wide screens while the imagery runs edge to edge.
 - **Never wrap a page in `overflow-x-hidden` (or any `overflow-hidden` ancestor).** It turns the wrapper into a scroll container, which silently stops `position: sticky` from pinning, and the scroll-driven sections then slide past instead of animating. Use `overflow-x-clip`.
-- `SiteHeader` is `position="fixed"` and floats over the page, so the first section must clear it: `Hero` and `PageHero` already carry that top padding. Any other first section needs `pt-32`.
+- `SiteHeader` is `position="fixed"` and floats over the page, so the first section must deal with it. `Hero` and `PageHero` already do - `Hero` deliberately runs its photograph up under the header. Any other first section needs `pt-32`.
+- `Hero` is one full-bleed image with the headline set **into** the image, in the empty sky beside the limb (left of it on wide screens, along the bottom on a phone). Its type is sized in `vw` so it stays clear of the horizon at every window size - don't re-style the headline or move it out from under the photograph.
 
 ```jsx
 const { SiteHeader, Hero, StatBar, AltitudeScrollSection, EnduranceScrollSection,

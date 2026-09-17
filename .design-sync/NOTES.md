@@ -50,6 +50,14 @@
   system fonts.
 - `.ds-stars`, `.ds-aurora`, `.ds-earth` are hand-written component classes in `@layer components` - the CSS-drawn
   Earth limb needs the `::after` rim, so it cannot be expressed in utilities alone.
+- **`Hero` sets the headline into the photograph**, in the black sky left of the limb (bottom-anchored under `md`,
+  with its own bottom-up scrim there). The room it has is a triangle: the limb runs corner to corner, so the sky
+  beside the headline narrows in proportion to the window. Stepped breakpoint type (`md:text-6xl lg:text-7xl`) put
+  "Next Infrastructure Layer" straight through the limb at 1024-1280px, so the headline is sized fluidly -
+  `text-[clamp(2.25rem,4.2vw,4.5rem)]` - which tracks that triangle at every width and still caps at the old 72px.
+  Windows narrower than about 1.57:1 also crop the photo horizontally (the band gets taller than the 16:9 frame),
+  eating black from the left; the fluid size covers that too. Re-check `render-page.mjs` at 1920/1280/1024/390 after
+  touching the headline, the hero height, or the photograph.
 
 ## Imagery and rights
 - **Hero photograph is swappable.** `static/hero/` holds eight NASA (public domain) horizon photographs at full

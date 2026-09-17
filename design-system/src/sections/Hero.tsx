@@ -11,9 +11,9 @@ import { cx } from '../utils';
 export interface HeroProps {
   /** Anchor id. */
   id?: string;
-  /** Photograph filling the top band. Defaults to `images.heroStratosphere`; pass null for the CSS-drawn Earth limb. */
+  /** Photograph behind the hero. Defaults to `images.heroStratosphere`; pass null for the CSS-drawn Earth limb. */
   backgroundImage?: string | null;
-  /** Height of the image band. */
+  /** Height of the hero; the headline sits inside it. */
   imageHeight?: 'tall' | 'medium' | 'short';
   /**
    * Which part of the photograph stays in frame when it is cropped to the band - any CSS
@@ -22,7 +22,7 @@ export interface HeroProps {
   imagePosition?: string;
   /** Where the horizon sits when the CSS-drawn limb is used. */
   horizon?: string;
-  /** Headline under the image, one entry per line. Three short lines read best. */
+  /** Headline set over the image, one entry per line. Three short lines read best. */
   titleLines?: string[];
   /** Mono label above the headline. Off by default. */
   eyebrow?: ReactNode;
@@ -41,16 +41,16 @@ export interface HeroProps {
 }
 
 const IMAGE_HEIGHT = {
-  tall: 'h-[78vh] min-h-[520px]',
-  medium: 'h-[60vh] min-h-[380px]',
-  short: 'h-[44vh] min-h-[280px]',
+  tall: 'h-[88vh] min-h-[600px]',
+  medium: 'h-[72vh] min-h-[500px]',
+  short: 'h-[56vh] min-h-[420px]',
 } as const;
 
 
 /**
- * Opening view: a full-bleed stratospheric horizon photograph across the top, fading into
- * the page, with the display headline set left-aligned underneath it. The fixed SiteHeader
- * floats over the image.
+ * Opening view: a full-bleed stratospheric horizon photograph with the display headline set
+ * into the empty sky beside it - left of the limb on wide screens, along the bottom once the
+ * crop narrows. The fixed SiteHeader floats over the image.
  */
 export function Hero({
   id = 'hero',
@@ -70,24 +70,33 @@ export function Hero({
   className,
 }: HeroProps) {
   return (
-    <section id={id} className={cx('relative bg-space-950', className)}>
-      <div className={cx('relative w-full overflow-hidden', IMAGE_HEIGHT[imageHeight])}>
-        {backgroundImage ? (
-          <img
-            src={backgroundImage}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: imagePosition }}
-          />
-        ) : (
-          <EarthLimb horizon={horizon} scrim={0.35} />
+    <section id={id} className={cx('relative w-full overflow-hidden bg-space-950', IMAGE_HEIGHT[imageHeight], className)}>
+      {backgroundImage ? (
+        <img
+          src={backgroundImage}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: imagePosition }}
+        />
+      ) : (
+        <EarthLimb horizon={horizon} scrim={0.35} />
+      )}
+      {/* The headline sits on the photograph, so it carries its own dark ground: from the left
+          on wide screens, up from the bottom once the crop is too narrow to keep sky beside it. */}
+      <div className="md:hidden absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-space-950 via-space-950/80 to-transparent" />
+      <div className="hidden md:block absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-space-950 via-space-950/50 to-transparent" />
+      {/* the image dissolves into the page rather than ending on a hard edge */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-space-950" />
+      <div
+        className={cx(
+          containerClass,
+          'relative h-full flex flex-col justify-end pb-16 md:justify-center md:pb-0',
         )}
-        {/* the image dissolves into the page rather than ending on a hard edge */}
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-space-950" />
-      </div>
-      <div className={cx(containerClass, 'relative pt-10 md:pt-14 pb-20 md:pb-28')}>
+      >
         {eyebrow ? <Eyebrow className="mb-6">{eyebrow}</Eyebrow> : null}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] max-w-4xl">
+        {/* The headline shares the frame with the limb, and the sky beside it narrows as the
+            window does, so the type is sized off the viewport rather than stepped at breakpoints. */}
+        <h1 className="text-[clamp(2.25rem,4.2vw,4.5rem)] font-bold text-white tracking-tight leading-[1.12] max-w-5xl">
           {titleLines.map((line, i) => (
             <span key={i} className="block">
               {line}
