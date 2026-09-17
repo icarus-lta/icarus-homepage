@@ -11,8 +11,16 @@ export interface AltitudeScrollSectionProps {
   eyebrow?: ReactNode;
   title?: ReactNode;
   description?: ReactNode;
-  /** Altitude labels down the left edge of the scene. */
-  rowLabels?: { leo: string; leoAlt: string; icarus: string; atmosphere: string; ground: string };
+  /** The altitude scale down the left edge - a name and the altitude it sits at. */
+  rowLabels?: {
+    leo: string;
+    leoAlt: string;
+    icarus: string;
+    icarusAlt: string;
+    atmosphere: string;
+    atmosphereAlt: string;
+    ground: string;
+  };
   /** Throughput written beside each link. Keep the relay figure marked as a target. */
   rates?: { crosslink: string; direct: string; laser: string; relay: string };
   /**
@@ -31,8 +39,10 @@ export interface AltitudeScrollSectionProps {
 const DEFAULT_ROW_LABELS = {
   leo: 'LEO',
   leoAlt: '400–700 km',
-  icarus: '20 km',
-  atmosphere: '~10 km',
+  icarus: 'ICARUS',
+  icarusAlt: '20 km',
+  atmosphere: 'ATMOSPHERE',
+  atmosphereAlt: '~10 km',
   ground: 'GROUND STATION',
 };
 
@@ -43,28 +53,32 @@ const DEFAULT_RATES = {
   relay: 'Tens of Gbps (target)',
 };
 
-// Signal colours. Ice is the brand accent and carries the optical laser; the deeper blue is the
-// radio relay; the amber marks the weak direct link and is diagram-only - it is deliberately not
-// a brand token, so nothing outside this scene can reach for it.
-const LASER = '#8fd8ff';
-const LASER_CORE = '#eef6ff';
+// Link colours, fixed by the wireframe so the three kinds of hop never read as each other:
+// red for an optical laser, blue for the radio relay, amber for the weak direct drop. Ice stays
+// on the hardware itself. These are local constants, not theme tokens - the brand still has one
+// accent, and nothing outside this scene can reach for a second.
+const LASER = '#ff4a5c';
+const LASER_CORE = '#ffd9dd';
+const LASER_TEXT = '#ff9aa4';
 const RADIO = '#4aa8e0';
 const WEAK = '#d9a441';
+const ICE = '#8fd8ff';
 
-const LEO_Y = 15;
+const LEO_Y = 19;
 const ICARUS_Y = 52;
-const ATMO_Y = 74;
-const GROUND_Y = 90;
+const ATMO_Y = 76;
+const GROUND_Y = 91;
 const AXIS_X = 50;
 const SAT_X = [18, 50, 82];
+const CLOUD_OFFSET = 13;
 
 function SatelliteMark({ opacity }: { opacity: number }) {
   return (
     <svg viewBox="0 0 64 28" className="w-12 md:w-16 h-auto" style={{ opacity }} aria-hidden="true">
       <rect x="26" y="9" width="12" height="10" rx="2" fill="#e8f2ff" />
-      <rect x="4" y="11" width="18" height="6" rx="1" fill={LASER} opacity=".75" />
-      <rect x="42" y="11" width="18" height="6" rx="1" fill={LASER} opacity=".75" />
-      <circle cx="32" cy="22" r="2" fill={LASER} />
+      <rect x="4" y="11" width="18" height="6" rx="1" fill={ICE} opacity=".75" />
+      <rect x="42" y="11" width="18" height="6" rx="1" fill={ICE} opacity=".75" />
+      <circle cx="32" cy="22" r="2" fill={ICE} />
     </svg>
   );
 }
@@ -74,15 +88,20 @@ function GroundMark({ opacity }: { opacity: number }) {
     <svg viewBox="0 0 48 34" className="w-10 md:w-12 h-auto" style={{ opacity }} aria-hidden="true">
       <path d="M24 2 L32 32 H16 Z" fill="none" stroke="#b9c9e2" strokeWidth="1.6" />
       <path d="M19 20 H29" stroke="#b9c9e2" strokeWidth="1.4" />
-      <circle cx="24" cy="2" r="2.4" fill={LASER} />
+      <circle cx="24" cy="2" r="2.4" fill={ICE} />
     </svg>
   );
 }
 
-/** The cloud deck the direct downlink has to cross. Sits on the atmosphere line in every frame. */
-function CloudMark() {
+/** A bank of the cloud deck. Two of these flank the downlink, which threads between them. */
+function CloudMark({ flip = false }: { flip?: boolean }) {
   return (
-    <svg viewBox="0 0 60 22" className="w-24 md:w-32 h-auto" aria-hidden="true">
+    <svg
+      viewBox="0 0 60 22"
+      className="w-20 md:w-32 h-auto"
+      style={flip ? { transform: 'scaleX(-1)' } : undefined}
+      aria-hidden="true"
+    >
       <path
         d="M10 18 q-8 0 -8 -5 q0 -5 7 -5 q1 -6 9 -6 q7 0 9 5 q4 -3 8 1 q4 -4 8 0 q7 0 7 5 q0 5 -8 5 z"
         fill="#b9c9e2"
@@ -97,9 +116,10 @@ function CloudMark() {
 
 /**
  * The bandwidth bottleneck, driven by scroll, in three frames. The LEO constellation, the cloud
- * deck and the ground station stand still the whole way and the crosslinks never stop pulsing;
- * only the downlink changes. Orbit carries Tbps, a direct drop to the ground is worth Mbps, then
- * ICARUS takes the empty layer at 20 km - laser up, radio down. `progress` freezes one frame.
+ * deck and the ground station stand still the whole way and the red laser crosslinks never stop
+ * pulsing; only the downlink changes. Orbit carries Tbps, a direct drop through the cloud deck is
+ * worth Mbps, then ICARUS takes the empty layer at 20 km - laser up, radio down. An altitude
+ * scale runs down the left edge. `progress` freezes one frame.
  */
 export function AltitudeScrollSection({
   id = 'why-20km',
@@ -145,26 +165,33 @@ export function AltitudeScrollSection({
             <div className="border-t border-dashed border-white/10" />
           </div>
 
-          {/* Altitude labels down the left edge. They sit above their line, not beside it - the
-              leftmost satellite reaches into that corner once the frame is narrow. */}
+          {/* The altitude scale down the left edge - the whole point of the scene is which layer
+              each hop lives in, so the figures are set large. The LEO block sits above its row
+              rather than beside it: the leftmost satellite reaches into that corner. */}
           <div
-            className="absolute left-5 md:left-6 font-mono text-[10px] leading-tight tracking-[0.12em]"
-            style={{ top: `${LEO_Y}%`, transform: 'translateY(-140%)' }}
+            className="absolute left-5 md:left-6"
+            style={{ top: `${LEO_Y}%`, transform: 'translateY(-118%)' }}
           >
-            <div className="text-mist">{rowLabels.leo}</div>
-            <div className="text-mist-dim">{rowLabels.leoAlt}</div>
+            <div className="font-mono text-[10px] md:text-xs tracking-[0.22em] text-mist-dim">{rowLabels.leo}</div>
+            <div className="font-mono text-sm md:text-xl leading-tight text-mist tabular-nums">{rowLabels.leoAlt}</div>
           </div>
           <div
-            className="absolute left-5 md:left-6 font-mono text-[10px] leading-tight tracking-[0.12em] text-ice transition-opacity duration-500"
+            className="absolute left-5 md:left-6 transition-opacity duration-500"
             style={{ top: `${ICARUS_Y}%`, transform: 'translateY(-50%)', opacity: airshipIn }}
           >
-            {rowLabels.icarus}
+            <div className="font-mono text-[10px] md:text-xs tracking-[0.22em] text-ice/70">{rowLabels.icarus}</div>
+            <div className="font-mono text-sm md:text-xl leading-tight text-ice tabular-nums">{rowLabels.icarusAlt}</div>
           </div>
           <div
-            className="absolute left-5 md:left-6 font-mono text-[10px] leading-tight tracking-[0.12em] text-mist-dim"
-            style={{ top: `${ATMO_Y}%`, transform: 'translateY(-130%)' }}
+            className="absolute left-5 md:left-6"
+            style={{ top: `${ATMO_Y}%`, transform: 'translateY(-118%)' }}
           >
-            {rowLabels.atmosphere}
+            <div className="font-mono text-[10px] md:text-xs tracking-[0.22em] text-mist-dim/70">
+              {rowLabels.atmosphere}
+            </div>
+            <div className="font-mono text-sm md:text-xl leading-tight text-mist-dim tabular-nums">
+              {rowLabels.atmosphereAlt}
+            </div>
           </div>
 
           {/* links */}
@@ -252,38 +279,50 @@ export function AltitudeScrollSection({
             />
           </svg>
 
-          {/* the cloud sits over the links, so whatever crosses it is visibly dimmed */}
+          {/* two banks of cloud on the atmosphere line, one either side of the downlink, so the
+              link threads between them instead of disappearing behind one */}
           <span
             className="absolute"
-            style={{ left: `${AXIS_X}%`, top: `${ATMO_Y}%`, transform: 'translate(-50%, -62%)' }}
+            style={{ left: `${AXIS_X - CLOUD_OFFSET}%`, top: `${ATMO_Y}%`, transform: 'translate(-50%, -58%)' }}
           >
             <CloudMark />
+          </span>
+          <span
+            className="absolute"
+            style={{ left: `${AXIS_X + CLOUD_OFFSET}%`, top: `${ATMO_Y}%`, transform: 'translate(-50%, -58%)' }}
+          >
+            <CloudMark flip />
           </span>
 
           {/* rates */}
           <span
-            className="absolute font-mono text-[10px] tracking-[0.14em] text-ice-300"
-            style={{ left: `${(SAT_X[0] + SAT_X[1]) / 2}%`, top: `${LEO_Y + 4}%`, transform: 'translateX(-50%)' }}
+            className="absolute font-mono text-[10px] md:text-xs tracking-[0.14em]"
+            style={{
+              left: `${(SAT_X[0] + SAT_X[1]) / 2}%`,
+              top: `${LEO_Y + 4}%`,
+              transform: 'translateX(-50%)',
+              color: LASER_TEXT,
+            }}
           >
             {rates.crosslink}
           </span>
           {/* the drop is labelled on the left and the laser that replaces it on the right, so a
               half-finished scroll never stacks the two figures on top of each other */}
           <span
-            className="absolute font-mono text-[10px] tracking-[0.14em] whitespace-nowrap transition-opacity duration-500"
-            style={{ left: `${AXIS_X - 3}%`, top: '30%', transform: 'translateX(-100%)', color: WEAK, opacity: direct }}
+            className="absolute font-mono text-[10px] md:text-xs tracking-[0.14em] whitespace-nowrap transition-opacity duration-500"
+            style={{ left: `${AXIS_X - 3}%`, top: '32%', transform: 'translateX(-100%)', color: WEAK, opacity: direct }}
           >
             {rates.direct}
           </span>
           <span
-            className="absolute font-mono text-[10px] tracking-[0.14em] text-ice transition-opacity duration-500"
-            style={{ left: `${AXIS_X + 3}%`, top: '30%', opacity: relay }}
+            className="absolute font-mono text-[10px] md:text-xs tracking-[0.14em] transition-opacity duration-500"
+            style={{ left: `${AXIS_X + 3}%`, top: '32%', color: LASER_TEXT, opacity: relay }}
           >
             {rates.laser}
           </span>
           <span
-            className="absolute font-mono text-[10px] tracking-[0.14em] max-w-[8rem] leading-tight transition-opacity duration-500"
-            style={{ left: `${AXIS_X + 3}%`, top: '62%', color: RADIO, opacity: relay }}
+            className="absolute font-mono text-[10px] md:text-xs tracking-[0.14em] max-w-[9rem] leading-tight transition-opacity duration-500"
+            style={{ left: `${AXIS_X + 3}%`, top: '63%', color: RADIO, opacity: relay }}
           >
             {rates.relay}
           </span>
