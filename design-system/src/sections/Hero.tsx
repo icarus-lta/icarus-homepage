@@ -14,8 +14,11 @@ export interface HeroProps {
   backgroundImage?: string | null;
   /** Height of the image band. */
   imageHeight?: 'tall' | 'medium' | 'short';
-  /** Which part of the photograph stays in frame when it is cropped to the band. */
-  imagePosition?: 'top' | 'center' | 'bottom';
+  /**
+   * Which part of the photograph stays in frame when it is cropped to the band - any CSS
+   * object-position value, e.g. "center top", "center 30%", "left bottom".
+   */
+  imagePosition?: string;
   /** Where the horizon sits when the CSS-drawn limb is used. */
   horizon?: string;
   /** Headline under the image, one entry per line. Three short lines read best. */
@@ -42,11 +45,6 @@ const IMAGE_HEIGHT = {
   short: 'h-[44vh] min-h-[280px]',
 } as const;
 
-const IMAGE_POSITION = {
-  top: 'object-top',
-  center: 'object-center',
-  bottom: 'object-bottom',
-} as const;
 
 /**
  * Opening view: a full-bleed stratospheric horizon photograph across the top, fading into
@@ -77,7 +75,8 @@ export function Hero({
           <img
             src={backgroundImage}
             alt=""
-            className={cx('absolute inset-0 w-full h-full object-cover', IMAGE_POSITION[imagePosition])}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: imagePosition }}
           />
         ) : (
           <EarthLimb horizon={horizon} scrim={0.35} />
