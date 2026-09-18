@@ -109,6 +109,17 @@
 @keyframes ds-flow {
   to { stroke-dashoffset: -60; }
 }
+@keyframes ds-roadmap-flow-x {
+  to { background-position: 13px 0; }
+}
+@keyframes ds-roadmap-flow-y {
+  to { background-position: 0 13px; }
+}
+@keyframes ds-roadmap-ripple {
+  0% { transform: scale(1); opacity: 0; }
+  15% { opacity: .5; }
+  100% { transform: scale(2.75); opacity: 0; }
+}
 
 @layer base {
   html {
@@ -117,6 +128,10 @@
   body {
     @apply bg-space-950 text-mist font-sans antialiased;
   }
+  html[lang='ko'] body {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
   ::selection {
     background: var(--color-ice);
     color: var(--color-space-950);
@@ -124,6 +139,116 @@
 }
 
 @layer components {
+  .ds-roadmap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .ds-roadmap-phase {
+    position: relative;
+    min-width: 0;
+    padding: 0 0 2.75rem 2.5rem;
+  }
+  .ds-roadmap-phase:last-child { padding-bottom: 0; }
+  .ds-roadmap-track {
+    position: absolute;
+    left: 7px;
+    top: 28px;
+    width: 2px;
+    height: calc(100% - 32px);
+    color: rgb(255 255 255 / 24%);
+    background-image: linear-gradient(to bottom, currentColor 5px, transparent 5px);
+    background-size: 2px 13px;
+    background-repeat: repeat-y;
+    pointer-events: none;
+  }
+  .ds-roadmap-phase-current .ds-roadmap-track {
+    color: rgb(143 216 255 / 75%);
+    animation: ds-roadmap-flow-y 1.6s linear infinite;
+  }
+  .ds-roadmap-node {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgb(255 255 255 / 40%);
+    border-radius: 50%;
+    background: var(--color-space-950);
+  }
+  .ds-roadmap-phase-current .ds-roadmap-node {
+    border-color: var(--color-ice);
+    background: var(--color-ice);
+    box-shadow: 0 0 12px rgb(143 216 255 / 30%);
+  }
+  .ds-roadmap-phase-current .ds-roadmap-node::before,
+  .ds-roadmap-phase-current .ds-roadmap-node::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 1px solid var(--color-ice);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    animation: ds-roadmap-ripple 3.2s cubic-bezier(.2, .65, .35, 1) infinite;
+  }
+  .ds-roadmap-phase-current .ds-roadmap-node::after {
+    animation-delay: -1.6s;
+  }
+  .ds-roadmap-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem .5rem;
+    color: var(--color-ice-100);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: .02em;
+  }
+  .ds-roadmap-note {
+    color: var(--color-ice);
+    font-weight: 400;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+  .ds-roadmap-title {
+    margin-top: .875rem;
+    color: var(--color-ice-100);
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+  @media (min-width: 64rem) {
+    .ds-roadmap { grid-template-columns: repeat(var(--ds-phases), minmax(0, 1fr)); }
+    .ds-roadmap-phase { padding: 2.75rem 1.5rem 0 0; }
+    .ds-roadmap-track {
+      left: 24px;
+      top: 7px;
+      width: calc(100% - 32px);
+      height: 2px;
+      background-image: linear-gradient(to right, currentColor 5px, transparent 5px);
+      background-size: 13px 2px;
+      background-repeat: repeat-x;
+    }
+    .ds-roadmap-phase-current .ds-roadmap-track { animation-name: ds-roadmap-flow-x; }
+    .ds-roadmap-node { top: 0; }
+    .ds-roadmap-title { font-size: 1.5rem; }
+  }
+  @media (64rem <= width < 80rem) {
+    .ds-roadmap-label { min-height: 3.25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ds-roadmap-phase-current .ds-roadmap-track,
+    .ds-roadmap-phase-current .ds-roadmap-node::before,
+    .ds-roadmap-phase-current .ds-roadmap-node::after { animation: none; }
+  }
+
   /* Star field for hero and full-bleed space bands. Pure CSS - no image to load. */
   .ds-stars {
     background-image:
@@ -142,6 +267,87 @@
       radial-gradient(60% 45% at 50% 42%, rgba(143, 216, 255, .16), transparent 70%),
       radial-gradient(45% 35% at 22% 74%, rgba(28, 63, 125, .35), transparent 72%);
   }
+  /* ANIM B's closing copy sits beside the map; phones reserve a compact band below it. */
+  .ds-endurance-diagram { height: 100%; }
+  .ds-endurance-capabilities {
+    position: absolute;
+    top: 50%;
+    right: 4.5%;
+    width: 27%;
+    max-width: 276px;
+    display: grid;
+    gap: 28px;
+    transform: translateY(calc(-50% + (1 - var(--closing)) * 10px));
+    pointer-events: none;
+  }
+  .ds-endurance-capability h3 {
+    margin: 0 0 14px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid rgba(143, 216, 255, .3);
+    color: #eef6ff;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+  }
+  .ds-endurance-metrics {
+    display: grid;
+    gap: 13px;
+  }
+  .ds-endurance-metrics strong {
+    display: block;
+    color: #8fd8ff;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .ds-endurance-metrics span {
+    color: #b9c9e2;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .ds-endurance-realtime {
+    margin-bottom: 10px;
+    color: #8fd8ff;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .ds-endurance-applications {
+    display: grid;
+    gap: 5px;
+    color: #b9c9e2;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  @media (max-width: 767px) {
+    .ds-endurance-diagram {
+      height: calc(100% - var(--closing) * 218px);
+    }
+    .ds-endurance-capabilities {
+      inset: auto 18px 20px;
+      width: auto;
+      max-width: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      transform: translateY(calc((1 - var(--closing)) * 10px));
+    }
+    .ds-endurance-capability h3 {
+      min-height: 49px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      font-size: 15px;
+    }
+    .ds-endurance-metrics { gap: 10px; }
+    .ds-endurance-metrics strong { font-size: 13px; }
+    .ds-endurance-metrics span { font-size: 12px; }
+    .ds-endurance-realtime { font-size: 12px; margin-bottom: 8px; }
+    .ds-endurance-applications { font-size: 12px; gap: 3px; }
+  }
+  @media (max-width: 359px) {
+    .ds-endurance-diagram { height: calc(100% - var(--closing) * 234px); }
+  }
+
   /* Hairline rule used between data rows and section bands. */
   .ds-hairline {
     border-color: rgba(255, 255, 255, .10);

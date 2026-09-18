@@ -1,6 +1,6 @@
 import { RoadmapTimeline } from '@icarus-lta/design-system';
 
-/** The three programme phases. */
+/** The four homepage programme phases. */
 export const Default = () => <RoadmapTimeline />;
 
 /** A four-step version for a detailed programme page. */

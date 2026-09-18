@@ -1,5 +1,7 @@
 import type * as React from 'react';
 import type { ReactNode } from 'react';
+import { content } from '../i18n/content';
+import { useLanguage } from '../i18n/language';
 import { Button } from '../primitives/Button';
 import { Section } from '../primitives/Section';
 import { cx } from '../utils';
@@ -26,18 +28,21 @@ export interface ContactCTAProps {
  * Closing call to action: a centered line over a starry navy band, with the contact
  * address as the ice pill and a quieter second action beside it.
  */
-export function ContactCTA({
-  id = 'contact',
-  title = 'From the ground to the stratosphere',
-  description = 'We are looking for partners, operators and engineers to climb with us.',
-  primaryLabel,
-  email = 'contact@icarus-airship.com',
-  onPrimaryClick,
-  secondaryLabel = 'Careers',
-  secondaryHref = '/career',
-  onSecondaryClick,
-  className,
-}: ContactCTAProps) {
+export function ContactCTA(props: ContactCTAProps) {
+  const { language } = useLanguage();
+  const copy = content[language].contact;
+  const {
+    id = 'contact',
+    title = copy.title,
+    description = copy.description,
+    primaryLabel,
+    email = 'contact@icarus-airship.com',
+    onPrimaryClick,
+    secondaryLabel = copy.secondaryLabel,
+    secondaryHref = '/career',
+    onSecondaryClick,
+    className,
+  } = props;
   return (
     <Section id={id} tone="navy" stars className={cx('text-center', className)}>
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight">{title}</h2>

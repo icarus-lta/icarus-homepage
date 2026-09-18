@@ -61,6 +61,8 @@ const images = [
   { src: 'bg_rec.png', out: 'logo.webp', resize: { height: 96 }, webp: { quality: 90, alphaQuality: 100 } },
   { src: 'bg-white_circle.ico', out: 'logo-circle.webp', ico: true, resize: { width: 96, height: 96 }, webp: { quality: 90, alphaQuality: 100 } },
   { src: 'airship_3d.png', out: 'airship-3d.webp', resize: { width: 1024 }, webp: { quality: 82, alphaQuality: 90 } },
+  // the platform photograph, cut off its studio white by .design-sync/cutout.mjs
+  { src: 'airframe_photo.png', out: 'airframe.webp', resize: { width: 1280 }, webp: { quality: 88, alphaQuality: 100 } },
   { src: 'about_img.gif', out: 'about.webp', animated: true, resize: { width: 448 }, webp: { quality: 55, effort: 6 } },
   { src: 'product_img.png', out: 'product.webp', resize: { width: 896 }, webp: { quality: 78 } },
   { src: 'news_img_4.png', out: 'news-material.webp', resize: { width: 800 }, webp: { quality: 78 } },

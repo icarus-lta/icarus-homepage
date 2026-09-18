@@ -1,10 +1,10 @@
 import { AltitudeScrollSection } from '@icarus-lta/design-system';
 
-/** Frame 1 — orbit only: Tbps runs between the satellites and never comes down. */
-export const FrameOrbitOnly = () => <AltitudeScrollSection progress={0.12} />;
+/** 0% — Ground Station, Mbps and Network bottleneck are visible before scrolling. */
+export const FrameBottleneck = () => <AltitudeScrollSection progress={0} />;
 
-/** Frame 2 — a direct drop to the ground appears, thin and slow, straight through the cloud. */
-export const FrameDirectDrop = () => <AltitudeScrollSection progress={0.5} />;
+/** 50% — the airship and Gbps / x 100 bandwidth relay join the persistent ground station. */
+export const FrameRelayActive = () => <AltitudeScrollSection progress={0.5} />;
 
-/** Frame 3 — ICARUS takes the empty layer at 20 km: laser up, radio down. */
-export const FrameRelayActive = () => <AltitudeScrollSection progress={1} />;
+/** 100% — City, Mobile, Mobility and Military join the airship through Direct to Cell links. */
+export const FrameDirectToCell = () => <AltitudeScrollSection progress={1} />;

@@ -15,10 +15,11 @@ export const InFlow = () => (
       position="static"
       ctaLabel={null}
       links={[
-        { label: 'Info', href: '/info' },
-        { label: 'Technology', href: '/technology' },
-        { label: 'Career', href: '/career' },
-        { label: 'Contact', href: '/contact' },
+        { label: 'MISSION', href: '/mission' },
+        { label: 'ABOUT', href: '/about' },
+        { label: 'CAREER', href: '/career' },
+        { label: 'NEWS', href: '/news' },
+        { label: 'CONTACT', href: '/contact' },
       ]}
     />
   </div>

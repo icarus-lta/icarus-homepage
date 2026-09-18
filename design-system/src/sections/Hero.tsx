@@ -1,5 +1,7 @@
 import type * as React from 'react';
 import type { ReactNode } from 'react';
+import { content } from '../i18n/content';
+import { useLanguage } from '../i18n/language';
 import { images } from '../assets';
 import { heroPosition } from '../generated/hero';
 import { EarthLimb } from '../media/EarthLimb';
@@ -28,11 +30,11 @@ export interface HeroProps {
   eyebrow?: ReactNode;
   /** Paragraph under the headline. Off by default. */
   subtitle?: ReactNode;
-  /** Ice pill label. Off by default; set it to show a call to action under the headline. */
+  /** Ice pill label. Defaults to Join us; pass null to hide it. */
   primaryLabel?: string | null;
   primaryHref?: string;
   onPrimaryClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
-  /** Outlined pill label. Off by default. */
+  /** Outlined pill label. Defaults to Contact; pass null to hide it. */
   secondaryLabel?: string | null;
   secondaryHref?: string;
   onSecondaryClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
@@ -52,23 +54,26 @@ const IMAGE_HEIGHT = {
  * into the empty sky beside it - left of the limb on wide screens, along the bottom once the
  * crop narrows. The fixed SiteHeader floats over the image.
  */
-export function Hero({
-  id = 'hero',
-  backgroundImage = images.heroStratosphere,
-  imageHeight = 'tall',
-  imagePosition = heroPosition,
-  horizon = '72%',
-  titleLines = ['Building Humanity’s', 'Next Infrastructure Layer', 'In the Stratosphere'],
-  eyebrow,
-  subtitle,
-  primaryLabel = null,
-  primaryHref = '#company-profile',
-  onPrimaryClick,
-  secondaryLabel = null,
-  secondaryHref = 'mailto:contact@icarus-airship.com',
-  onSecondaryClick,
-  className,
-}: HeroProps) {
+export function Hero(props: HeroProps) {
+  const { language } = useLanguage();
+  const copy = content[language].hero;
+  const {
+    id = 'hero',
+    backgroundImage = images.heroStratosphere,
+    imageHeight = 'tall',
+    imagePosition = heroPosition,
+    horizon = '72%',
+    titleLines = copy.titleLines,
+    eyebrow,
+    subtitle,
+    primaryLabel = copy.primaryLabel,
+    primaryHref,
+    onPrimaryClick,
+    secondaryLabel = copy.secondaryLabel,
+    secondaryHref,
+    onSecondaryClick,
+    className,
+  } = props;
   return (
     <section id={id} className={cx('relative w-full overflow-hidden bg-space-950', IMAGE_HEIGHT[imageHeight], className)}>
       {backgroundImage ? (
@@ -105,14 +110,23 @@ export function Hero({
         </h1>
         {subtitle ? <p className="mt-7 text-base md:text-lg text-mist max-w-xl leading-relaxed">{subtitle}</p> : null}
         {primaryLabel || secondaryLabel ? (
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <div className="mt-8 md:mt-10 flex flex-wrap items-center gap-3 md:gap-4">
             {primaryLabel ? (
-              <Button href={primaryHref} onClick={onPrimaryClick}>
+              <Button
+                href={primaryHref}
+                onClick={onPrimaryClick}
+                className="min-w-32 md:min-w-40 font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ice"
+              >
                 {primaryLabel}
               </Button>
             ) : null}
             {secondaryLabel ? (
-              <Button variant="secondary" href={secondaryHref} onClick={onSecondaryClick}>
+              <Button
+                variant="secondary"
+                href={secondaryHref}
+                onClick={onSecondaryClick}
+                className="min-w-32 md:min-w-40 font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ice"
+              >
                 {secondaryLabel}
               </Button>
             ) : null}

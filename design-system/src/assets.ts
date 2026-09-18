@@ -2,6 +2,7 @@ import heroStratosphere from '../generated/assets/hero-stratosphere.webp';
 import logo from '../generated/assets/logo.webp';
 import logoCircle from '../generated/assets/logo-circle.webp';
 import airship3d from '../generated/assets/airship-3d.webp';
+import airframe from '../generated/assets/airframe.webp';
 import about from '../generated/assets/about.webp';
 import product from '../generated/assets/product.webp';
 import newsMaterial from '../generated/assets/news-material.webp';
@@ -19,6 +20,11 @@ export interface IcarusImages {
   logoCircle: string;
   /** 3D airship illustration used in the hero (transparent background). */
   airship3d: string;
+  /**
+   * Photograph of the platform itself, nose to the left, cut out of its studio background.
+   * ANIM B's first scene is this image - the parts are called out on the real aircraft.
+   */
+  airframe: string;
   /** Animated airship clip used in the About section (square crop works best). */
   about: string;
   /** Envelope-material product photo used in the Product section (square). */
@@ -38,6 +44,7 @@ export const images: IcarusImages = {
   logo,
   logoCircle,
   airship3d,
+  airframe,
   about,
   product,
   newsMaterial,

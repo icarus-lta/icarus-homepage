@@ -1,5 +1,6 @@
 export { images, type IcarusImages } from './assets';
 export { heroCredit, heroPhotoName } from './generated/hero';
+export { useLanguage, setLanguage, type Language } from './i18n/language';
 export { useScrollProgress, ramp, type ScrollProgressOptions } from './hooks/useScrollProgress';
 
 export { containerClass } from './primitives/container';
