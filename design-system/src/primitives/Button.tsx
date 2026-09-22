@@ -24,6 +24,7 @@ export interface ButtonProps {
   external?: boolean;
   onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
+  'aria-current'?: React.AriaAttributes['aria-current'];
   /** Extra classes appended to the button. */
   className?: string;
 }
@@ -41,6 +42,7 @@ export function Button({
   external = false,
   onClick,
   type = 'button',
+  'aria-current': ariaCurrent,
   className,
 }: ButtonProps) {
   const classes = cx(
@@ -56,6 +58,7 @@ export function Button({
         href={href}
         className={classes}
         onClick={onClick}
+        aria-current={ariaCurrent}
         {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         {children}
@@ -63,7 +66,7 @@ export function Button({
     );
   }
   return (
-    <button type={type} className={classes} onClick={onClick}>
+    <button type={type} className={classes} onClick={onClick} aria-current={ariaCurrent}>
       {children}
     </button>
   );

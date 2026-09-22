@@ -412,18 +412,17 @@ export function EnduranceScrollSection(props: EnduranceScrollSectionProps) {
   };
 
   const scene = (
-    <div className={containerClass}>
+    <div className={cx(containerClass, 'ds-endurance-scene')}>
       {/* the heading introduces the scene, so it sits above the frame rather than beside it */}
-      <div className="max-w-6xl">
+      <div className="ds-endurance-heading max-w-6xl">
         {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight">{title}</h2>
-        {description ? <p className="mt-4 text-lg md:text-xl text-mist leading-relaxed tracking-[-0.015em] xl:whitespace-nowrap">{description}</p> : null}
+        <h2 className="font-bold text-white tracking-tight leading-tight">{title}</h2>
+        {description ? <p className="text-mist tracking-[-0.015em] xl:whitespace-nowrap">{description}</p> : null}
       </div>
 
-      {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
-          always fit the sticky h-screen box, which clips whatever overflows. */}
+      {/* The heading keeps its natural height; the frame takes the remaining viewport space. */}
       <div
-        className="ds-endurance-frame mt-8 md:mt-10 relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950 overflow-hidden h-[58vh] min-h-[400px] md:h-[68vh] md:min-h-[520px] md:max-h-[760px] shadow-2xl"
+        className="ds-endurance-frame relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950 overflow-hidden shadow-2xl"
         style={{ '--closing': closing } as CSSProperties}
       >
         <div className="ds-stars absolute inset-0 opacity-40" />
@@ -628,8 +627,8 @@ export function EnduranceScrollSection(props: EnduranceScrollSectionProps) {
 
   return (
     <section id={id} ref={ref} className={cx('relative bg-space-950', className)} style={{ height: trackHeight }}>
-      {/* h-screen, not min-h-screen: a sticky box taller than the viewport never pins at the top. */}
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">{scene}</div>
+      {/* Reserve the fixed navigation before fitting both the heading and animation. */}
+      <div className="ds-endurance-viewport sticky top-0 overflow-hidden">{scene}</div>
     </section>
   );
 }

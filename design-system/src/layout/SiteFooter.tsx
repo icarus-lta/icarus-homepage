@@ -9,6 +9,8 @@ import { cx } from '../utils';
 export interface SiteFooterProps {
   /** Wordmark text. */
   brand?: string;
+  /** Small company suffix aligned at the lower right of the wordmark. */
+  brandSuffix?: string | null;
   /** Legal line under the wordmark. */
   legal?: ReactNode;
   /** Registered address. Pass null to omit. */
@@ -20,7 +22,7 @@ export interface SiteFooterProps {
 }
 
 /**
- * Closing bar: ICARUS wordmark and legal line on the left, page links on the right,
+ * Closing bar: ICARUS LTA wordmark and legal line on the left, page links on the right,
  * a hairline, then the copyright and image credit.
  */
 export function SiteFooter(props: SiteFooterProps) {
@@ -28,9 +30,10 @@ export function SiteFooter(props: SiteFooterProps) {
   const copy = content[language].footer;
   const {
     brand = 'ICARUS',
+    brandSuffix = 'LTA',
     legal = 'ICARUS LTA Inc.',
     address = copy.address,
-    links = content[language].navigation.links as NonNullable<SiteFooterProps['links']>,
+    links = [...content[language].navigation.links, { label: content[language].navigation.contact, href: '/contact' }] as NonNullable<SiteFooterProps['links']>,
     credit = language === 'ko'
       ? heroCredit.replace('Hero photograph:', '메인 사진:').replace('public domain', '퍼블릭 도메인').replace('retouched', '보정 이미지')
       : heroCredit,
@@ -40,7 +43,14 @@ export function SiteFooter(props: SiteFooterProps) {
       <div className={cx(containerClass, 'py-16')}>
         <div className="grid grid-cols-1 gap-x-10 gap-y-2 md:grid-cols-[minmax(0,1fr)_auto]">
           <div>
-            <div className="text-white font-bold text-lg tracking-[0.2em]">{brand}</div>
+            <div className="inline-flex items-baseline gap-1 text-white font-bold uppercase">
+              <span className="-mr-[0.2em] text-xl md:text-2xl leading-none tracking-[0.2em]">{brand}</span>
+              {brandSuffix ? (
+                <span className="translate-y-px text-[9px] md:text-[10px] font-medium leading-none tracking-[0.03em]">
+                  {' '}{brandSuffix}
+                </span>
+              ) : null}
+            </div>
             {legal ? <div className="mt-4 text-sm text-mist">{legal}</div> : null}
           </div>
           {address ? <div className="min-w-0 text-sm text-mist-dim leading-relaxed md:col-span-2 md:whitespace-nowrap">{address}</div> : null}

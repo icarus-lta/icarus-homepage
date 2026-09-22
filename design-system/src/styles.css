@@ -7,6 +7,9 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap");
 @import "tailwindcss" source(none);
+@import "./about.css";
+@import "./news.css";
+@import "./contact.css";
 
 /* Classes used by the components. */
 @source "./";
@@ -267,6 +270,33 @@
       radial-gradient(60% 45% at 50% 42%, rgba(143, 216, 255, .16), transparent 70%),
       radial-gradient(45% 35% at 22% 74%, rgba(28, 63, 125, .35), transparent 72%);
   }
+  /* Fit ANIM B below the fixed header, with the animation using the heading's remaining space. */
+  .ds-endurance-viewport {
+    height: 100svh;
+    padding-top: calc(65px + clamp(12px, 2svh, 24px));
+    padding-bottom: clamp(12px, 2svh, 24px);
+  }
+  .ds-endurance-scene {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(12px, 3svh, 32px);
+    min-height: 0;
+  }
+  .ds-endurance-viewport .ds-endurance-scene { height: 100%; }
+  .ds-endurance-heading { flex: none; }
+  .ds-endurance-heading h2 { font-size: 36px; }
+  .ds-endurance-heading > p { margin-top: 16px; font-size: 18px; line-height: 1.625; }
+  .ds-endurance-frame { height: min(68svh, 760px); }
+  .ds-endurance-viewport .ds-endurance-frame { flex: 1; min-height: 0; max-height: 760px; }
+  @media (min-width: 768px) {
+    .ds-endurance-viewport { padding-top: calc(81px + clamp(12px, 2svh, 24px)); }
+    .ds-endurance-heading h2 { font-size: 48px; }
+    .ds-endurance-heading > p { font-size: 20px; }
+  }
+  @media (min-width: 1024px) {
+    .ds-endurance-heading h2 { font-size: 60px; }
+  }
   /* ANIM B's closing copy sits beside the map; phones reserve a compact band below it. */
   .ds-endurance-diagram { height: 100%; }
   .ds-endurance-capabilities {
@@ -294,31 +324,25 @@
     display: grid;
     gap: 13px;
   }
-  .ds-endurance-metrics strong {
+  .ds-endurance-metrics strong, .ds-endurance-realtime {
     display: block;
     color: #8fd8ff;
     font-size: 17px;
     font-weight: 600;
     line-height: 1.35;
   }
-  .ds-endurance-metrics span {
-    color: #b9c9e2;
-    font-size: 13px;
+  .ds-endurance-metrics span, .ds-endurance-applications {
+    color: #d6e2f2;
+    font-size: calc(13px + 1pt);
+    font-weight: 500;
     line-height: 1.5;
   }
   .ds-endurance-realtime {
     margin-bottom: 10px;
-    color: #8fd8ff;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.4;
   }
   .ds-endurance-applications {
     display: grid;
     gap: 5px;
-    color: #b9c9e2;
-    font-size: 13px;
-    line-height: 1.5;
   }
   @media (max-width: 767px) {
     .ds-endurance-diagram {
@@ -339,13 +363,34 @@
       font-size: 15px;
     }
     .ds-endurance-metrics { gap: 10px; }
-    .ds-endurance-metrics strong { font-size: 13px; }
-    .ds-endurance-metrics span { font-size: 12px; }
-    .ds-endurance-realtime { font-size: 12px; margin-bottom: 8px; }
-    .ds-endurance-applications { font-size: 12px; gap: 3px; }
+    .ds-endurance-metrics strong, .ds-endurance-realtime { font-size: 13px; }
+    .ds-endurance-metrics span, .ds-endurance-applications { font-size: calc(12px + 1pt); }
+    .ds-endurance-realtime { margin-bottom: 8px; }
+    .ds-endurance-applications { gap: 3px; }
   }
   @media (max-width: 359px) {
     .ds-endurance-diagram { height: calc(100% - var(--closing) * 234px); }
+  }
+  /* Short windows still show the complete scene, with tighter copy and closing-callout spacing. */
+  @media (max-height: 740px) {
+    .ds-endurance-scene { gap: 12px; }
+    .ds-endurance-heading h2 { font-size: clamp(28px, 4vw, 44px); }
+    .ds-endurance-heading > p { margin-top: 10px; font-size: 16px; line-height: 1.5; }
+    .ds-endurance-capabilities { gap: 14px; }
+    .ds-endurance-capability h3 { margin-bottom: 8px; padding-bottom: 7px; font-size: 16px; }
+    .ds-endurance-metrics { gap: 6px; }
+    .ds-endurance-metrics strong, .ds-endurance-realtime { font-size: 14px; }
+    .ds-endurance-metrics span, .ds-endurance-applications { font-size: calc(12px + 1pt); }
+    .ds-endurance-realtime { margin-bottom: 6px; }
+    .ds-endurance-applications { gap: 2px; }
+  }
+  @media (max-width: 767px) and (max-height: 740px) {
+    .ds-endurance-diagram { height: calc(100% - var(--closing) * 176px); }
+    .ds-endurance-capabilities { inset: auto 14px 14px; gap: 12px; }
+    .ds-endurance-capability h3 { min-height: 0; font-size: 14px; }
+    .ds-endurance-metrics strong { display: inline; }
+    .ds-endurance-metrics strong, .ds-endurance-realtime { font-size: 12px; }
+    .ds-endurance-metrics span, .ds-endurance-applications { font-size: calc(11px + 1pt); }
   }
 
   /* Hairline rule used between data rows and section bands. */

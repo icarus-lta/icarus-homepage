@@ -2,7 +2,7 @@ const en = {
   navigation: {
     label: 'Main navigation',
     links: [
-      { label: 'MISSION', href: '/mission' },
+      { label: 'MISSION', href: '/#hero' },
       { label: 'ABOUT', href: '/about' },
       { label: 'CAREER', href: '/career' },
       { label: 'NEWS', href: '/news' },
@@ -78,7 +78,7 @@ const ko: typeof en = {
   navigation: {
     label: '주 메뉴',
     links: [
-      { label: '미션', href: '/mission' },
+      { label: '미션', href: '/#hero' },
       { label: '회사 소개', href: '/about' },
       { label: '채용', href: '/career' },
       { label: '소식', href: '/news' },
@@ -87,7 +87,7 @@ const ko: typeof en = {
   },
   hero: {
     titleLines: ['성층권을 통한', '인류의 새로운 인프라를 구축합니다'],
-    primaryLabel: '지원하기', secondaryLabel: '문의하기',
+    primaryLabel: '합류하기', secondaryLabel: '문의하기',
   },
   altitude: {
     title: '우주와 지상 사이의 새로운 공간',

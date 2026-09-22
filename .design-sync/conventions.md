@@ -16,7 +16,7 @@ ICARUS LTA builds uncrewed airships that hold station at 20 km. The system is **
 const { SiteHeader, Hero, AltitudeScrollSection, EnduranceScrollSection,
         RoadmapTimeline, ContactCTA, SiteFooter } = window.IcarusDS;
 <div className="overflow-x-clip">
-  <SiteHeader />
+  <SiteHeader activeHref="/#hero" />
   <Hero />                       {/* nothing between the photograph and the first scene */}
   <AltitudeScrollSection />      {/* scroll milestones: 0% bottleneck → 50% relay → 100% Direct to Cell */}
   <EnduranceScrollSection />     {/* scroll-driven: one airframe, anatomy -> peninsula coverage */}

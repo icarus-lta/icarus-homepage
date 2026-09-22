@@ -70,7 +70,7 @@ export function Hero(props: HeroProps) {
     primaryHref,
     onPrimaryClick,
     secondaryLabel = copy.secondaryLabel,
-    secondaryHref,
+    secondaryHref = '/contact',
     onSecondaryClick,
     className,
   } = props;

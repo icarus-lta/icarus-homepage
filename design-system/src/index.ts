@@ -17,6 +17,10 @@ export { SiteFooter, type SiteFooterProps } from './layout/SiteFooter';
 
 export { Hero, type HeroProps } from './sections/Hero';
 export { PageHero, type PageHeroProps } from './sections/PageHero';
+export { AboutPage, type AboutPageProps } from './sections/AboutPage';
+export { NewsPage } from './sections/NewsPage';
+export { newsArticles, newsContent, type NewsArticle, type NewsCategory, type NewsFilter } from './i18n/news';
+export { ContactPage, type ContactPageProps } from './sections/ContactPage';
 export { StatBar, type StatBarProps } from './sections/StatBar';
 export { AltitudeScrollSection, type AltitudeScrollSectionProps } from './sections/AltitudeScrollSection';
 export { EnduranceScrollSection, type EnduranceScrollSectionProps } from './sections/EnduranceScrollSection';

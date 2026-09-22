@@ -2,13 +2,23 @@
 // .design-sync/.cache/preview/, ready for any static server. Bundles straight from
 // design-system/dist (never touches ds-bundle/_screenshots).
 //   /          the real homepage skeleton, scroll-driven
+//   /about/    the bilingual company story, with the supplied flight film
+//   /news/     bilingual company news with original-source links
+//   /contact/  bilingual inquiry form and direct email
 //   /anim.html either scroll section on a progress slider, for checking single frames
-import { mkdirSync, copyFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { mkdirSync, copyFileSync, writeFileSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 import { bundleToIife } from '../.ds-sync/lib/bundle.mjs';
 
 const REPO = '/root/icarus-homepage';
 const OUT = `${REPO}/.design-sync/.cache/preview`;
+// Public form endpoint only. Private delivery credentials never belong in the browser bundle.
+const contactSubmitUrl = process.env.ICARUS_CONTACT_FORM_URL?.trim() || '';
+if (contactSubmitUrl && !/^https:\/\//.test(contactSubmitUrl) && !/^\/(?!\/)/.test(contactSubmitUrl)) {
+  throw new Error('ICARUS_CONTACT_FORM_URL must be an HTTPS URL or a same-origin path.');
+}
+const contactProps = JSON.stringify(contactSubmitUrl ? { submitUrl: contactSubmitUrl } : {}).replace(/</g, '\\u003c');
 mkdirSync(join(OUT, '_vendor'), { recursive: true });
 
 await bundleToIife({
@@ -19,31 +29,100 @@ await bundleToIife({
   tsconfig: null,
 });
 
-copyFileSync(`${REPO}/design-system/dist/styles.css`, join(OUT, 'styles.css'));
+// A slow external @import blocks the classic scripts and can leave a phone on a blank page.
+// Keep all preview assets on the same server and let text render while local fonts load.
+mkdirSync(join(OUT, 'fonts'), { recursive: true });
+for (const f of readdirSync(join(REPO, 'static/fonts'))) {
+  copyFileSync(join(REPO, 'static/fonts', f), join(OUT, 'fonts', f));
+}
+const previewStyles = readFileSync(`${REPO}/design-system/dist/styles.css`, 'utf8')
+  .replace(/^@import url\("https:\/\/[^"\n]+"\);\s*$/gm, '');
+writeFileSync(join(OUT, 'styles.css'), readFileSync(join(REPO, 'static/fonts/preview-fonts.css'), 'utf8') + '\n' + previewStyles);
+copyFileSync(join(REPO, '.design-sync/connection-check.html'), join(OUT, 'connection-check.html'));
 for (const f of readdirSync(`${REPO}/ds-bundle/_vendor`)) {
   copyFileSync(`${REPO}/ds-bundle/_vendor/${f}`, join(OUT, '_vendor', f));
 }
+mkdirSync(join(OUT, 'media'), { recursive: true });
+for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp']) {
+  copyFileSync(join(REPO, 'static', 'about', f), join(OUT, 'media', f));
+}
 
+const loadingRoot = (id = 'root') => `<div id="${id}"><div id="preview-status" role="status" style="padding:100px 24px;font:16px/1.8 system-ui,sans-serif">ICARUS LTA<br>페이지를 불러오는 중입니다… / Loading…</div></div>`;
+const assetVersion = createHash('sha256').update(readFileSync(join(OUT, '_ds_bundle.js'))).update(readFileSync(join(OUT, 'styles.css'))).digest('hex').slice(0, 12);
 const head = `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="/styles.css">
-<script src="/_vendor/react.js"></script><script src="/_vendor/react-dom.js"></script>
-<script src="/_ds_bundle.js"></script>`;
+<style>html,body{margin:0;background:#02030a;color:#b9c9e2}</style>
+<link rel="stylesheet" href="/styles.css?v=${assetVersion}">
+<script defer src="/_vendor/react.js"></script><script defer src="/_vendor/react-dom.js"></script>
+<script defer src="/_ds_bundle.js?v=${assetVersion}"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){
+  var language=new URLSearchParams(window.location.search).get('lang');
+  if((language==='en'||language==='ko')&&window.IcarusDS) window.IcarusDS.setLanguage(language);
+});</script>
+<script>window.addEventListener('error',function(event){
+  var status=document.getElementById('preview-status');
+  if(status && (event.error || event.target.tagName==='SCRIPT')) status.textContent='페이지를 불러오지 못했습니다. 새로고침해 주세요. / Please reload the page.';
+},true);</script>`;
 
 // The page skeleton conventions.md defines - the five homepage sections, nothing else.
 writeFileSync(
   join(OUT, 'index.html'),
   `<!doctype html><html lang="en"><head>${head}<title>ICARUS — homepage preview</title>
 <style>a.jump{position:fixed;z-index:60;right:16px;bottom:16px;padding:8px 14px;border-radius:999px;
-background:#8fd8ff;color:#02030a;font:600 13px system-ui;text-decoration:none}</style></head>
-<body><div id="root"></div><a class="jump" href="/anim.html">Scroll frames &rarr;</a><script>
+background:#8fd8ff;color:#02030a;font:600 13px system-ui;text-decoration:none}
+@media(max-width:767px){a.jump{display:none}}</style></head>
+<body>${loadingRoot()}<a class="jump" href="/anim.html">Scroll frames &rarr;</a><script>
+window.addEventListener('DOMContentLoaded', () => {
 const D = window.IcarusDS, h = React.createElement;
 ReactDOM.createRoot(document.getElementById('root')).render(
   h('div', { className: 'overflow-x-clip' },
-    h(D.SiteHeader), h(D.Hero),
+    h(D.SiteHeader, { activeHref: '/#hero' }), h(D.Hero),
     h(D.AltitudeScrollSection), h(D.EnduranceScrollSection),
     h(D.RoadmapTimeline), h(D.ContactCTA), h(D.SiteFooter)));
+});
 </script></body></html>`,
 );
+
+mkdirSync(join(OUT, 'about'), { recursive: true });
+writeFileSync(
+  join(OUT, 'about', 'index.html'),
+  `<!doctype html><html lang="en"><head>${head}
+<title>About ICARUS LTA — The making of ICARUS</title>
+<meta name="description" content="The story of ICARUS: an overlooked possibility, a study of what came before, and a foundation in flight-control research.">
+<meta property="og:title" content="About ICARUS LTA — The making of ICARUS">
+<meta property="og:description" content="A question. An investigation. The decision to build. Discover the story behind ICARUS.">
+<meta property="og:image" content="/media/about-flight-poster.jpg">
+<meta property="og:type" content="website">
+</head><body>${loadingRoot()}<script>
+window.addEventListener('DOMContentLoaded', () => {
+const D = window.IcarusDS, h = React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h('div', { className: 'overflow-x-clip' },
+    h(D.SiteHeader, { activeHref: '/about' }), h(D.AboutPage), h(D.SiteFooter, { credit: null })));
+});
+</script></body></html>`,
+);
+
+// Real subpages share the existing header, footer, and persisted language selection.
+for (const page of [
+  { path:'news', component:'NewsPage', title:'News & updates — ICARUS LTA', description:'Company news, development updates and media coverage from ICARUS LTA.' },
+  { path:'contact', component:'ContactPage', title:'Contact — ICARUS LTA', description:'Get in touch with ICARUS. Send us your email, subject, and inquiry.' },
+]) {
+  mkdirSync(join(OUT, page.path), { recursive:true });
+  writeFileSync(join(OUT, page.path, 'index.html'), `<!doctype html><html lang="en"><head>${head}
+<title>${page.title}</title>
+<meta name="description" content="${page.description}">
+<meta property="og:title" content="${page.title}">
+<meta property="og:description" content="${page.description}">
+<meta property="og:type" content="website">
+</head><body>${loadingRoot()}<script>
+window.addEventListener('DOMContentLoaded', () => {
+const D = window.IcarusDS, h = React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(
+  h('div', { className:'overflow-x-clip' },
+    h(D.SiteHeader, { activeHref:'/${page.path}' }), h(D.${page.component}, ${page.path === 'contact' ? contactProps : '{}'}), h(D.SiteFooter, { credit:null })));
+});
+</script></body></html>`);
+}
 
 // A frozen-frame rig: the same component, driven by a slider instead of the scroll.
 writeFileSync(
@@ -60,7 +139,7 @@ font:13px ui-monospace,monospace;color:#b9c9e2}
 border-radius:6px;padding:4px 10px;font:12px ui-monospace,monospace;cursor:pointer}
 #steps{display:flex;flex-wrap:wrap;gap:6px}
 #stage{padding-bottom:96px}</style></head>
-<body><div id="stage"></div>
+<body>${loadingRoot('stage')}
 <div class="bar">
   <a href="/">&larr; page</a>
   <select id="scene"><option value="A">ANIM A</option><option value="B">ANIM B</option></select>
@@ -68,6 +147,7 @@ border-radius:6px;padding:4px 10px;font:12px ui-monospace,monospace;cursor:point
   <b id="v">0.00</b>
   <span id="steps"></span>
 </div><script>
+window.addEventListener('DOMContentLoaded', () => {
 const D = window.IcarusDS, h = React.createElement;
 const root = ReactDOM.createRoot(document.getElementById('stage'));
 const slider = document.getElementById('p'), out = document.getElementById('v');
@@ -106,7 +186,9 @@ document.getElementById('scene').addEventListener('change', (e) => {
 slider.addEventListener('input', draw);
 buildMarks();
 draw();
+});
 </script></body></html>`,
 );
 
 console.log('preview ->', OUT);
+await import('./build-about-story-preview.mjs');

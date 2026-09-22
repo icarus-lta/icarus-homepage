@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About us 제안 — ICARUS LTA</title>
+<style>
+@font-face{font-family:'Pretendard';font-style:normal;font-weight:45 920;font-display:swap;src:url('/fonts/PretendardVariable.woff2') format('woff2');}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/IBMPlexMono-Regular.ttf') format('truetype');}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url('/fonts/IBMPlexMono-Medium.ttf') format('truetype');}
+
+:root{
+  --bg:#02030a; --panel:#060a10; --panel-2:#0a111b;
+  --line:rgba(143,216,255,.14); --line-soft:rgba(143,216,255,.08);
+  --fg:#eef6ff; --fg-2:#b9c9e2; --fg-3:#8095b5; --fg-4:#5a6d88;
+  --accent:#8fd8ff; --warn:#f3aaa5;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --gutter:16px; --maxw:1120px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.7;
+  font-feature-settings:"ss01";overflow-x:hidden;}
+a{color:inherit}
+h1,h2,h3{margin:0;line-height:1.25;font-weight:600;letter-spacing:-.02em}
+p{margin:0}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;display:block;margin-bottom:14px}
+.rule{height:1px;background:var(--line-soft);border:0;margin:0}
+section{padding:72px 0;border-top:1px solid var(--line-soft)}
+section:first-of-type{border-top:0}
+@media(min-width:768px){section{padding:96px 0}}
+
+/* ---- proposal chrome (not part of the page design) ---- */
+.chrome{position:sticky;top:0;z-index:50;background:rgba(2,3,10,.88);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft)}
+.chrome .wrap{display:flex;align-items:center;gap:12px;height:52px;justify-content:space-between}
+.brand{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--fg-2)}
+.brand b{color:var(--fg);font-weight:500}
+.toggle{font-family:var(--mono);font-size:11px;letter-spacing:.08em;cursor:pointer;
+  background:transparent;color:var(--accent);border:1px solid var(--line);
+  padding:7px 12px;border-radius:999px;transition:background .15s,color .15s}
+.toggle:hover{background:rgba(143,216,255,.1)}
+.toggle[aria-pressed="true"]{background:var(--accent);color:#02030a;border-color:var(--accent)}
+
+/* ---- annotation layer ---- */
+.note{display:none;border-left:2px solid var(--accent);background:rgba(143,216,255,.05);
+  padding:14px 16px;margin:20px 0 0;border-radius:0 6px 6px 0}
+.note .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);display:block;margin-bottom:6px}
+.note p{font-size:14px;color:var(--fg-2);line-height:1.65}
+.note p + p{margin-top:8px}
+body.notes .note{display:block}
+.was{display:none;font-size:13px;color:var(--fg-4);font-family:var(--mono);
+  margin-top:10px;padding-left:2px}
+body.notes .was{display:block}
+.was s{color:var(--warn);opacity:.75}
+
+/* ---- hero / lead ---- */
+.lead{padding-top:64px}
+.lead h1{font-size:clamp(28px,5.2vw,50px);letter-spacing:-.03em;line-height:1.3;max-width:19ch}
+.lead h1 em{font-style:normal;color:var(--accent)}
+.lead .sub{margin-top:24px;max-width:62ch;color:var(--fg-2);font-size:clamp(15px,1.7vw,17px)}
+.lead .sub + .sub{margin-top:12px}
+
+/* ---- fact strip ---- */
+.facts{margin-top:44px;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  display:grid;grid-template-columns:1fr;background:var(--panel)}
+@media(min-width:560px){.facts{grid-template-columns:1fr 1fr}}
+@media(min-width:900px){.facts{grid-template-columns:repeat(4,1fr)}}
+.fact{padding:18px 20px;border-top:1px solid var(--line-soft)}
+.fact:first-child{border-top:0}
+@media(min-width:560px){
+  .fact{border-top:1px solid var(--line-soft);border-left:1px solid var(--line-soft)}
+  .fact:nth-child(-n+2){border-top:0}
+  .fact:nth-child(odd){border-left:0}
+}
+@media(min-width:900px){
+  .fact:nth-child(-n+4){border-top:0}
+  .fact:nth-child(odd){border-left:1px solid var(--line-soft)}
+  .fact:nth-child(4n+1){border-left:0}
+}
+.fact dt{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--fg-3);margin:0 0 7px}
+.fact dd{margin:0;font-size:15px;color:var(--fg);line-height:1.5}
+.fact dd small{display:block;color:var(--fg-3);font-size:12.5px;margin-top:3px;line-height:1.5}
+.tbd{color:var(--warn);font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  border:1px dashed rgba(243,170,165,.4);border-radius:4px;padding:1px 7px;
+  display:inline-block;background:rgba(243,170,165,.06)}
+
+/* ---- section heading ---- */
+.shead{display:grid;gap:18px;margin-bottom:38px}
+@media(min-width:900px){.shead{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px;align-items:start}}
+.shead h2{font-size:clamp(21px,2.9vw,30px)}
+.shead .desc{color:var(--fg-2);font-size:15.5px;max-width:58ch}
+
+/* ---- spec table ---- */
+.spec{width:100%;border-collapse:collapse;font-size:14.5px}
+.spec caption{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--fg-3);padding-bottom:12px}
+.spec th,.spec td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line-soft);
+  vertical-align:top}
+.spec thead th{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fg-3);font-weight:500;border-bottom:1px solid var(--line)}
+.spec tbody th{font-weight:500;color:var(--fg);width:38%}
+.spec td{color:var(--fg-2)}
+.spec .num{font-family:var(--mono);color:var(--fg);white-space:nowrap}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--fg-3);
+  display:inline-block;white-space:nowrap}
+.tag.goal{color:var(--warn);border-color:rgba(243,170,165,.35)}
+.tag.done{color:var(--accent);border-color:rgba(143,216,255,.4)}
+@media(max-width:620px){
+  .spec thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .spec tbody th,.spec td{display:block;width:auto;padding:4px 0;border:0}
+  .spec tbody th{padding-top:16px}
+  .spec tbody tr{display:block;padding-bottom:14px;border-bottom:1px solid var(--line-soft)}
+}
+
+/* ---- cards ---- */
+.cards{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.cards{grid-template-columns:repeat(3,1fr)}}
+.card{border:1px solid var(--line);border-radius:10px;padding:22px;background:var(--panel);
+  display:flex;flex-direction:column;gap:12px}
+.card h3{font-size:16.5px}
+.card p{font-size:14px;color:var(--fg-2)}
+.card .who{margin-top:auto;padding-top:6px}
+
+/* ---- phases ---- */
+.phases{display:grid;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+.phase{display:grid;gap:6px;padding:20px;border-top:1px solid var(--line-soft)}
+.phase:first-child{border-top:0}
+@media(min-width:760px){.phase{grid-template-columns:110px minmax(0,1fr) 150px;gap:24px;align-items:baseline}}
+.phase .p{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--fg-3)}
+.phase h3{font-size:16px;font-weight:500}
+.phase .gate{font-size:13px;color:var(--fg-3);grid-column:1/-1}
+@media(min-width:760px){.phase .gate{grid-column:2/3;margin-top:2px}}
+.phase.now{background:rgba(143,216,255,.05)}
+.phase.now .p{color:var(--accent)}
+.phase .st{justify-self:start}
+@media(min-width:760px){.phase .st{justify-self:end}}
+
+/* ---- timeline ---- */
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;gap:5px;padding:18px 0 18px 22px;border-bottom:1px solid var(--line-soft);
+  position:relative}
+@media(min-width:760px){.tl li{grid-template-columns:100px minmax(0,1fr) auto;gap:24px;align-items:baseline}}
+.tl li::before{content:"";position:absolute;left:0;top:26px;width:6px;height:6px;border-radius:50%;
+  background:var(--accent);opacity:.65}
+.tl .d{font-family:var(--mono);font-size:12px;color:var(--fg-3);letter-spacing:.04em}
+.tl .t{font-size:15.5px;color:var(--fg)}
+.tl .t span{display:block;color:var(--fg-2);font-size:13.5px;margin-top:3px}
+.tl .src{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--fg-3);
+  text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;white-space:nowrap;justify-self:start}
+.tl .src:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ---- team ---- */
+.team{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:640px){.team{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.team{grid-template-columns:repeat(4,1fr)}}
+.person{border:1px dashed rgba(143,216,255,.22);border-radius:10px;padding:20px;
+  background:rgba(10,17,27,.5);display:flex;flex-direction:column;gap:9px;min-height:170px}
+.person .av{width:38px;height:38px;border-radius:50%;background:rgba(143,216,255,.1);
+  border:1px solid var(--line)}
+.person .nm{font-size:15px;color:var(--fg)}
+.person .ro{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-3)}
+.person .bio{font-size:13px;color:var(--fg-4);margin-top:auto}
+
+/* ---- sites ---- */
+.sites{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.sites{grid-template-columns:repeat(3,1fr)}}
+.site{border:1px solid var(--line);border-radius:10px;padding:22px;background:var(--panel)}
+.site .nm{font-size:17px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.site .nm span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--fg-3)}
+.site .ro{font-size:13.5px;color:var(--accent);margin-top:9px;font-weight:500}
+.site p{font-size:14px;color:var(--fg-2);margin-top:7px}
+.site .ad{font-size:12.5px;color:var(--fg-4);margin-top:12px;font-family:var(--mono);line-height:1.6}
+
+/* ---- origin ---- */
+.origin{max-width:66ch}
+.origin p{color:var(--fg-2);font-size:15.5px}
+.origin p + p{margin-top:14px}
+
+/* ---- contact ---- */
+.routes{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.routes{grid-template-columns:repeat(3,1fr)}}
+.route{border:1px solid var(--line);border-radius:10px;padding:22px;background:var(--panel)}
+.route h3{font-size:15.5px}
+.route p{font-size:13.5px;color:var(--fg-2);margin-top:8px}
+.route a{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:12.5px;
+  color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(143,216,255,.4);padding-bottom:2px}
+.route a:hover{border-color:var(--accent)}
+
+footer{padding:40px 0 64px;border-top:1px solid var(--line-soft);color:var(--fg-4);font-size:12.5px;
+  font-family:var(--mono);line-height:1.8}
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <div class="wrap">
+    <span class="brand"><b>ICARUS LTA</b> &nbsp;/&nbsp; ABOUT US 제안안</span>
+    <button class="toggle" id="t" aria-pressed="false">설계 의도 보기</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ============ 1. LEAD ============ -->
+  <section class="lead">
+    <span class="eyebrow">About us · 회사 소개</span>
+    <h1>ICARUS LTA는 성층권에 오래 머무는 <em>무인 비행선</em>을 개발하는 광주의 항공우주 기업입니다.</h1>
+    <p class="sub">고도 20km 성층권에서 장기 체공하며 통신 중계와 지상 관측을 수행하는 비행선을 만듭니다. 비행선 설계와 비행 제어, 기낭 소재까지 하나의 시스템으로 직접 개발합니다.</p>
+    <p class="sub">현재는 소형 무인 비행선 시험 비행 단계이며, 성층권 비행 실증을 준비하고 있습니다.</p>
+
+    <dl class="facts">
+      <div class="fact"><dt>설립</dt><dd><span class="tbd">연도 확인 필요</span><small>법인 설립 기준</small></dd></div>
+      <div class="fact"><dt>본사</dt><dd>대한민국 광주<small>GIST 창업진흥센터</small></dd></div>
+      <div class="fact"><dt>분야</dt><dd>무인 비행선 · 성층권 시스템<small>HAPS · 통신 중계 · 관측</small></dd></div>
+      <div class="fact"><dt>현재 단계</dt><dd>소형 비행선 시험 비행<small>성층권 실증 준비 중</small></dd></div>
+    </dl>
+
+    <div class="was">현재 페이지: <s>“ICARUS의 시작 — 과거의 기술로 여겨지는 비행선에서, 우리는 새로운 가능성을 보았습니다.”</s></div>
+    <div class="note">
+      <span class="k">이 페이지의 전제</span>
+      <p><b>About 페이지의 독자는 팬이 아니라 심사자입니다.</b> 투자 검토자, 사업 제휴 담당자, 기자, 지원자가 처음 들어옵니다. 이들이 60초 안에 확인하려는 건 “이 회사가 왜 시작했는가”가 아니라 <b>“이 회사가 무엇을 하고, 어디까지 했고, 믿을 만한가”</b>입니다.</p>
+      <p>그래서 첫 화면을 서사가 아니라 <b>한 문장 정의 + 검증 가능한 사실</b>로 바꿨습니다. 이 H1은 기자가 기사 첫 문단에 그대로 옮겨 쓸 수 있는 문장입니다. 기존의 “우리는 가능성을 보았습니다”는 옮겨 쓸 수 없습니다.</p>
+      <p>“국내 유일”, “혁신”, “새로운 가능성” 같은 자기 평가어를 전부 뺐습니다. 이런 표현은 외부 독자에게 신뢰를 주지 않고, 오히려 검증할 내용이 없을 때 쓰는 말로 읽힙니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. WHAT WE BUILD ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">What we build</span><h2>무엇을 만드는가</h2></div>
+      <p class="desc">저궤도 위성과 지상 기지국 사이 20km 고도에는 아직 쓰이지 않는 층이 있습니다. ICARUS는 이 층에 오래 머무는 무인 비행선을 올려 통신 중계와 관측을 수행하려 합니다.</p>
+    </div>
+
+    <table class="spec">
+      <caption>주요 제원 · 목표 성능</caption>
+      <thead><tr><th scope="col">항목</th><th scope="col">값</th><th scope="col">상태</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">운용 고도</th><td class="num">20 km <span style="color:var(--fg-3)">(성층권)</span></td><td><span class="tag goal">목표</span></td></tr>
+        <tr><th scope="row">체공 시간</th><td class="num"><span class="tbd">목표치 확인 필요</span></td><td><span class="tag goal">목표</span></td></tr>
+        <tr><th scope="row">통신 중계 (지상 ↔ 비행선)</th><td class="num">Gbps급 RF</td><td><span class="tag goal">목표</span></td></tr>
+        <tr><th scope="row">통신 중계 (비행선 ↔ 위성)</th><td class="num">Tbps급 레이저 (FSO)</td><td><span class="tag goal">목표</span></td></tr>
+        <tr><th scope="row">탑재 장비</th><td>통신 중계 안테나 · 레이더 · EO/IR</td><td><span class="tag goal">설계</span></td></tr>
+        <tr><th scope="row">추진 · 전력</th><td>고효율 전기 추진 · 태양전지</td><td><span class="tag goal">설계</span></td></tr>
+        <tr><th scope="row">기낭 소재</th><td>경량 고강도 헬륨 차단 적층 복합 소재</td><td><span class="tag done">시제품 개발</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <span class="k">가장 중요한 변경</span>
+      <p><b>“위성 대비 10배 저렴, 100배 빠름”을 단독으로 쓰지 않았습니다.</b> 현재 홈페이지는 이 숫자를 검증된 성능처럼 제시합니다. 아직 성층권 비행 실증 전인 회사가 이렇게 쓰면, 기술을 아는 독자에게는 가장 빠르게 신뢰를 잃는 지점입니다.</p>
+      <p>대신 <b>‘목표 / 설계 / 개발 완료’를 항목마다 라벨</b>로 붙였습니다. 역설적이지만 이 라벨이 신뢰도를 올립니다. 무엇이 아직 목표인지 스스로 구분해 말하는 회사는, 완료했다고 말하는 항목도 믿을 수 있기 때문입니다. 실제로 투자 검토와 정부 과제 평가에서 이 구분을 가장 먼저 봅니다.</p>
+      <p>비교 우위 주장(위성 대비 비용·속도)은 이 표가 아니라 기술 페이지에서 <b>산출 근거와 함께</b> 다루는 편이 맞습니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 3. CAPABILITIES ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">Capabilities</span><h2>직접 하는 일</h2></div>
+      <p class="desc">설계·제어·소재를 나눠 맡기지 않고 한 팀 안에서 연결합니다. 외부와 함께하는 부분은 파트너를 함께 밝힙니다.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="eyebrow" style="margin:0">Airframe</span>
+        <h3>비행선 설계 · 제작</h3>
+        <p>기체 형상 설계부터 조립까지 광주 격납고에서 직접 수행합니다. 시험 비행 결과를 다음 설계에 반영합니다.</p>
+        <div class="who"><span class="tag done">자체 수행</span></div>
+      </article>
+      <article class="card">
+        <span class="eyebrow" style="margin:0">Control &amp; GCS</span>
+        <h3>비행 제어 · 지상관제</h3>
+        <p>드론 제어 연구에서 출발한 무인 비행선 비행 제어 소프트웨어와 지상관제 시스템을 개발합니다. 비행 동역학 모델을 실험값과 대조해 보정합니다.</p>
+        <div class="who"><span class="tag done">자체 수행</span></div>
+      </article>
+      <article class="card">
+        <span class="eyebrow" style="margin:0">Materials</span>
+        <h3>기낭 소재</h3>
+        <p>가볍고 강하면서 헬륨이 새지 않는 적층 복합 소재를 개발합니다. 2025년 시제품 개발을 마쳤습니다.</p>
+        <div class="who"><span class="tag">한국섬유개발연구원 공동개발</span></div>
+      </article>
+    </div>
+
+    <div class="note">
+      <span class="k">서사 → 역량</span>
+      <p>현재 페이지의 “How we work”는 <b>RESEARCH → CONTROL → FLIGHT → SYSTEMS</b>라는 성장 서사입니다. “자료를 읽고, 직접 만들고, 현장에서 시험했습니다” 같은 문장은 창업자에게는 의미가 크지만, 외부 독자에게는 어느 스타트업에나 해당되는 말이라 정보량이 0에 가깝습니다.</p>
+      <p>같은 내용을 <b>“지금 이 회사가 사내에서 할 수 있는 일”</b> 목록으로 바꿨습니다. 제휴 담당자는 이 목록을 보고 “우리가 맡길 수 있는 범위”를 판단합니다. 자체/공동 구분을 명시한 것도 같은 이유입니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4. STATUS ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">Development status</span><h2>지금 어디까지 왔는가</h2></div>
+      <p class="desc">각 단계를 “무엇을 보이면 끝난 것으로 보는가”와 함께 적었습니다. 완료 조건이 있어야 진행 상황이 외부에서 검증됩니다.</p>
+    </div>
+
+    <div class="phases">
+      <div class="phase now">
+        <span class="p">PHASE 01</span>
+        <h3>소형 무인 비행선 시험 비행</h3>
+        <span class="tag done st">진행 중</span>
+        <span class="gate">완료 기준: 자체 개발 제어 시스템으로 계획된 비행 프로파일을 반복 수행</span>
+      </div>
+      <div class="phase">
+        <span class="p">PHASE 02</span>
+        <h3>성층권 비행선 시험 비행</h3>
+        <span class="tag st">예정</span>
+        <span class="gate">완료 기준: 20km 고도 도달 및 체공 <span class="tbd">목표 시간 확인 필요</span></span>
+      </div>
+      <div class="phase">
+        <span class="p">PHASE 03</span>
+        <h3>기체 스케일업</h3>
+        <span class="tag st">예정</span>
+        <span class="gate">완료 기준: 임무 탑재 장비를 실은 운용급 기체 비행</span>
+      </div>
+      <div class="phase">
+        <span class="p">PHASE 04</span>
+        <h3>상용 서비스</h3>
+        <span class="tag st">예정</span>
+        <span class="gate">완료 기준: 고객사 대상 통신 중계 · 관측 서비스 운영</span>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="k">로드맵에 완료 조건 붙이기</span>
+      <p>현재 로드맵은 단계 이름만 있고 완료 조건이 없습니다. 이러면 “진행 중”이 몇 년째 진행 중인지 외부에서 알 수 없고, 로드맵이 의지 표명으로만 읽힙니다.</p>
+      <p>단계마다 <b>검증 가능한 완료 기준</b>을 한 줄씩 붙이면, 다음에 이 페이지를 다시 방문한 사람이 진척을 스스로 확인할 수 있습니다. 이게 About 페이지가 재방문되는 유일한 이유이기도 합니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 5. TRACK RECORD ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">Track record</span><h2>외부에서 확인된 기록</h2></div>
+      <p class="desc">수상, 공동 연구, 언론 보도를 날짜순으로 정리하고 원문을 링크했습니다. 자기 소개가 아니라 제3자가 확인한 사실입니다.</p>
+    </div>
+
+    <ul class="tl">
+      <li>
+        <span class="d">2025.12</span>
+        <span class="t">무인 비행선용 기낭 소재 개발<span>한국섬유개발연구원과 공동으로 경량·고강도·가스 차단 소재 개발</span></span>
+        <a class="src" href="https://www.etnews.com/20251203000330" target="_blank" rel="noopener">전자신문 ↗</a>
+      </li>
+      <li>
+        <span class="d">2025.10</span>
+        <span class="t">K-딥테크 왕중왕전 우수상<span>학생 창업 부문</span></span>
+        <a class="src" href="https://www.unicornfactory.co.kr/article/2025101715015176267" target="_blank" rel="noopener">유니콘팩토리 ↗</a>
+      </li>
+      <li>
+        <span class="d">2025.06</span>
+        <span class="t">YTN 뉴스 보도<span>광주미래산업엑스포 전시 기술 소개</span></span>
+        <a class="src" href="https://www.ytn.co.kr/_ln/0115_202506262059094515" target="_blank" rel="noopener">YTN ↗</a>
+      </li>
+      <li>
+        <span class="d">2024.11</span>
+        <span class="t">한국전력공사 창업경진대회 대상<span></span></span>
+        <a class="src" href="https://www.mediayouth.kr/news/806190" target="_blank" rel="noopener">미디어유스 ↗</a>
+      </li>
+    </ul>
+
+    <div class="note">
+      <span class="k">신뢰를 만드는 실제 엔진</span>
+      <p>이 섹션이 <b>기존 “Why we start” 자리를 대신합니다.</b> 창업 동기는 회사가 스스로 하는 말이지만, 수상·공동 연구·보도는 <b>외부가 검증한 사실</b>입니다. 처음 온 독자가 이 회사를 믿을지 말지는 거의 전적으로 이 섹션에서 결정됩니다.</p>
+      <p>현재는 이 내용이 별도 News 페이지에만 있습니다. About 페이지에 요약해 두고 원문을 링크해야, News까지 넘어가지 않는 대다수 방문자에게도 닿습니다.</p>
+      <p>덧붙여, 정부 과제 수행 이력이나 특허 출원이 있다면 이 목록에 함께 넣는 것이 좋습니다. 하드웨어 스타트업 평가에서 비중이 큽니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 6. SITES ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">Sites</span><h2>거점</h2></div>
+      <p class="desc">연구·조립과 시험 비행을 나눠 운영합니다.</p>
+    </div>
+
+    <div class="sites">
+      <div class="site">
+        <div class="nm">광주 <span>GWANGJU</span></div>
+        <div class="ro">본사 · 조립 격납고</div>
+        <p>설계와 소프트웨어 개발, 기체 조립을 수행합니다.</p>
+        <div class="ad">광주광역시 북구 첨단과기로 123<br>광주과학기술원 창업진흥센터 A-318-1</div>
+      </div>
+      <div class="site">
+        <div class="nm">장성 <span>JANGSEONG</span></div>
+        <div class="ro">시험 비행장</div>
+        <p>비행 시험을 수행하고 계측 결과를 개발에 반영합니다.</p>
+        <div class="ad">운영 중</div>
+      </div>
+      <div class="site">
+        <div class="nm">고흥 <span>GOHEUNG</span></div>
+        <div class="ro">확장 예정</div>
+        <p>성층권 비행 실증을 위한 거점을 준비하고 있습니다.</p>
+        <div class="ad">준비 중 · <span class="tbd">시점 확인 필요</span></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="k">거의 그대로 유지</span>
+      <p>이 섹션은 기존 구성이 이미 좋습니다. 사실 중심이고, 각 장소가 하는 일이 분명합니다. 주소를 명시하고, 고흥이 <b>왜</b> 다음 거점인지(성층권 실증 — 인근 나로우주센터 권역)를 한 줄 덧붙인 것만 달라졌습니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 8. ORIGIN ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">Origin</span><h2>시작</h2></div>
+      <p class="desc"></p>
+    </div>
+
+    <div class="origin">
+      <p><span class="tbd">설립연도 확인 필요</span>년, GIST에서 드론 제어를 연구하던 구성원들이 ICARUS를 설립했습니다. 고고도 비행선과 기구를 다룬 선행 연구를 검토하고 연구자들을 만나면서, 제어 기술과 소재가 발전한 지금은 비행선으로 시도해볼 수 있는 일이 남아 있다고 판단했습니다.</p>
+      <p>이후 소형 무인 비행선을 직접 제작해 비행 시험을 반복하며 제어 소프트웨어와 동역학 모델을 다듬어 왔고, 기낭 소재 개발로 범위를 넓혔습니다.</p>
+    </div>
+
+    <div class="note">
+      <span class="k">서사는 없애지 않고, 내렸습니다</span>
+      <p>창업 이야기 자체가 문제는 아닙니다. <b>페이지 맨 위에서 전면 영상과 대형 타이포로 제시되는 것</b>이 문제였습니다. 그 자리에 오면 독자는 사실을 찾으러 왔는데 브랜드 필름을 보게 됩니다.</p>
+      <p>그래서 두 문단으로 줄여 페이지 하단에 두었습니다. 위에서 사실을 다 확인한 독자가 “그래서 왜 이 사람들이 이걸 하고 있나”가 궁금해질 때 읽는 위치입니다. 문장도 “우리는 가능성을 보았습니다” 같은 선언 대신, <b>연도·장소·행동</b>으로 썼습니다. 같은 내용인데 자기 신격화로 읽히지 않습니다.</p>
+      <p>현재 페이지의 4개 챕터(Why / How / What / Where)라는 구조 자체도 뺐습니다. 이 구조는 회사를 하나의 이야기로 읽게 만들지만, About 페이지 독자는 보통 필요한 한 섹션만 찾아 읽고 나갑니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ 9. CONTACT ============ -->
+  <section>
+    <div class="shead">
+      <div><span class="eyebrow">Contact</span><h2>문의</h2></div>
+      <p class="desc">찾아오는 목적이 다르므로 창구를 나눠 안내합니다.</p>
+    </div>
+
+    <div class="routes">
+      <div class="route">
+        <h3>사업 · 기술 제휴</h3>
+        <p>통신 중계, 관측 임무, 공동 개발에 관한 논의</p>
+        <a href="mailto:contact@icarus-airship.com">contact@icarus-airship.com</a>
+      </div>
+      <div class="route">
+        <h3>미디어 · 취재</h3>
+        <p>인터뷰, 기업 소개 자료, 이미지 사용 문의</p>
+        <a href="mailto:contact@icarus-airship.com">보도자료 요청 ↗</a>
+      </div>
+      <div class="route">
+        <h3>채용</h3>
+        <p>비행 제어, 기체 설계, 소재 분야에서 함께할 분</p>
+        <a href="/career">채용 공고 보기 ↗</a>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="k">독자별 분기</span>
+      <p>단일 문의 폼 하나만 두면, 기자도 지원자도 제휴 담당자도 같은 곳으로 들어와 분류 비용이 생깁니다. About 페이지 하단은 <b>독자가 자기 목적을 확인하고 나가는 자리</b>이므로 세 갈래로 나눴습니다.</p>
+      <p>미디어 항목에 <b>보도자료 키트</b>(로고, 고해상도 기체 사진, 회사 개요 PDF)를 붙이면 언론 노출이 실제로 늘어납니다. 이미 YTN·전자신문 보도가 있는 만큼 효과가 있을 부분입니다.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  ICARUS LTA · 광주광역시 북구 첨단과기로 123, 광주과학기술원 창업진흥센터 A-318-1<br>
+  contact@icarus-airship.com<br>
+  <span style="color:var(--fg-3)">— 이 페이지는 about us 구조 제안용 샘플입니다. 실제 배포본이 아닙니다.</span>
+</footer>
+
+<script>
+  var b = document.body, t = document.getElementById('t');
+  t.addEventListener('click', function () {
+    var on = b.classList.toggle('notes');
+    t.setAttribute('aria-pressed', String(on));
+    t.textContent = on ? '설계 의도 숨기기' : '설계 의도 보기';
+  });
+</script>
+</body>
+</html>

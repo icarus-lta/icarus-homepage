@@ -3,7 +3,7 @@ import { Hero, SiteHeader } from '@icarus-lta/design-system';
 /** The live setup: the bar floats over the top of the hero photograph. */
 export const OverHero = () => (
   <div>
-    <SiteHeader />
+    <SiteHeader activeHref="/#hero" />
     <Hero imageHeight="short" primaryLabel={null} secondaryLabel={null} />
   </div>
 );
@@ -15,7 +15,7 @@ export const InFlow = () => (
       position="static"
       ctaLabel={null}
       links={[
-        { label: 'MISSION', href: '/mission' },
+        { label: 'MISSION', href: '/#hero' },
         { label: 'ABOUT', href: '/about' },
         { label: 'CAREER', href: '/career' },
         { label: 'NEWS', href: '/news' },

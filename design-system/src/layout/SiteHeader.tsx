@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { content } from '../i18n/content';
 import { useLanguage } from '../i18n/language';
 import { Button } from '../primitives/Button';
@@ -21,6 +22,8 @@ export interface SiteHeaderProps {
   onHomeClick?: React.MouseEventHandler<HTMLAnchorElement>;
   /** Nav links (default: Mission / About / Career / News; Contact is the CTA). */
   links?: Array<{ label: string; href: string; onClick?: React.MouseEventHandler<HTMLAnchorElement> }>;
+  /** Href of the current page, highlighted in desktop and mobile navigation. */
+  activeHref?: string;
   /** Right-hand pill label. Pass null to hide it. */
   ctaLabel?: string | null;
   ctaHref?: string;
@@ -41,15 +44,31 @@ export function SiteHeader(props: SiteHeaderProps) {
   const {
     brand = 'ICARUS',
     brandSuffix = 'LTA',
-    homeHref = '/',
+    homeHref = '/#hero',
     onHomeClick,
     links = copy.links as NonNullable<SiteHeaderProps['links']>,
+    activeHref,
     ctaLabel = copy.contact,
-    ctaHref = 'mailto:contact@icarus-airship.com',
+    ctaHref = '/contact',
     onCtaClick,
     position = 'fixed',
     className,
   } = props;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuId = useId();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [menuOpen]);
+
   return (
     <header
       className={cx(
@@ -62,7 +81,10 @@ export function SiteHeader(props: SiteHeaderProps) {
         <div className="flex items-center justify-between gap-2 md:gap-4 h-16 md:h-20">
           <a
             href={homeHref}
-            onClick={onHomeClick}
+            onClick={(event) => {
+              setMenuOpen(false);
+              onHomeClick?.(event);
+            }}
             aria-label={[brand, brandSuffix].filter(Boolean).join(' ')}
             className="inline-flex shrink-0 items-baseline gap-1 text-white font-bold uppercase no-underline"
           >
@@ -80,7 +102,11 @@ export function SiteHeader(props: SiteHeaderProps) {
                   key={link.label}
                   href={link.href}
                   onClick={link.onClick}
-                  className="py-3 text-sm lg:text-[15px] font-medium uppercase tracking-[0.05em] text-mist hover:text-white no-underline transition-colors duration-300"
+                  aria-current={activeHref === link.href ? 'page' : undefined}
+                  className={cx(
+                    'py-3 text-sm lg:text-[15px] font-medium uppercase tracking-[0.05em] hover:text-white no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice',
+                    activeHref === link.href ? 'text-ice' : 'text-mist',
+                  )}
                 >
                   {link.label}
                 </a>
@@ -92,8 +118,9 @@ export function SiteHeader(props: SiteHeaderProps) {
                   variant="secondary"
                   size="sm"
                   href={ctaHref}
+                  aria-current={activeHref === ctaHref ? 'page' : undefined}
                   onClick={onCtaClick}
-                  className="max-md:px-3 max-md:text-xs lg:text-[15px] font-medium uppercase tracking-[0.05em] shrink-0"
+                  className="max-md:hidden lg:text-[15px] font-medium uppercase tracking-[0.05em] shrink-0"
                 >
                   {ctaLabel}
                 </Button>
@@ -117,9 +144,62 @@ export function SiteHeader(props: SiteHeaderProps) {
                   className={cx('min-h-11 min-w-7 px-1 cursor-pointer rounded-sm transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice', language === 'ko' ? 'text-ice font-semibold' : 'text-mist-dim')}
                 >KO</button>
               </div>
+              <button
+                ref={menuButtonRef}
+                type="button"
+                aria-expanded={menuOpen}
+                aria-controls={menuId}
+                aria-label={language === 'ko' ? (menuOpen ? '메뉴 닫기' : '메뉴 열기') : (menuOpen ? 'Close menu' : 'Open menu')}
+                onClick={() => setMenuOpen((open) => !open)}
+                className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-sm px-1 text-xs font-medium text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice md:hidden"
+              >
+                <span>{language === 'ko' ? '메뉴' : 'Menu'}</span>
+                <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" className={cx('transition-transform duration-200', menuOpen && 'rotate-180')}>
+                  <path d="m2 3.5 3 3 3-3" stroke="currentColor" strokeWidth="1.25" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
+        <nav
+          id={menuId}
+          aria-label={copy.label}
+          hidden={!menuOpen}
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 pb-5 md:hidden"
+        >
+          {links.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              aria-current={activeHref === link.href ? 'page' : undefined}
+              onClick={(event) => {
+                setMenuOpen(false);
+                link.onClick?.(event);
+              }}
+              className={cx(
+                'flex min-h-12 items-center border-b border-white/10 py-3 text-sm font-medium uppercase tracking-[0.05em] no-underline transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ice',
+                activeHref === link.href ? 'text-ice' : 'text-mist',
+              )}
+            >
+              {link.label}
+            </a>
+          ))}
+          {ctaLabel ? (
+            <Button
+              variant="secondary"
+              size="sm"
+              href={ctaHref}
+              aria-current={activeHref === ctaHref ? 'page' : undefined}
+              onClick={(event) => {
+                setMenuOpen(false);
+                onCtaClick?.(event);
+              }}
+              className="mt-4 w-full min-h-11 font-medium uppercase tracking-[0.05em]"
+            >
+              {ctaLabel}
+            </Button>
+          ) : null}
+        </nav>
       </div>
     </header>
   );
