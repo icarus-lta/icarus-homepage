@@ -11,5 +11,8 @@ ds-bundle/
 .design-sync/learnings/
 .design-sync/node_modules
 
+# Local design proposals, screenshots, and browser verification artifacts
+/output/
+
 # Windows alternate-data-stream leftovers from dragging files into WSL
 *:Zone.Identifier

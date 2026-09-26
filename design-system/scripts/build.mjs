@@ -65,10 +65,11 @@ const images = [
   { src: 'airframe_photo.png', out: 'airframe.webp', resize: { width: 1280 }, webp: { quality: 88, alphaQuality: 100 } },
   { src: 'about_img.gif', out: 'about.webp', animated: true, resize: { width: 448 }, webp: { quality: 55, effort: 6 } },
   { src: 'product_img.png', out: 'product.webp', resize: { width: 896 }, webp: { quality: 78 } },
-  { src: 'news_img_4.png', out: 'news-material.webp', resize: { width: 800 }, webp: { quality: 78 } },
-  { src: 'news_img_3.jpg', out: 'news-award.webp', resize: { width: 800 }, webp: { quality: 78 } },
-  { src: 'news_img_1.png', out: 'news-ytn.webp', resize: { width: 800 }, webp: { quality: 78 } },
-  { src: 'news_img_2.jpg', out: 'news-kepco.webp', resize: { width: 800 }, webp: { quality: 78 } },
+  // News photographs lead the Newsroom's magazine layout at up to ~860px wide.
+  { src: 'news_img_4.png', out: 'news-material.webp', resize: { width: 1200 }, webp: { quality: 80 } },
+  { src: 'news_img_3.jpg', out: 'news-award.webp', resize: { width: 1200 }, webp: { quality: 80 } },
+  { src: 'news_img_1.png', out: 'news-ytn.webp', resize: { width: 1200 }, webp: { quality: 80 } },
+  { src: 'news_img_2.jpg', out: 'news-kepco.webp', resize: { width: 1200 }, webp: { quality: 80 } },
 ];
 
 for (const img of images) {

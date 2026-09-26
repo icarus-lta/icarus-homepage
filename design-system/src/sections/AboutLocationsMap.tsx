@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { ROK_PATH, ROK_ISLANDS_PATH } from './koreaCoastline';
 
 export interface AboutLocationsMapProps {
@@ -18,26 +19,58 @@ function cityPoint(longitude: number, latitude: number) {
 const gwangju = cityPoint(126.8526, 35.1595);
 const jangseong = cityPoint(126.7849, 35.3018);
 const goheung = cityPoint(127.2849, 34.6112);
+const jangseongLeader = `M${jangseong.x},${jangseong.y} L179,250 H44`;
+const gwangjuLeader = `M${gwangju.x},${gwangju.y} L182,325 H44`;
 
 /** City-level view of ICARUS's development locations, including its future site. */
 export function AboutLocationsMap({ labels, note }: AboutLocationsMapProps) {
+  const mapRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    let visible = false;
+    const sync = () => { map.dataset.running = String(visible && !document.hidden); };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(map);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, []);
+
   return (
     <figure className="ds-about-location-figure">
-      <svg className="ds-about-location-map" viewBox="0 0 550 490" fill="none" aria-hidden="true" focusable="false">
+      <svg ref={mapRef} className="ds-about-location-map" viewBox="0 0 550 490" fill="none" aria-hidden="true" focusable="false">
         <g transform="translate(14 -300) scale(3.2)" fill="#111f30" stroke="#36506a" strokeWidth="0.34" strokeLinejoin="round">
           <path d={ROK_PATH} />
           <path d={ROK_ISLANDS_PATH} />
         </g>
 
         <g stroke="#8fd8ff" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-          <path d={`M${jangseong.x},${jangseong.y} L179,250 H44`} opacity="0.65" />
-          <path d={`M${gwangju.x},${gwangju.y} L182,325 H44`} opacity="0.65" />
+          <path d={jangseongLeader} opacity="0.65" />
+          <path d={gwangjuLeader} opacity="0.65" />
         </g>
         <path d={`M${goheung.x},${goheung.y} L285,392 H474`} stroke="#8293a9" strokeWidth="1" strokeDasharray="4 5" strokeLinecap="round" strokeLinejoin="round" opacity="0.75" />
 
+        <g className="ds-about-location-activity" stroke="#a6e4ff" strokeWidth="1" pointerEvents="none">
+          {[gwangju, jangseong].map((point, index) => (
+            <g key={index}>
+              {[0, 1].map(ring => (
+                <circle key={ring} className="ds-about-location-ripple" cx={point.x} cy={point.y} r="5"
+                  style={{ animationDelay: `${-index * .9 - ring * 1.8}s` }} />
+              ))}
+            </g>
+          ))}
+        </g>
+
         <g fill="#8fd8ff" stroke="#02030a" strokeWidth="2">
-          <circle cx={gwangju.x} cy={gwangju.y} r="4.5" />
-          <circle cx={jangseong.x} cy={jangseong.y} r="4.5" />
+          <circle className="ds-about-location-active-node" cx={gwangju.x} cy={gwangju.y} r="4.5" />
+          <circle className="ds-about-location-active-node" cx={jangseong.x} cy={jangseong.y} r="4.5" />
         </g>
         <circle cx={goheung.x} cy={goheung.y} r="5" fill="#111f30" stroke="#a8b6c8" strokeWidth="1.5" />
         <circle cx={goheung.x} cy={goheung.y} r="11" stroke="#8293a9" strokeWidth="0.8" strokeDasharray="2 4" opacity="0.6" />

@@ -113,10 +113,10 @@ export const newsArticles: readonly NewsArticle[] = [
 
 const en = {
   metadata: {
-    title: 'News & updates — ICARUS LTA',
+    title: 'Newsroom — ICARUS LTA',
     description: 'Company news, development updates and media coverage from ICARUS LTA.',
   },
-  heading: 'News',
+  heading: 'Newsroom',
   eyebrow: 'NEWSROOM',
   title: ['News &', 'updates.'],
   introduction: 'Progress, perspectives and stories from ICARUS. Follow the work as it takes shape.',
@@ -143,7 +143,7 @@ const ko: typeof en = {
     title: '새로운 소식 — ICARUS LTA',
     description: '이카루스의 기업 소식과 개발 이야기, 언론 보도를 만나보세요.',
   },
-  heading: 'News',
+  heading: 'Newsroom',
   eyebrow: '새로운 소식',
   title: ['ICARUS의', '지금.'],
   introduction: '기술을 만들어가는 과정부터 새로운 만남까지. 이카루스의 발걸음을 전합니다.',

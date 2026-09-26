@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { images } from '../assets';
 import { aboutContent } from '../i18n/about';
 import { useLanguage } from '../i18n/language';
@@ -9,12 +9,24 @@ export interface AboutPageProps {
   /** Public URLs; serve the supplied film separately from the component bundle. */
   videoSrc?: string;
   posterSrc?: string;
+  /** Flight-control simulation shown by the second Why ICARUS card. */
+  controlVideoSrc?: string;
+  controlPosterSrc?: string;
   /** Replace the provisional development photograph with an early company photograph. */
   controlImageSrc?: string;
 }
 
 function Lines({ text }: { text: string }) {
   return <>{text.split('\n').map((line, i) => <Fragment key={i}>{i > 0 && <br />}{line}</Fragment>)}</>;
+}
+
+function HistoryText({ text }: { text: string }) {
+  // Long program names read as supporting information. Keep short qualifiers
+  // such as (예비) in the sentence, and preserve the full wording in both cases.
+  const program = text.match(/^(.*?)\(([^()]{12,})\)\s*(.*)$/);
+  if (!program) return <>{text}</>;
+  return <><span className="ds-about-history-summary">{[program[1].trim(), program[3].trim()].filter(Boolean).join(' ')}</span>
+    <span className="ds-about-history-detail">({program[2]})</span></>;
 }
 
 function ChapterHeading({ number, title, id }: { number: string; title: string; id: string }) {
@@ -37,42 +49,94 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 export function AboutPage({
   videoSrc = '/media/about-flight.mp4',
   posterSrc = '/media/about-flight-poster.jpg',
+  controlVideoSrc = '/media/about-control.mp4?v=20',
+  controlPosterSrc = '/media/about-control-poster.webp?v=20',
   controlImageSrc = '/media/about-field-team-source.png',
 }: AboutPageProps) {
   const { language } = useLanguage();
   const copy = aboutContent[language];
   const videoRef = useRef<HTMLVideoElement>(null);
+  const whyVisualRef = useRef<HTMLElement>(null);
   const cfdRef = useRef<HTMLVideoElement>(null);
+  const controlRef = useRef<HTMLVideoElement>(null);
   const manuallyPaused = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
+  /** The Why ICARUS card whose visual is showing. */
+  const [strength, setStrength] = useState(0);
+  const strengthsRef = useRef<HTMLDivElement>(null);
+  const strengthIndicatorRef = useRef<HTMLSpanElement>(null);
 
+  // One capsule follows the selected card, including changes to translated text and viewport size.
+  useLayoutEffect(() => {
+    const stack = strengthsRef.current;
+    const indicator = strengthIndicatorRef.current;
+    if (!stack || !indicator) return;
+    let disposed = false;
+    let frame = 0;
+    let readyFrame = 0;
+    const measure = () => {
+      frame = 0;
+      if (disposed) return;
+      const active = stack.querySelector<HTMLElement>('.ds-about-strength.is-active');
+      if (!active) return;
+      // offsetTop ignores the moving card's transform; its final lift is -3px.
+      indicator.style.height = `${Math.max(36, active.offsetHeight - 32)}px`;
+      indicator.style.transform = `translateY(${active.offsetTop + 13}px)`;
+      if (!indicator.dataset.ready && !readyFrame) {
+        readyFrame = requestAnimationFrame(() => {
+          readyFrame = 0;
+          if (!disposed) indicator.dataset.ready = 'true';
+        });
+      }
+    };
+    const schedule = () => {
+      if (!disposed && !frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    const observer = new ResizeObserver(schedule);
+    observer.observe(stack);
+    stack.querySelectorAll('.ds-about-strength').forEach(card => observer.observe(card));
+    void document.fonts.ready.then(schedule);
+    return () => {
+      disposed = true;
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(readyFrame);
+    };
+  }, [strength, language]);
+
+  // Why ICARUS: only the chosen card's film plays, and only while the chapter is on screen.
   useEffect(() => {
-    const video = cfdRef.current;
-    if (!video) return;
+    const figure = whyVisualRef.current;
+    if (!figure) return;
+    const films = [cfdRef.current, controlRef.current];
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let visible = false;
     const syncPlayback = () => {
-      if (visible && !document.hidden && !reduced.matches) {
-        void video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
+      films.forEach((film, i) => {
+        if (!film) return;
+        if (i === strength && visible && !document.hidden && !reduced.matches) {
+          void film.play().catch(() => {});
+        } else {
+          film.pause();
+        }
+      });
     };
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       syncPlayback();
     });
-    observer.observe(video);
+    observer.observe(figure);
     reduced.addEventListener('change', syncPlayback);
     document.addEventListener('visibilitychange', syncPlayback);
     return () => {
       observer.disconnect();
       reduced.removeEventListener('change', syncPlayback);
       document.removeEventListener('visibilitychange', syncPlayback);
-      video.pause();
+      films.forEach(film => film?.pause());
     };
-  }, []);
+  }, [strength]);
 
   useEffect(() => {
     document.title = copy.metadata.title;
@@ -180,12 +244,15 @@ export function AboutPage({
                   <span key={claim.text} className="ds-about-chapter-claim"><strong>{claim.only}</strong> {claim.text}</span>
                 ))}
               </p>
-              <p className="ds-about-chapter-description">{copy.what.description}</p>
-              <div className="ds-about-chapter-facts">
-                {copy.what.points.map(point => (
-                  <article key={point.title} className="ds-about-chapter-fact">
+              <p className="ds-about-chapter-description">
+                {copy.what.description.split('\n').map(part => <span key={part}>{part}</span>)}
+              </p>
+              <div className="ds-about-capabilities">
+                {copy.what.points.map((point, i) => (
+                  <article key={point.title} className="ds-about-capability">
+                    <span className="ds-about-capability-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                     <h3>{point.title}</h3>
-                    <p>{point.description}</p>
+                    <p>{point.description.split('\n').map(line => <span key={line}>{line}</span>)}</p>
                   </article>
                 ))}
               </div>
@@ -198,24 +265,48 @@ export function AboutPage({
         <div className={`${containerClass} ds-about-chapter-inner`}>
           <ChapterHeading number="02" title={copy.why.title} id="why-title" />
           <div className="ds-about-chapter-body">
-            <figure className="ds-about-chapter-visual">
-              <div className="ds-about-cfd-viewport">
+            {/* One layer per card, in the order of copy.why.points: the CFD film, the control simulation and
+                the envelope-material photograph. The chosen card's layer fades in over the others. */}
+            <figure id="why-visual" ref={whyVisualRef} className={`ds-about-chapter-visual${strength === 1 ? ' is-control-active' : ''}`}>
+              <div className={`ds-about-why-media ds-about-cfd-viewport${strength === 0 ? ' is-active' : ''}`} aria-hidden={strength !== 0}>
                 <video ref={cfdRef} src="/media/about-cfd-dark.mp4" poster="/media/about-cfd-dark-poster.webp"
-                  muted loop playsInline preload="none" width="800" height="450"
-                  aria-label={language === 'ko' ? '비행선 주변 유동을 보여주는 CFD 시뮬레이션' : 'CFD simulation of airflow around the airship'} />
+                  muted loop playsInline preload="none" width="800" height="450" aria-label={copy.why.points[0].visual} />
               </div>
-              <figcaption>{copy.why.imageCaption}</figcaption>
+              <div className={`ds-about-why-media ds-about-control-viewport${strength === 1 ? ' is-active' : ''}`} aria-hidden={strength !== 1}>
+                <video ref={controlRef} src={controlVideoSrc} poster={controlPosterSrc}
+                  muted loop playsInline preload="none" width="1440" height="810" aria-label={copy.why.points[1].visual} />
+              </div>
+              <div className={`ds-about-why-media ds-about-why-photo${strength === 2 ? ' is-active' : ''}`} aria-hidden={strength !== 2}>
+                <img src={images.product} alt={copy.why.points[2].visual} loading="lazy" />
+              </div>
+              <figcaption>{copy.why.points[strength].caption}</figcaption>
             </figure>
             <div className="ds-about-chapter-copy">
-              <p className="ds-about-chapter-lead">{copy.why.lead.replace(/\s+/g, ' ')}</p>
-              <p className="ds-about-chapter-description">{copy.why.description}</p>
-              <div className="ds-about-chapter-facts">
-                {copy.why.points.map(point => (
-                  <article key={point.title} className="ds-about-chapter-fact">
-                    <h3>{point.title}</h3>
-                    <p>{point.description}</p>
+              <div ref={strengthsRef} className="ds-about-strengths" onKeyDown={event => {
+                if (event.defaultPrevented || !['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+                const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('.ds-about-strength-button'));
+                const current = buttons.indexOf(document.activeElement as HTMLButtonElement);
+                if (current < 0) return;
+                event.preventDefault();
+                const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1
+                  : (current + (event.key === 'ArrowDown' ? 1 : buttons.length - 1)) % buttons.length;
+                buttons[next].focus({ preventScroll: true });
+                setStrength(next);
+              }}>
+                {copy.why.points.map((point, i) => (
+                  <article key={point.title} className={`ds-about-strength${i === strength ? ' is-active' : ''}`}>
+                    <h3>
+                      <button type="button" className="ds-about-strength-button" aria-pressed={i === strength}
+                        aria-controls="why-visual" onClick={() => setStrength(i)}>
+                        <span className="ds-about-strength-index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                        {point.title}
+                      </button>
+                    </h3>
+                    <p className="ds-about-strength-text">{point.description}</p>
                   </article>
                 ))}
+                <span className="ds-about-strength-track" aria-hidden="true" />
+                <span ref={strengthIndicatorRef} className="ds-about-strength-indicator" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -227,17 +318,17 @@ export function AboutPage({
           <ChapterHeading number="03" title={copy.when.title} id="when-title" />
           <div className="ds-about-chapter-body">
             <div className="ds-about-chapter-copy">
-              <p className="ds-about-chapter-lead">{copy.when.lead.replace(/\s+/g, ' ')}</p>
-              <p className="ds-about-chapter-description">{copy.when.description}</p>
-              <ol className="ds-about-history">
-                {copy.when.history.map(year => (
-                  <li key={year.year} className="ds-about-history-year">
+              <ol className="ds-about-history" data-year-count={copy.when.history.length}>
+                {copy.when.history.map((year, i, years) => (
+                  <li key={year.year} className={`ds-about-history-year${i === years.length - 1 ? ' is-current' : ''}`}
+                    aria-current={i === years.length - 1 ? 'date' : undefined}>
+                    <span className="ds-about-history-marker" aria-hidden="true" />
                     <h3>{year.year}</h3>
                     <ul>
                       {year.entries.map(entry => (
                         <li key={entry.text}>
                           {entry.date && <span className="ds-about-history-date">{entry.date}</span>}
-                          <span className="ds-about-history-text">{entry.text}</span>
+                          <span className="ds-about-history-text"><HistoryText text={entry.text} /></span>
                         </li>
                       ))}
                     </ul>
@@ -257,16 +348,17 @@ export function AboutPage({
               <AboutLocationsMap labels={copy.where.places.map(place => place.name)} note={copy.where.mapNote} />
             </div>
             <div className="ds-about-chapter-copy">
-              <p className="ds-about-chapter-description">{copy.where.description}</p>
               <div className="ds-about-chapter-places">
                 {copy.where.places.map((place, index) => (
                   <article key={place.english} className="ds-about-chapter-place">
                     <div className="ds-about-chapter-place-heading">
                       <h3>{place.name}</h3>
-                      <span className={`ds-about-chapter-status${index === 2 ? ' is-planned' : ''}`}>{place.status}</span>
+                      <span className={`ds-about-chapter-status${index === 2 ? ' is-planned' : ''}`}><i aria-hidden="true" />{place.status}</span>
                     </div>
-                    <p className="ds-about-chapter-place-role">{place.role}</p>
-                    <p className="ds-about-chapter-place-description">{place.description}</p>
+                    <div className="ds-about-chapter-place-details">
+                      <p className="ds-about-chapter-place-role">{place.role}</p>
+                      <p className="ds-about-chapter-place-description">{place.description}</p>
+                    </div>
                   </article>
                 ))}
               </div>

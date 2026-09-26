@@ -6,12 +6,15 @@
 //   /news/     bilingual company news with original-source links
 //   /contact/  bilingual inquiry form and direct email
 //   /anim.html either scroll section on a progress slider, for checking single frames
-import { mkdirSync, copyFileSync, writeFileSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { mkdirSync, copyFileSync, writeFileSync, readdirSync, readFileSync, existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { bundleToIife } from '../.ds-sync/lib/bundle.mjs';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
-const REPO = '/root/icarus-homepage';
+const REPO = dirname(dirname(fileURLToPath(import.meta.url)));
+const require = createRequire(join(REPO, 'design-system/package.json'));
+const { build } = require('esbuild');
 const OUT = `${REPO}/.design-sync/.cache/preview`;
 // Public form endpoint only. Private delivery credentials never belong in the browser bundle.
 const contactSubmitUrl = process.env.ICARUS_CONTACT_FORM_URL?.trim() || '';
@@ -19,14 +22,29 @@ if (contactSubmitUrl && !/^https:\/\//.test(contactSubmitUrl) && !/^\/(?!\/)/.te
   throw new Error('ICARUS_CONTACT_FORM_URL must be an HTTPS URL or a same-origin path.');
 }
 const contactProps = JSON.stringify(contactSubmitUrl ? { submitUrl: contactSubmitUrl } : {}).replace(/</g, '\\u003c');
-mkdirSync(join(OUT, '_vendor'), { recursive: true });
+mkdirSync(OUT, { recursive: true });
 
-await bundleToIife({
-  entry: `${REPO}/design-system/dist/index.js`,
-  globalName: 'IcarusDS',
-  nodePaths: `${REPO}/design-system/node_modules`,
-  out: OUT,
-  tsconfig: null,
+// One runtime from the lockfile, with no dependency on local design-tool caches.
+// These globals also support the existing standalone review pages.
+await build({
+  stdin: {
+    contents: `import * as React from 'react';
+      import * as ReactDOM from 'react-dom';
+      import * as ReactDOMClient from 'react-dom/client';
+      import * as IcarusDS from './dist/index.js';
+      window.React = React;
+      window.ReactDOM = { ...ReactDOM, ...ReactDOMClient };
+      window.IcarusDS = IcarusDS;`,
+    resolveDir: join(REPO, 'design-system'),
+    sourcefile: 'site-entry.js',
+  },
+  outfile: join(OUT, '_ds_bundle.js'),
+  bundle: true,
+  format: 'iife',
+  platform: 'browser',
+  target: 'es2020',
+  minify: true,
+  define: { 'process.env.NODE_ENV': '"production"' },
 });
 
 // A slow external @import blocks the classic scripts and can leave a phone on a blank page.
@@ -39,11 +57,8 @@ const previewStyles = readFileSync(`${REPO}/design-system/dist/styles.css`, 'utf
   .replace(/^@import url\("https:\/\/[^"\n]+"\);\s*$/gm, '');
 writeFileSync(join(OUT, 'styles.css'), readFileSync(join(REPO, 'static/fonts/preview-fonts.css'), 'utf8') + '\n' + previewStyles);
 copyFileSync(join(REPO, '.design-sync/connection-check.html'), join(OUT, 'connection-check.html'));
-for (const f of readdirSync(`${REPO}/ds-bundle/_vendor`)) {
-  copyFileSync(`${REPO}/ds-bundle/_vendor/${f}`, join(OUT, '_vendor', f));
-}
 mkdirSync(join(OUT, 'media'), { recursive: true });
-for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp']) {
+for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp', 'about-control.mp4', 'about-control-poster.webp']) {
   copyFileSync(join(REPO, 'static', 'about', f), join(OUT, 'media', f));
 }
 
@@ -52,7 +67,6 @@ const assetVersion = createHash('sha256').update(readFileSync(join(OUT, '_ds_bun
 const head = `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>html,body{margin:0;background:#02030a;color:#b9c9e2}</style>
 <link rel="stylesheet" href="/styles.css?v=${assetVersion}">
-<script defer src="/_vendor/react.js"></script><script defer src="/_vendor/react-dom.js"></script>
 <script defer src="/_ds_bundle.js?v=${assetVersion}"></script>
 <script>window.addEventListener('DOMContentLoaded',function(){
   var language=new URLSearchParams(window.location.search).get('lang');
@@ -104,7 +118,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 // Real subpages share the existing header, footer, and persisted language selection.
 for (const page of [
-  { path:'news', component:'NewsPage', title:'News & updates — ICARUS LTA', description:'Company news, development updates and media coverage from ICARUS LTA.' },
+  { path:'news', component:'NewsPage', title:'Newsroom — ICARUS LTA', description:'Company news, development updates and media coverage from ICARUS LTA.' },
   { path:'contact', component:'ContactPage', title:'Contact — ICARUS LTA', description:'Get in touch with ICARUS. Send us your email, subject, and inquiry.' },
 ]) {
   mkdirSync(join(OUT, page.path), { recursive:true });
@@ -191,4 +205,7 @@ draw();
 );
 
 console.log('preview ->', OUT);
-await import('./build-about-story-preview.mjs');
+// Older design studies are optional local artifacts, absent from fresh clones.
+if (['about-story.html', 'about-story.css', 'about-story-notes.html'].every(file => existsSync(join(REPO, 'output', file)))) {
+  await import('./build-about-story-preview.mjs');
+}
