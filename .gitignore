@@ -16,3 +16,10 @@ ds-bundle/
 
 # Windows alternate-data-stream leftovers from dragging files into WSL
 *:Zone.Identifier
+
+# Server-only mail configuration and Python environment
+.env
+.env.local
+.venv/
+__pycache__/
+*.pyc

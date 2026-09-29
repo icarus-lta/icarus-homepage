@@ -6,12 +6,13 @@ export const companyContactEmail = 'contact@icarus-airship.com';
 const en = {
   metadata: {
     title: 'Contact — ICARUS LTA',
-    description: 'Get in touch with ICARUS. Send us your email, subject, and inquiry.',
+    description: 'Get in touch with ICARUS. Send us your name, email, subject, and inquiry.',
   },
   title: 'Contact',
   description: 'Have a question or a proposal? We’d like to hear from you.',
   requiredNote: 'Required fields',
   fields: {
+    name: { label: 'Name', placeholder: 'Enter your name', required: 'Enter your name.' },
     email: { label: 'Email', placeholder: 'you@company.com', required: 'Enter your email address.' },
     subject: { label: 'Subject', placeholder: 'What would you like to discuss?', required: 'Enter a subject.' },
     message: { label: 'Message', placeholder: 'Tell us how we can help.', required: 'Enter your message.' },
@@ -30,12 +31,13 @@ const en = {
 const ko: typeof en = {
   metadata: {
     title: '문의하기 — ICARUS LTA',
-    description: 'ICARUS에 궁금한 점이나 제안을 남겨주세요. 이메일, 문의 제목, 문의 내용을 입력하실 수 있습니다.',
+    description: 'ICARUS에 궁금한 점이나 제안을 남겨주세요. 이름, 이메일, 문의 제목, 문의 내용을 입력하실 수 있습니다.',
   },
   title: '문의하기',
   description: 'ICARUS에 궁금한 점이나 제안을 남겨주세요.',
   requiredNote: '필수 입력 항목',
   fields: {
+    name: { label: '이름', placeholder: '이름을 입력해주세요.', required: '이름을 입력해주세요.' },
     email: { label: '이메일', placeholder: '답변받으실 이메일을 입력해주세요.', required: '이메일을 입력해주세요.' },
     subject: { label: '문의 제목', placeholder: '문의 제목을 입력해주세요.', required: '문의 제목을 입력해주세요.' },
     message: { label: '문의 내용', placeholder: '문의하실 내용을 남겨주세요.', required: '문의 내용을 입력해주세요.' },

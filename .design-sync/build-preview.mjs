@@ -4,6 +4,7 @@
 //   /          the real homepage skeleton, scroll-driven
 //   /about/    the bilingual company story, with the supplied flight film
 //   /news/     bilingual company news with original-source links
+//   /career/   bilingual recruitment posts and role introductions
 //   /contact/  bilingual inquiry form and direct email
 //   /anim.html either scroll section on a progress slider, for checking single frames
 import { mkdirSync, copyFileSync, writeFileSync, readdirSync, readFileSync, existsSync } from 'node:fs';
@@ -17,12 +18,22 @@ const require = createRequire(join(REPO, 'design-system/package.json'));
 const { build } = require('esbuild');
 const OUT = `${REPO}/.design-sync/.cache/preview`;
 // Public form endpoint only. Private delivery credentials never belong in the browser bundle.
-const contactSubmitUrl = process.env.ICARUS_CONTACT_FORM_URL?.trim() || '';
+const contactSubmitUrl = process.env.ICARUS_CONTACT_FORM_URL?.trim() || '/api/contact';
 if (contactSubmitUrl && !/^https:\/\//.test(contactSubmitUrl) && !/^\/(?!\/)/.test(contactSubmitUrl)) {
   throw new Error('ICARUS_CONTACT_FORM_URL must be an HTTPS URL or a same-origin path.');
 }
 const contactProps = JSON.stringify(contactSubmitUrl ? { submitUrl: contactSubmitUrl } : {}).replace(/</g, '\\u003c');
 mkdirSync(OUT, { recursive: true });
+
+// The server validates against exactly the roles used by the current frontend.
+const rolesModule = await build({
+  entryPoints: [join(REPO, 'design-system/src/i18n/career.ts')],
+  bundle: true, platform: 'node', format: 'esm', write: false,
+});
+const { careerRoles } = await import(`data:text/javascript;base64,${Buffer.from(rolesModule.outputFiles[0].text).toString('base64')}`);
+writeFileSync(join(OUT, '..', 'career-roles.json'), JSON.stringify(Object.fromEntries(
+  careerRoles.map(role => [role.id, { ko: role.ko.title, en: role.en.title }]),
+), null, 2));
 
 // One runtime from the lockfile, with no dependency on local design-tool caches.
 // These globals also support the existing standalone review pages.
@@ -58,7 +69,7 @@ const previewStyles = readFileSync(`${REPO}/design-system/dist/styles.css`, 'utf
 writeFileSync(join(OUT, 'styles.css'), readFileSync(join(REPO, 'static/fonts/preview-fonts.css'), 'utf8') + '\n' + previewStyles);
 copyFileSync(join(REPO, '.design-sync/connection-check.html'), join(OUT, 'connection-check.html'));
 mkdirSync(join(OUT, 'media'), { recursive: true });
-for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp', 'about-control.mp4', 'about-control-poster.webp']) {
+for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd.mp4', 'about-cfd-poster.webp', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp', 'about-cfd-clean.mp4', 'about-cfd-clean-poster.webp', 'about-control.mp4', 'about-control-poster.webp']) {
   copyFileSync(join(REPO, 'static', 'about', f), join(OUT, 'media', f));
 }
 
@@ -118,6 +129,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 // Real subpages share the existing header, footer, and persisted language selection.
 for (const page of [
+  { path:'career', component:'CareerPage', title:'Careers — ICARUS LTA', description:'Explore engineering roles at ICARUS LTA.' },
+  { path:'career/apply', component:'CareerApplicationPage', title:'Apply — ICARUS LTA', description:'Apply for an engineering role at ICARUS LTA.' },
   { path:'news', component:'NewsPage', title:'Newsroom — ICARUS LTA', description:'Company news, development updates and media coverage from ICARUS LTA.' },
   { path:'contact', component:'ContactPage', title:'Contact — ICARUS LTA', description:'Get in touch with ICARUS. Send us your email, subject, and inquiry.' },
 ]) {
@@ -133,10 +146,16 @@ window.addEventListener('DOMContentLoaded', () => {
 const D = window.IcarusDS, h = React.createElement;
 ReactDOM.createRoot(document.getElementById('root')).render(
   h('div', { className:'overflow-x-clip' },
-    h(D.SiteHeader, { activeHref:'/${page.path}' }), h(D.${page.component}, ${page.path === 'contact' ? contactProps : '{}'}), h(D.SiteFooter, { credit:null })));
+    h(D.SiteHeader, { activeHref:'/${page.path.startsWith('career') ? 'career' : page.path}' }), h(D.${page.component}, ${page.path === 'contact' ? contactProps : '{}'}), h(D.SiteFooter, { credit:null })));
 });
 </script></body></html>`);
 }
+
+// Keep the previously shared design-review URL pointing to the current recruitment page.
+mkdirSync(join(OUT, 'career-proposals'), { recursive:true });
+writeFileSync(join(OUT, 'career-proposals', 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Careers — ICARUS LTA</title>
+<script>var lang=new URLSearchParams(location.search).get('lang');location.replace('/career/'+(lang==='ko'||lang==='en'?'?lang='+lang:''));</script>
+</head><body><a href="/career/">Careers / 채용 공고</a></body></html>`);
 
 // A frozen-frame rig: the same component, driven by a slider instead of the scroll.
 writeFileSync(
@@ -204,6 +223,9 @@ draw();
 </script></body></html>`,
 );
 
+await import('./build-career-layouts.mjs');
+await import('./build-career-intro.mjs');
+await import('./build-career-process.mjs');
 console.log('preview ->', OUT);
 // Older design studies are optional local artifacts, absent from fresh clones.
 if (['about-story.html', 'about-story.css', 'about-story-notes.html'].every(file => existsSync(join(REPO, 'output', file)))) {

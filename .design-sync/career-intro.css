@@ -1,0 +1,92 @@
+.ci-review { --ci-header: 80px; --ci-toolbar: 64px; background: #060a10; color: #d8e0e9; font-family: Pretendard, sans-serif; overflow-wrap: anywhere; }
+.ci-review[lang="ko"] { word-break: keep-all; }
+.ci-review :where(h1,h2,h3,p,ul,ol,dl,dd) { margin: 0; }
+.ci-review :where(a,select):focus-visible { outline: 2px solid #a1c7e5; outline-offset: 4px; }
+.ci-review-bar { position: sticky; top: var(--ci-header); z-index: 40; margin-top: var(--ci-header); border-bottom: 1px solid #29323e; background: #0c121b; }
+.ci-controls { display: flex; align-items: center; gap: 24px; max-width: 960px; min-height: var(--ci-toolbar); margin: auto; padding: 10px 24px; }
+.ci-review-label { color: #98a6b6; font-size: 12px; white-space: nowrap; }
+.ci-controls nav { display: flex; align-items: center; gap: 4px; }
+.ci-controls nav a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 8px 14px; color: #a8b6c6; font-size: 13px; border-radius: 4px; white-space: nowrap; }
+.ci-controls nav a b { font-size: 11px; font-weight: 500; }
+.ci-controls nav a[aria-current] { color: #f0f5fa; background: #202d3c; }
+.ci-controls nav a:hover { color: #fff; background: #192432; }
+.ci-controls select { margin-left: auto; min-width: 132px; min-height: 40px; padding: 8px 12px; border: 1px solid #354050; border-radius: 4px; background: #0c121b; color: #d9e3ed; font: 13px Pretendard, sans-serif; cursor: pointer; }
+.ci-main { max-width: 960px; padding: 38px 40px 96px; margin: auto; }
+.ci-post-head { padding-bottom: 30px; border-bottom: 1px solid #2a3441; }
+.ci-back { display: inline-flex; min-height: 44px; align-items: center; margin-bottom: 24px; font-size: 14px; color: #a5b6c8; }
+.ci-post-head h1 { font-size: clamp(28px,3vw,38px); color: #f5f7fb; font-weight: 650; line-height: 1.4; letter-spacing: -.03em; text-wrap: balance; }
+.ci-post-head > p { margin-top: 16px; font-size: 15px; line-height: 1.7; color: #a5b4c5; }
+.ci-intro { margin-top: 40px; scroll-margin-top: calc(var(--ci-header) + var(--ci-toolbar) + 28px); }
+.ci-main h2 { margin-bottom: 24px; color: #f2f5fa; font-size: 24px; font-weight: 650; line-height: 1.5; letter-spacing: -.025em; }
+.ci-intro-copy { font-size: 18px; line-height: 1.95; letter-spacing: -.012em; }
+.ci-intro-copy p { text-wrap: pretty; }
+.ci-intro-copy > p + p { margin-top: 24px; }
+
+/* A: one restrained card, readable line length and three prose paragraphs. */
+.ci-intro-a { padding: 32px 36px 36px; border: 1px solid #303b49; border-radius: 8px; background: #0d141e; }
+.ci-intro-a h2 { margin-bottom: 22px; }
+
+/* B: a simple mission panel, with supporting paragraphs underneath. */
+.ci-mission-panel { margin-bottom: 26px; padding: 28px 32px; background: #141e2b; border-radius: 6px; }
+.ci-mission-panel .ci-lead { font-size: 22px; font-weight: 600; line-height: 1.65; letter-spacing: -.02em; color: #f0f5fb; }
+.ci-mission-panel p + p { margin-top: 18px; }
+.ci-intro-b .ci-intro-copy > p { padding-inline: 2px; }
+
+/* C: compact labels clarify the paragraph progression; the copy stays prose. */
+.ci-paragraph { display: grid; grid-template-columns: 108px minmax(0,1fr); gap: 24px; padding: 24px 0; border-bottom: 1px solid #27313d; }
+.ci-paragraph:first-child { padding-top: 0; }
+.ci-paragraph:last-child { border: 0; padding-bottom: 0; }
+.ci-paragraph h3 { padding-top: 4px; color: #b8cadc; font-size: 14px; line-height: 1.8; font-weight: 600; }
+
+/* Shared, conventional job-post layout beneath the introduction. */
+.ci-job-body { margin-top: 48px; }
+.ci-job-section { padding-top: 32px; border-top: 1px solid #27323f; font-size: 18px; line-height: 1.85; letter-spacing: -.012em; }
+.ci-job-section + .ci-job-section { margin-top: 42px; }
+.ci-job-section h2 { margin-bottom: 20px; }
+.ci-job-section ul { padding-left: 1.2em; list-style: disc; }
+.ci-job-section ul > li { padding-left: .15em; text-wrap: pretty; }
+.ci-job-section ul > li::marker { font-size: .7em; color: #9bafc3; }
+.ci-job-section ul > li + li { margin-top: 12px; }
+.ci-facts { font-size: 17px; }
+.ci-facts > div { display: grid; grid-template-columns: 128px minmax(0,1fr); gap: 20px; padding: 14px 0; border-bottom: 1px solid #202a36; }
+.ci-facts dt { color: #a9b9cb; }
+.ci-facts dd { color: #e6edf5; }
+.ci-steps { padding-left: 1.4em; list-style: decimal; }
+.ci-steps > li { padding-left: 8px; }
+.ci-steps > li::marker { color: #afc7dc; font-size: 16px; }
+.ci-steps > li + li { margin-top: 28px; }
+.ci-steps h3 { margin-bottom: 12px; color: #eef3f8; font-size: 19px; line-height: 1.6; font-weight: 600; }
+.ci-steps ul { font-size: 17px; }
+.ci-steps ul > li + li { margin-top: 6px; }
+.ci-current { display: flex; width: fit-content; min-height: 44px; align-items: center; margin: 52px auto 0; color: #b5c6d8; font-size: 14px; }
+@media (max-width: 899px) { .ci-review-label { display: none; } }
+@media (max-width: 767px) {
+  .ci-review { --ci-header: 64px; --ci-toolbar: 110px; }
+  .ci-controls { padding: 8px 20px; gap: 8px; flex-wrap: wrap; }
+  .ci-controls nav { width: 100%; }
+  .ci-controls nav a { flex: 1; gap: 6px; padding-inline: 8px; font-size: 12px; }
+  .ci-controls select { margin: 0; min-height: 40px; width: 100%; }
+  .ci-main { padding: 24px 24px 64px; }
+  .ci-post-head { padding-bottom: 26px; }
+  .ci-post-head > p { font-size: 14px; }
+  .ci-back { margin-bottom: 16px; }
+  .ci-intro { margin-top: 30px; scroll-margin-top: calc(var(--ci-header) + var(--ci-toolbar) + 20px); }
+  .ci-main h2 { font-size: 22px; margin-bottom: 20px; }
+  .ci-intro-copy { font-size: 17px; line-height: 1.9; }
+  .ci-intro-copy > p + p { margin-top: 22px; }
+  .ci-intro-a { padding: 25px 22px 28px; border-radius: 6px; }
+  .ci-mission-panel { padding: 24px 22px; margin-bottom: 24px; }
+  .ci-mission-panel .ci-lead { font-size: 20px; line-height: 1.7; }
+  .ci-paragraph { display: block; padding: 22px 0; }
+  .ci-paragraph h3 { padding: 0; margin-bottom: 10px; font-size: 14px; }
+  .ci-job-body { margin-top: 36px; }
+  .ci-job-section { padding-top: 28px; font-size: 17px; }
+  .ci-job-section + .ci-job-section { margin-top: 36px; }
+  .ci-facts > div { grid-template-columns: 80px minmax(0,1fr); gap: 14px; }
+}
+@media (max-width: 359px) {
+  .ci-main { padding-inline: 18px; }
+  .ci-controls { padding-inline: 14px; }
+  .ci-controls nav a { padding-inline: 4px; gap: 4px; }
+  .ci-intro-a, .ci-mission-panel { padding-inline: 18px; }
+}

@@ -1,5 +1,6 @@
 import type { Language } from './language';
 
+
 const en = {
   metadata: {
     title: 'About ICARUS LTA',
@@ -94,9 +95,6 @@ const en = {
       { name: 'Jangseong', english: 'JANGSEONG', role: 'Test area', description: 'Where we test our airships and bring what we learn back into development.', status: 'Active' },
       { name: 'Goheung', english: 'GOHEUNG', role: 'Future location', description: 'The next location for ICARUS is taking shape.', status: 'Coming soon' },
     ],
-    mapNote: 'Schematic overview of our locations.',
-    contact: 'Get in touch',
-    contactDescription: 'Start a conversation about our technology and what we could build together.',
   },
 };
 
@@ -186,10 +184,10 @@ const ko: typeof en = {
         year: '2026',
         entries: [
           { date: '02', text: '이카루스LTA 법인 전환' },
-          { date: '03', text: '이카루스LTA 연구소 설립' },
-          { date: '05', text: '이카루스LTA 시드 투자 유치' },
+          { date: '03', text: '기업 연구소 설립' },
+          { date: '05', text: '시드 투자 유치' },
           { date: '06', text: '글로벌 기업 협업 프로그램(ANSYS SPACE KOREA)후속 선정' },
-          { date: '09', text: '이카루스LTA TIPS 선정' },
+          { date: '09', text: 'TIPS 선정' },
         ],
       },
     ],
@@ -202,9 +200,6 @@ const ko: typeof en = {
       { name: '장성', english: 'JANGSEONG', role: '시험 비행장', description: '실제 비행을 통한 기체 비행 성능 및 운용 성능 검증', status: '운영 중' },
       { name: '고흥', english: 'GOHEUNG', role: '시험 비행장', description: '2027년 예정', status: '준비 중' },
     ],
-    mapNote: '',
-    contact: '문의하기',
-    contactDescription: 'ICARUS의 기술과 함께 만들어 갈 가능성에 관해 이야기해 주세요.',
   },
 };
 

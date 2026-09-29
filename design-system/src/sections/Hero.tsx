@@ -67,7 +67,7 @@ export function Hero(props: HeroProps) {
     eyebrow,
     subtitle,
     primaryLabel = copy.primaryLabel,
-    primaryHref,
+    primaryHref = '/career',
     onPrimaryClick,
     secondaryLabel = copy.secondaryLabel,
     secondaryHref = '/contact',

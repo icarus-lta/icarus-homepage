@@ -99,20 +99,18 @@
   .ds-about-chapter--what .ds-about-chapter-visual { display: block; width: 100%; padding: 0; }
   .ds-about-chapter--what .ds-about-chapter-visual::after { content: ''; background: linear-gradient(90deg,rgba(6,10,16,.05),rgba(6,10,16,.1) 28%,rgba(6,10,16,.45) 46%,rgba(6,10,16,.9) 62%,#060a10 82%),linear-gradient(0deg,#060a10,transparent 20%,transparent 78%,rgba(6,10,16,.55)); }
   .ds-about-chapter--what .ds-about-chapter-visual > figcaption { position: absolute; max-width: 50%; bottom: 32px; }
-  .ds-about-cfd-viewport { position: absolute; inset: 0; overflow: hidden; width: 100%; height: 100%; background: var(--chapter-bg); }
-  /* Half the previous zoom, keeping the 16:9 source and its legend outside the visible composition. */
-  .ds-about-cfd-viewport > video { position: absolute; display: block; width: 87.5%; max-width: none; height: auto; left: -16.25%; top: 50%; transform: translateY(-50%); clip-path: inset(0 0 0 24%); mask-image: linear-gradient(90deg,transparent 24%,#000 28%); filter: grayscale(1) contrast(1.05) brightness(.9) blur(.3px); opacity: .74; mix-blend-mode: screen; }
-  /* Each capability keeps its own framing: the control dashboard needs its whole frame,
-     while the material photograph dissolves into the chapter background. */
+  /* Keep the complete simulation frames and original material photograph without cropping. */
   .ds-about-why-media { opacity: 0; visibility: hidden; transition: opacity .5s ease,visibility 0s linear .5s; }
   .ds-about-why-media.is-active { opacity: 1; visibility: visible; transition: opacity .5s ease; }
   .ds-about-chapter--what .ds-about-chapter-visual::after { transition: opacity .5s ease; }
-  .ds-about-chapter--what .ds-about-chapter-visual.is-control-active::after { opacity: 0; }
-  .ds-about-control-viewport { position: absolute; inset: 0; }
-  .ds-about-control-viewport > video { position: absolute; display: block; left: var(--chapter-gutter); top: 50%; width: calc(58.6364% + var(--chapter-copy-offset,0px) - var(--chapter-gutter) - 48px); max-width: none; height: auto; aspect-ratio: 16 / 9; object-fit: contain; transform: translateY(-50%); border: 1px solid rgb(198 222 237 / 12%); border-radius: 12px; background: #060b12; box-shadow: 0 24px 64px -30px rgb(0 0 0 / 65%); filter: saturate(.72) brightness(.96); }
-  .ds-about-why-photo { position: absolute; inset: 0; overflow: hidden; }
-  .ds-about-why-photo > img { position: absolute; top: 0; left: 0; display: block; width: 62%; max-width: none; height: 100%; object-fit: cover; filter: saturate(.55) brightness(.72) contrast(1.05); mask-image: linear-gradient(90deg,#000 58%,transparent),linear-gradient(0deg,transparent,#000 14%,#000 86%,transparent); mask-composite: intersect; }
-  .ds-about-why-photo > img { object-position: center 72%; }
+  .ds-about-chapter--what .ds-about-chapter-visual.is-framed-active::after,
+  .ds-about-chapter--what .ds-about-chapter-visual.is-photo-active::after { opacity: 0; }
+  .ds-about-framed-viewport { position: absolute; inset: 0; }
+  .ds-about-framed-viewport > video { position: absolute; display: block; left: var(--chapter-gutter); top: 50%; width: calc(58.6364% + var(--chapter-copy-offset,0px) - var(--chapter-gutter) - 48px); max-width: none; height: auto; aspect-ratio: 16 / 9; object-fit: contain; transform: translateY(-50%); border: 1px solid rgb(198 222 237 / 12%); border-radius: 12px; background: #060b12; box-shadow: 0 24px 64px -30px rgb(0 0 0 / 65%); }
+  .ds-about-cfd-viewport > video { max-width: 800px; background: var(--chapter-bg); }
+  .ds-about-control-viewport > video { filter: saturate(.72) brightness(.96); }
+  .ds-about-why-photo { position: absolute; top: 0; bottom: 0; left: var(--chapter-gutter); display: flex; align-items: center; justify-content: center; width: calc(58.6364% + var(--chapter-copy-offset,0px) - var(--chapter-gutter) - 48px); }
+  .ds-about-why-photo > img { display: block; width: 100%; max-width: 560px; height: auto; object-fit: contain; border: 1px solid rgb(198 222 237 / 12%); border-radius: 12px; filter: saturate(.85) brightness(.9); box-shadow: 0 24px 64px -30px rgb(0 0 0 / 65%); }
   /* Mist blue numbers/titles on tinted glass. The selected panel lifts into the light,
      while a single capsule travels along the left track to its centre. */
   .ds-about-strengths { --strength-blue: #c6deed; position: relative; display: grid; gap: 16px; }
@@ -185,7 +183,6 @@
     .ds-about-location-ripple { animation: none; r: 9; opacity: .25; }
     .ds-about-location-ripple:nth-child(2) { display: none; }
   }
-  .ds-about-location-figure figcaption { padding-top: 14px; color: #aebfd0; font-size: 12px; line-height: 1.7; }
   /* Each location has two shared rows: city / role, then status / description.
      Shared row tracks keep status and description aligned below the larger
      city name, including when a role wraps. */
@@ -203,11 +200,6 @@
   .ds-about-chapter-place-description { grid-column: 2; grid-row: 2; min-width: 0; margin: 0; color: #cbd9e5; font-size: 16px; line-height: 1.8; text-wrap: pretty; }
   .ds-about[lang="en"] .ds-about-chapter-place { grid-template-columns: 128px minmax(0,1fr); column-gap: 24px; }
   .ds-about[lang="en"] .ds-about-chapter-place h3 { font-size: 24px; line-height: 1.4; }
-  .ds-about-contact-strip { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding-top: 35px; padding-bottom: 38px; background: #060a10; }
-  .ds-about-contact-strip > p { color: #aebfd0; font-size: 15px; line-height: 1.7; }
-  .ds-about-contact-link { display: inline-flex; justify-content: space-between; align-items: center; gap: 60px; min-height: 48px; padding-bottom: 5px; border-bottom: 1px solid #8fd8ff; color: #b4e5ff; text-decoration: none; font-size: 14px; white-space: nowrap; }
-  .ds-about-contact-link > span { font-size: 26px; transition: transform .2s; }
-  .ds-about-contact-link:hover > span { transform: translate(3px,-3px); }
   .ds-about[lang="ko"] { word-break: keep-all; overflow-wrap: break-word; }
   .ds-about[lang="ko"] h1 { line-height: 1.12; letter-spacing: -.045em; }
   .ds-about[lang="ko"] .ds-about-kicker, .ds-about[lang="ko"] .ds-about-scroll { letter-spacing: .04em; }
@@ -231,7 +223,7 @@
   }
   @media (min-width: 1800px) {
     .ds-about-chapter { --chapter-gutter: max(96px,calc((100vw - 1536px)/2)); }
-    .ds-about-chapter-inner, .ds-about-contact-strip { padding-left: max(96px,calc((100vw - 1536px)/2)); padding-right: max(96px,calc((100vw - 1536px)/2)); }
+    .ds-about-chapter-inner { padding-left: max(96px,calc((100vw - 1536px)/2)); padding-right: max(96px,calc((100vw - 1536px)/2)); }
   }
   @media (min-width: 768px) and (max-width: 1023px) {
     .ds-about-history { column-gap: 28px; }
@@ -244,7 +236,6 @@
     .ds-about-strength { padding: 20px 24px 21px 84px; }
     .ds-about-strength h3 { font-size: 20px; }
     .ds-about-strength-index { left: 20px; top: 15px; font-size: 40px; }
-    .ds-about-cfd-viewport > video { width: 105%; left: -27.5%; }
     .ds-about-chapter--where .ds-about-chapter-visual { width: 47%; padding-left: 30px; }
     .ds-about-chapter-place { grid-template-columns: 82px minmax(0,1fr); column-gap: 22px; padding: 25px 0; }
     .ds-about-chapter-place h3 { font-size: 28px; }
@@ -315,11 +306,12 @@
     .ds-about-chapter--what .ds-about-chapter-visual { width: calc(100% + 48px); height: clamp(360px,65svh,480px); padding: 0; }
     .ds-about-chapter--what .ds-about-chapter-visual::after { content: ''; background: linear-gradient(0deg,#060a10,transparent 30%,transparent 78%,#060a10),linear-gradient(90deg,rgba(6,10,16,.08),transparent 55%,rgba(6,10,16,.3)); }
     .ds-about-chapter--what .ds-about-chapter-visual > figcaption { bottom: 18px; max-width: none; }
-    .ds-about-cfd-viewport > video { width: auto; min-width: 112.5%; height: 77.5%; left: 48%; top: 50%; transform: translate(-57%,-50%); object-fit: cover; }
     .ds-about-chapter-places { margin-top: 0; }
-    .ds-about-chapter--what .ds-about-chapter-visual.is-control-active { height: calc(56.25vw + 60px); }
-    .ds-about-control-viewport > video { left: 12px; top: 14px; width: calc(100% - 24px); transform: none; border-radius: 8px; }
-    .ds-about-why-photo > img { width: 100%; mask-image: linear-gradient(0deg,transparent,#000 18%,#000 82%,transparent); }
+    .ds-about-chapter--what .ds-about-chapter-visual.is-framed-active { height: calc(56.25vw + 60px); }
+    .ds-about-chapter--what .ds-about-chapter-visual.is-photo-active { height: min(calc(100vw + 24px), 644px); }
+    .ds-about-framed-viewport > video { left: 12px; top: 14px; width: calc(100% - 24px); transform: none; border-radius: 8px; }
+    .ds-about-why-photo { inset: 14px 24px 58px; width: auto; }
+    .ds-about-why-photo > img { border-radius: 8px; }
     .ds-about-strengths { gap: 16px; margin-top: 18px; }
     .ds-about-strength { padding: 18px 20px 19px 84px; border-radius: 12px; }
     .ds-about-strength.is-active { transform: translate(0,-3px); }
@@ -343,16 +335,12 @@
     .ds-about-chapter.ds-about-chapter--where .ds-about-chapter-visual { display: block; width: 100%; height: auto; padding: 0 0 22px; margin: 0; }
     .ds-about-chapter--where .ds-about-chapter-visual::after { content: none; }
     .ds-about-location-figure { max-width: 460px; margin: 0 auto; }
-    .ds-about-location-figure figcaption { padding-top: 8px; font-size: 11px; }
     .ds-about-chapter-place { grid-template-columns: 80px minmax(0,1fr); column-gap: 24px; min-height: 144px; padding: 25px 0; }
     .ds-about-chapter-place h3 { font-size: 28px; }
     .ds-about-chapter-place-role { font-size: 18px; }
     .ds-about-chapter-status, .ds-about-chapter-place-description { font-size: 16px; }
     .ds-about[lang="en"] .ds-about-chapter-place { grid-template-columns: 112px minmax(0,1fr); column-gap: 18px; }
     .ds-about[lang="en"] .ds-about-chapter-place h3 { font-size: 22px; }
-    .ds-about-contact-strip { align-items: start; flex-direction: column; gap: 18px; padding-top: 28px; padding-bottom: 32px; }
-    .ds-about-contact-strip > p { font-size: 14px; }
-    .ds-about-contact-link { gap: 55px; font-size: 14px; }
   }
   @media (min-width: 768px) and (max-height: 800px) {
     .ds-about-hero-content { padding-top: 110px; }

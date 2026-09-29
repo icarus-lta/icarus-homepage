@@ -9,6 +9,8 @@
 @import "tailwindcss" source(none);
 @import "./about.css";
 @import "./news.css";
+@import "./career.css";
+@import "./career-application.css";
 @import "./contact.css";
 
 /* Classes used by the components. */

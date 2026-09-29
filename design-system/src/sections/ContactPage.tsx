@@ -2,25 +2,29 @@ import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'r
 import { companyContactEmail, contactContent } from '../i18n/contact';
 import { useLanguage } from '../i18n/language';
 import { containerClass } from '../primitives/container';
+import { newSubmissionId, submitForm } from '../utils/submitForm';
+import { submissionMessage } from '../i18n/submission';
 
-type Fields = { email: string; subject: string; message: string };
+type Fields = { name: string; email: string; subject: string; message: string };
 type Field = keyof Fields;
 type FieldError = 'required' | 'email';
-const emptyFields: Fields = { email: '', subject: '', message: '' };
+const emptyFields: Fields = { name: '', email: '', subject: '', message: '' };
 
 export interface ContactPageProps {
   email?: string;
-  /** Public form-service URL accepting email, subject, message and language as FormData. */
+  /** Endpoint implementing the ICARUS form API. Empty string enables a design preview. */
   submitUrl?: string;
 }
 
-export function ContactPage({ email = companyContactEmail, submitUrl }: ContactPageProps) {
+export function ContactPage({ email = companyContactEmail, submitUrl = '/api/contact' }: ContactPageProps) {
   const { language } = useLanguage();
   const copy = contactContent[language];
   const [fields, setFields] = useState<Fields>(emptyFields);
   const [errors, setErrors] = useState<Partial<Record<Field, FieldError>>>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed' | 'preview'>('idle');
   const pendingRequest = useRef<AbortController | null>(null);
+  const submissionId = useRef<string | null>(null);
+  const [failureMessage, setFailureMessage] = useState('');
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,9 +34,11 @@ export function ContactPage({ email = companyContactEmail, submitUrl }: ContactP
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', copy.metadata.description);
   }, [copy.metadata]);
   useEffect(() => () => pendingRequest.current?.abort(), []);
+  useEffect(() => { submissionId.current = null; }, [language]);
   useEffect(() => { if (status === 'sent') resultRef.current?.focus(); }, [status]);
 
   const updateField = (field: Field, value: string) => {
+    submissionId.current = null;
     setFields(current => ({ ...current, [field]: value }));
     setErrors(current => ({ ...current, [field]: undefined }));
     if (status === 'failed' || status === 'preview') setStatus('idle');
@@ -41,9 +47,9 @@ export function ContactPage({ email = companyContactEmail, submitUrl }: ContactP
   const submitInquiry = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (pendingRequest.current) return;
-    const values = { email: fields.email.trim(), subject: fields.subject.trim(), message: fields.message.trim() };
+    const values = { name: fields.name.trim(), email: fields.email.trim(), subject: fields.subject.trim(), message: fields.message.trim() };
     const nextErrors: Partial<Record<Field, FieldError>> = {};
-    for (const field of ['email', 'subject', 'message'] as const) {
+    for (const field of ['name', 'email', 'subject', 'message'] as const) {
       if (!values[field]) nextErrors[field] = 'required';
     }
     const emailInput = event.currentTarget.elements.namedItem('email') as HTMLInputElement;
@@ -61,24 +67,20 @@ export function ContactPage({ email = companyContactEmail, submitUrl }: ContactP
     const controller = new AbortController();
     pendingRequest.current = controller;
     setStatus('sending');
-    const timeout = window.setTimeout(() => controller.abort(), 15000);
     try {
       const body = new FormData();
       for (const [key, value] of Object.entries(values)) body.append(key, value);
       body.append('language', language);
-      const response = await fetch(submitUrl, {
-        method: 'POST',
-        headers: { Accept: 'application/json' },
-        body,
-        signal: controller.signal,
-      });
-      if (!response.ok) throw new Error('Submission not accepted');
+      body.append('website', String(new FormData(event.currentTarget).get('website') || ''));
+      submissionId.current ??= newSubmissionId();
+      await submitForm(submitUrl, body, submissionId.current, controller.signal);
       setStatus('sent');
       setFields(emptyFields);
-    } catch {
+      submissionId.current = null;
+    } catch (error) {
+      setFailureMessage(submissionMessage(error, language, copy.failure));
       setStatus('failed');
     } finally {
-      window.clearTimeout(timeout);
       pendingRequest.current = null;
     }
   };
@@ -101,8 +103,9 @@ export function ContactPage({ email = companyContactEmail, submitUrl }: ContactP
             </div>
           ) : (
             <form className="ds-contact-form" onSubmit={submitInquiry} noValidate aria-busy={status === 'sending'}>
+              <div hidden aria-hidden="true"><input name="website" tabIndex={-1} autoComplete="off" /></div>
               <p className="ds-contact-required-note"><span aria-hidden="true">*</span> {copy.requiredNote}</p>
-              {(['email', 'subject', 'message'] as const).map(field => {
+              {(['name', 'email', 'subject', 'message'] as const).map(field => {
                 const fieldCopy = copy.fields[field];
                 const error = errors[field];
                 const shared = {
@@ -119,7 +122,7 @@ export function ContactPage({ email = companyContactEmail, submitUrl }: ContactP
                 return (
                   <div className="ds-contact-field" key={field}>
                     <label htmlFor={shared.id}>{fieldCopy.label} <span aria-hidden="true">*</span></label>
-                    {field === 'message' ? <textarea {...shared} rows={5} maxLength={5000} /> : <input {...shared} type={field === 'email' ? 'email' : 'text'} autoComplete={field === 'email' ? 'email' : 'off'} maxLength={field === 'email' ? 254 : 160} />}
+                    {field === 'message' ? <textarea {...shared} rows={5} maxLength={5000} /> : <input {...shared} type={field === 'email' ? 'email' : 'text'} autoComplete={field === 'email' ? 'email' : field === 'name' ? 'name' : 'off'} maxLength={field === 'email' ? 254 : field === 'name' ? 100 : 160} />}
                     {error && <p className="ds-contact-field-error" id={`contact-${field}-error`}>{error === 'email' ? copy.invalidEmail : fieldCopy.required}</p>}
                   </div>
                 );
@@ -129,7 +132,7 @@ export function ContactPage({ email = companyContactEmail, submitUrl }: ContactP
                 <button className="ds-contact-submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? copy.sending : copy.submit}<span aria-hidden="true">↗</span></button>
               </div>
               {status === 'preview' && <p className="ds-contact-preview-note" role="status">{copy.previewNotice}</p>}
-              {status === 'failed' && <p className="ds-contact-submit-error" role="alert">{copy.failure} <a href={`mailto:${email}`}>{email}</a></p>}
+              {status === 'failed' && <p className="ds-contact-submit-error" role="alert">{failureMessage} <a href={`mailto:${email}`}>{email}</a></p>}
             </form>
           )}
         </div>

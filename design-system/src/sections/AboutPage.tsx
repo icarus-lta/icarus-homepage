@@ -41,8 +41,8 @@ function ChapterHeading({ number, title, id }: { number: string; title: string; 
   );
 }
 
-function Arrow({ diagonal = false }: { diagonal?: boolean }) {
-  return <span aria-hidden="true">{diagonal ? '↗' : '↘'}</span>;
+function Arrow() {
+  return <span aria-hidden="true">↘</span>;
 }
 
 /** ICARUS in four chapters: what we do, why us, when we started, and where we are. */
@@ -267,12 +267,12 @@ export function AboutPage({
           <div className="ds-about-chapter-body">
             {/* One layer per card, in the order of copy.why.points: the CFD film, the control simulation and
                 the envelope-material photograph. The chosen card's layer fades in over the others. */}
-            <figure id="why-visual" ref={whyVisualRef} className={`ds-about-chapter-visual${strength === 1 ? ' is-control-active' : ''}`}>
-              <div className={`ds-about-why-media ds-about-cfd-viewport${strength === 0 ? ' is-active' : ''}`} aria-hidden={strength !== 0}>
-                <video ref={cfdRef} src="/media/about-cfd-dark.mp4" poster="/media/about-cfd-dark-poster.webp"
+            <figure id="why-visual" ref={whyVisualRef} className={`ds-about-chapter-visual${strength !== 2 ? ' is-framed-active' : ' is-photo-active'}`}>
+              <div className={`ds-about-why-media ds-about-cfd-viewport ds-about-framed-viewport${strength === 0 ? ' is-active' : ''}`} aria-hidden={strength !== 0}>
+                <video ref={cfdRef} src="/media/about-cfd-clean.mp4" poster="/media/about-cfd-clean-poster.webp"
                   muted loop playsInline preload="none" width="800" height="450" aria-label={copy.why.points[0].visual} />
               </div>
-              <div className={`ds-about-why-media ds-about-control-viewport${strength === 1 ? ' is-active' : ''}`} aria-hidden={strength !== 1}>
+              <div className={`ds-about-why-media ds-about-control-viewport ds-about-framed-viewport${strength === 1 ? ' is-active' : ''}`} aria-hidden={strength !== 1}>
                 <video ref={controlRef} src={controlVideoSrc} poster={controlPosterSrc}
                   muted loop playsInline preload="none" width="1440" height="810" aria-label={copy.why.points[1].visual} />
               </div>
@@ -345,7 +345,7 @@ export function AboutPage({
           <ChapterHeading number="04" title={copy.where.title} id="where-title" />
           <div className="ds-about-chapter-body">
             <div className="ds-about-chapter-visual ds-about-chapter-map">
-              <AboutLocationsMap labels={copy.where.places.map(place => place.name)} note={copy.where.mapNote} />
+              <AboutLocationsMap labels={copy.where.places.map(place => place.name)} />
             </div>
             <div className="ds-about-chapter-copy">
               <div className="ds-about-chapter-places">
@@ -366,11 +366,6 @@ export function AboutPage({
           </div>
         </div>
       </section>
-
-      <div className={`${containerClass} ds-about-contact-strip`}>
-        <p>{copy.where.contactDescription}</p>
-        <a href="/contact" className="ds-about-contact-link">{copy.where.contact}<Arrow diagonal /></a>
-      </div>
     </main>
   );
 }

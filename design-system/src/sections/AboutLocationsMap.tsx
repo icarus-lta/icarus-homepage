@@ -4,8 +4,6 @@ import { ROK_PATH, ROK_ISLANDS_PATH } from './koreaCoastline';
 export interface AboutLocationsMapProps {
   /** City names in this order: Gwangju, Jangseong, Goheung. */
   labels: string[];
-  /** Localized clarification that the diagram indicates cities, not exact sites. */
-  note: string;
 }
 
 // Same Mercator projection as .design-sync/generate-korea-map.py. These are
@@ -23,7 +21,7 @@ const jangseongLeader = `M${jangseong.x},${jangseong.y} L179,250 H44`;
 const gwangjuLeader = `M${gwangju.x},${gwangju.y} L182,325 H44`;
 
 /** City-level view of ICARUS's development locations, including its future site. */
-export function AboutLocationsMap({ labels, note }: AboutLocationsMapProps) {
+export function AboutLocationsMap({ labels }: AboutLocationsMapProps) {
   const mapRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -87,7 +85,6 @@ export function AboutLocationsMap({ labels, note }: AboutLocationsMapProps) {
         </g>
         <text x="45" y="44" textAnchor="middle" fill="#7f97b0" fontFamily="IBM Plex Mono, monospace" fontSize="10">N</text>
       </svg>
-      <figcaption>{note}</figcaption>
     </figure>
   );
 }
