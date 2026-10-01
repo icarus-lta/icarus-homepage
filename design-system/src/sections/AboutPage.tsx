@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { images } from '../assets';
 import { aboutContent } from '../i18n/about';
 import { useLanguage } from '../i18n/language';
 import { containerClass } from '../primitives/container';
@@ -12,6 +11,9 @@ export interface AboutPageProps {
   /** Flight-control simulation shown by the second Why ICARUS card. */
   controlVideoSrc?: string;
   controlPosterSrc?: string;
+  /** Envelope-material footage shown by the third Why ICARUS card. */
+  materialVideoSrc?: string;
+  materialPosterSrc?: string;
   /** Replace the provisional development photograph with an early company photograph. */
   controlImageSrc?: string;
 }
@@ -51,6 +53,8 @@ export function AboutPage({
   posterSrc = '/media/about-flight-poster.jpg',
   controlVideoSrc = '/media/about-control.mp4?v=20',
   controlPosterSrc = '/media/about-control-poster.webp?v=20',
+  materialVideoSrc = '/media/about-material-research-landscape.mp4',
+  materialPosterSrc = '/media/about-material-research-landscape-poster.webp',
   controlImageSrc = '/media/about-field-team-source.png',
 }: AboutPageProps) {
   const { language } = useLanguage();
@@ -59,6 +63,7 @@ export function AboutPage({
   const whyVisualRef = useRef<HTMLElement>(null);
   const cfdRef = useRef<HTMLVideoElement>(null);
   const controlRef = useRef<HTMLVideoElement>(null);
+  const materialRef = useRef<HTMLVideoElement>(null);
   const manuallyPaused = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -110,7 +115,7 @@ export function AboutPage({
   useEffect(() => {
     const figure = whyVisualRef.current;
     if (!figure) return;
-    const films = [cfdRef.current, controlRef.current];
+    const films = [cfdRef.current, controlRef.current, materialRef.current];
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let visible = false;
     const syncPlayback = () => {
@@ -187,12 +192,13 @@ export function AboutPage({
   return (
     <main className="ds-about" lang={language}>
       <section className="ds-about-hero" aria-labelledby="about-title">
-        <img className="ds-about-hero-media" src={posterSrc} alt="" fetchPriority="high" />
+        <img className="ds-about-hero-media" src={posterSrc} alt="" draggable={false} fetchPriority="high" />
         <video
           ref={videoRef}
           className="ds-about-hero-media"
           src={videoSrc}
           poster={posterSrc}
+          draggable={false}
           muted loop playsInline preload="metadata"
           aria-hidden="true"
           onPlay={() => setPlaying(true)}
@@ -226,16 +232,14 @@ export function AboutPage({
 
 
       {/* Copy alternates left / right / left / right down the page. The --how / --what /
-          --why / --where modifiers are tuned to the MEDIA each chapter carries, and each
-          medium is tuned to one side, so the media follow the alternation rather than the
-          copy: ground-team photograph (right), CFD video (left), photograph (right), map (left). */}
+          --why / --where modifiers are tuned to the media each chapter carries. */}
 
       <section id="what-we-do" className="ds-about-chapter ds-about-chapter--how is-reversed" aria-labelledby="what-title">
         <div className={`${containerClass} ds-about-chapter-inner`}>
           <ChapterHeading number="01" title={copy.what.title} id="what-title" />
           <div className="ds-about-chapter-body">
-            <figure className="ds-about-chapter-visual">
-              <img src={controlImageSrc} alt={copy.what.imageAlt} loading="lazy" />
+            <figure className="ds-about-chapter-visual" onDragStart={event => event.preventDefault()}>
+              <img src={controlImageSrc} alt={copy.what.imageAlt} draggable={false} loading="lazy" />
               <figcaption>{copy.what.imageCaption}</figcaption>
             </figure>
             <div className="ds-about-chapter-copy">
@@ -265,19 +269,19 @@ export function AboutPage({
         <div className={`${containerClass} ds-about-chapter-inner`}>
           <ChapterHeading number="02" title={copy.why.title} id="why-title" />
           <div className="ds-about-chapter-body">
-            {/* One layer per card, in the order of copy.why.points: the CFD film, the control simulation and
-                the envelope-material photograph. The chosen card's layer fades in over the others. */}
-            <figure id="why-visual" ref={whyVisualRef} className={`ds-about-chapter-visual${strength !== 2 ? ' is-framed-active' : ' is-photo-active'}`}>
+            {/* One film per card; the selected layer fades in while the others pause. */}
+            <figure id="why-visual" ref={whyVisualRef} className="ds-about-chapter-visual is-framed-active" onDragStart={event => event.preventDefault()}>
               <div className={`ds-about-why-media ds-about-cfd-viewport ds-about-framed-viewport${strength === 0 ? ' is-active' : ''}`} aria-hidden={strength !== 0}>
                 <video ref={cfdRef} src="/media/about-cfd-clean.mp4" poster="/media/about-cfd-clean-poster.webp"
-                  muted loop playsInline preload="none" width="800" height="450" aria-label={copy.why.points[0].visual} />
+                  muted loop playsInline preload="none" draggable={false} width="800" height="450" aria-label={copy.why.points[0].visual} />
               </div>
               <div className={`ds-about-why-media ds-about-control-viewport ds-about-framed-viewport${strength === 1 ? ' is-active' : ''}`} aria-hidden={strength !== 1}>
                 <video ref={controlRef} src={controlVideoSrc} poster={controlPosterSrc}
-                  muted loop playsInline preload="none" width="1440" height="810" aria-label={copy.why.points[1].visual} />
+                  muted loop playsInline preload="none" draggable={false} width="1440" height="810" aria-label={copy.why.points[1].visual} />
               </div>
-              <div className={`ds-about-why-media ds-about-why-photo${strength === 2 ? ' is-active' : ''}`} aria-hidden={strength !== 2}>
-                <img src={images.product} alt={copy.why.points[2].visual} loading="lazy" />
+              <div className={`ds-about-why-media ds-about-material-viewport ds-about-framed-viewport${strength === 2 ? ' is-active' : ''}`} aria-hidden={strength !== 2}>
+                <video ref={materialRef} src={materialVideoSrc} poster={materialPosterSrc}
+                  muted loop playsInline preload="none" draggable={false} width="1280" height="720" aria-label={copy.why.points[2].visual} />
               </div>
               <figcaption>{copy.why.points[strength].caption}</figcaption>
             </figure>

@@ -4,6 +4,7 @@
   .ds-application-eyebrow { margin-bottom: 14px !important; color: var(--color-ice); font-size: 12px; font-weight: 600; letter-spacing: .18em; }
   .ds-application-intro { margin-top: 16px !important; font-size: 17px; line-height: 1.8; }
   .ds-application-role { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; padding: 22px 26px; border: 1px solid #293747; border-radius: 6px; background: #111b28; }
+  .ds-application-role, .ds-application-role * { -webkit-user-select: none; user-select: none; }
   .ds-application-role > span { color: #9eafc2; font-size: 13px; }
   .ds-application-role h2 { color: #f1f6fc; font-size: 21px; font-weight: 600; line-height: 1.6; letter-spacing: -.02em; }
   .ds-application-required { margin-top: 24px !important; text-align: right; color: #b5c3d3; font-size: 13px; }

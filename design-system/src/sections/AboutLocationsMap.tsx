@@ -42,7 +42,7 @@ export function AboutLocationsMap({ labels }: AboutLocationsMapProps) {
   }, []);
 
   return (
-    <figure className="ds-about-location-figure">
+    <figure className="ds-about-location-figure" onDragStart={event => event.preventDefault()}>
       <svg ref={mapRef} className="ds-about-location-map" viewBox="0 0 550 490" fill="none" aria-hidden="true" focusable="false">
         <g transform="translate(14 -300) scale(3.2)" fill="#111f30" stroke="#36506a" strokeWidth="0.34" strokeLinejoin="round">
           <path d={ROK_PATH} />

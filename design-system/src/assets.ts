@@ -9,6 +9,10 @@ import newsMaterial from '../generated/assets/news-material.webp';
 import newsAward from '../generated/assets/news-award.webp';
 import newsYtn from '../generated/assets/news-ytn.webp';
 import newsKepco from '../generated/assets/news-kepco.webp';
+import newsIcarusLogo from '../generated/assets/news-icarus-logo.webp';
+import newsAnsysLogo from '../generated/assets/news-ansys-logo.webp';
+import newsTipsLogo from '../generated/assets/news-tips-logo.webp';
+import newsDkEmtechMou from '../generated/assets/news-dk-emtech-mou.webp';
 
 /** Brand images from the live site (static/), inlined as data URLs so they render wherever the bundle loads. */
 export interface IcarusImages {
@@ -37,6 +41,14 @@ export interface IcarusImages {
   newsYtn: string;
   /** News photo: KEPCO startup award (2024.11.14). */
   newsKepco: string;
+  /** Supplied ICARUS identity for company news posts. */
+  newsIcarusLogo: string;
+  /** Ansys part of Synopsys mark from Synopsys's official brand page. */
+  newsAnsysLogo: string;
+  /** TIPS KOREA mark from the official TIPS website. */
+  newsTipsLogo: string;
+  /** Supplied photograph for the DK Emtech MOU post. */
+  newsDkEmtechMou: string;
 }
 
 export const images: IcarusImages = {
@@ -51,4 +63,8 @@ export const images: IcarusImages = {
   newsAward,
   newsYtn,
   newsKepco,
+  newsIcarusLogo,
+  newsAnsysLogo,
+  newsTipsLogo,
+  newsDkEmtechMou,
 };

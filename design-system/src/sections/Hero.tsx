@@ -80,6 +80,7 @@ export function Hero(props: HeroProps) {
         <img
           src={backgroundImage}
           alt=""
+          draggable={false}
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: imagePosition }}
         />

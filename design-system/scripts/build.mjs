@@ -70,6 +70,10 @@ const images = [
   { src: 'news_img_3.jpg', out: 'news-award.webp', resize: { width: 1200 }, webp: { quality: 80 } },
   { src: 'news_img_1.png', out: 'news-ytn.webp', resize: { width: 1200 }, webp: { quality: 80 } },
   { src: 'news_img_2.jpg', out: 'news-kepco.webp', resize: { width: 1200 }, webp: { quality: 80 } },
+  { src: 'news/icarus-logo.png', out: 'news-icarus-logo.webp', trim: true, resize: { width: 640 }, webp: { quality: 88, alphaQuality: 100 } },
+  { src: 'news/ansys-part-of-synopsys-logo.svg', out: 'news-ansys-logo.webp', trim: true, resize: { width: 640 }, webp: { quality: 90, alphaQuality: 100 } },
+  { src: 'news/tips-logo.png', out: 'news-tips-logo.webp', trim: true, resize: { width: 640 }, webp: { quality: 90, alphaQuality: 100 } },
+  { src: 'news/dk-emtech-mou.jpg', out: 'news-dk-emtech-mou.webp', resize: { width: 1400 }, webp: { quality: 82 } },
 ];
 
 for (const img of images) {
@@ -92,6 +96,7 @@ for (const img of images) {
       pipeline = pipeline.extract({ left: 0, top: 0, width, height: img.cropTo });
     }
   }
+  if (img.trim) pipeline = pipeline.trim();
   const info = await pipeline
     .resize({ ...img.resize, withoutEnlargement: true })
     .webp(img.webp)

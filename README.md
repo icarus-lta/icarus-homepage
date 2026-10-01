@@ -1,16 +1,40 @@
 # ICARUS LTA homepage
 
+## Production website
+
+The current site is deployed to Cloudflare Pages at
+<https://icarus-site-1iq.pages.dev/>. Its Pages Function runs the same backend
+implementation as the existing Worker, with the same D1 database, private KV,
+Turnstile widget, and Resend delivery. The existing Worker remains active for its
+hourly cleanup job and as a separate preview.
+
+`www.icarus-airship.com` is registered as a custom domain on the Pages project.
+At Gabia, set only the `www` CNAME to `icarus-site-1iq.pages.dev`. Keep the
+Gabia nameservers and all mail records. Until that DNS change, the existing
+GitHub Pages homepage continues to serve `www`.
+
+To publish a new version from Ubuntu/WSL after committing it to GitHub:
+
+```sh
+./deploy-pages.sh
+```
+
+The script builds the frontend and shared backend, deploys Pages, and compares
+the public assets and API configuration against the build. The project uses a
+Direct Upload deployment; pushing to GitHub alone does not publish a new Pages
+version. See [the deployment notes](cloudflare/README.md) for credentials and
+domain verification.
+
 The current bilingual homepage is built from the React components in
 `design-system/`. It includes the main page, About, Careers, Newsroom, and Contact.
 
 Career posts include sharing and application buttons in the header and a fixed
 bottom bar. Each links to `/career/apply/?position=<role-id>&lang=ko` (or `en`).
 The application page validates contact details, resume and optional portfolio
-attachments, and consent. Contact inquiries and career applications now POST to
-the Python backend, which emails `contact@icarus-airship.com`. Applications include
-the resume and optional portfolio as attachments. SMTP credentials stay on the
-server; a missing configuration or failed delivery never shows a success screen.
-See [메일 접수 설정](backend/README.md) for Daum Smart Work setup.
+attachments, and consent. In production, contact inquiries and career
+applications POST to the same-origin Cloudflare API, which delivers to
+`contact@icarus-airship.com`. The Python/Daum SMTP backend remains available for
+local operation; see [메일 접수 설정](backend/README.md).
 
 ## Build and run locally
 
@@ -106,6 +130,20 @@ The repository-root `index.html` and `partials/` are the legacy HTMX homepage.
 The existing GitHub Pages configuration publishes that root from `main`; the
 current React work is on `dev`.
 
+## Cloudflare 무료 플랜으로 운영
+
+상시 PC 없이 운영할 수 있도록 Workers Static Assets + Workers/D1/비공개 KV + Resend 배포 구성을 `cloudflare/`에 추가했습니다. 카드 등록 없는 무료 구성으로, 첨부파일은 PDF만 파일당 10MB까지 받습니다.
+파일당 10MB 제한을 유지하며, 파일은 스트리밍으로 임시 저장하고 메일 서비스가 가져갑니다.
+코드 검증과 실제 계정 배포 검증은 구분합니다. 설정 절차와 무료 한도는 [cloudflare/README.md](cloudflare/README.md)를 참고하세요.
+
+```sh
+npm ci --prefix design-system
+npm ci --prefix cloudflare
+npm run check --prefix cloudflare
+```
+
+기존 로컬 Python/다음 SMTP 서버도 계속 사용할 수 있습니다.
+
 ## Content and media
 
 - Components and styles: `design-system/src/`
@@ -114,6 +152,7 @@ current React work is on `dev`.
 - Build and local server: `.design-sync/build-preview.mjs`, `.design-sync/serve-preview.py`
 - Flight-control media provenance: `static/about/CONTROL-MEDIA.md`
 
-Both forms use same-origin API routes by default. The running server must load
-the private `.env` SMTP configuration. See [backend/README.md](backend/README.md)
-for setup, tests, and deployment requirements.
+Both forms use same-origin API routes by default. In Python mode, the server loads
+the private `.env` SMTP configuration; see [backend/README.md](backend/README.md).
+Cloudflare mode uses server-side secrets and the separate deployment described in
+[cloudflare/README.md](cloudflare/README.md).

@@ -447,12 +447,12 @@ export function AltitudeScrollSection(props: AltitudeScrollSectionProps) {
       <div className="w-full">
         {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
         <h2 className="max-w-6xl text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight">{title}</h2>
-        {description ? <p className="mt-4 text-lg md:text-xl text-mist leading-relaxed tracking-[-0.015em] xl:whitespace-nowrap">{description}</p> : null}
+        {description ? <p className="mt-4 text-lg md:text-xl font-semibold text-mist leading-relaxed tracking-[-0.015em] xl:whitespace-nowrap">{description}</p> : null}
       </div>
 
       {/* The frame the scene plays inside. Its height is viewport-relative so heading plus frame
           always fit the sticky h-screen box, which clips whatever overflows. */}
-      <div className="mt-8 md:mt-10 relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950 overflow-hidden h-[52vh] min-h-[360px] md:h-[60vh] md:min-h-[440px] md:max-h-[680px] shadow-2xl [--ground-station-size:2rem] md:[--ground-station-size:3rem]">
+      <div className="ds-scroll-graphic mt-8 md:mt-10 relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950 overflow-hidden h-[52vh] min-h-[360px] md:h-[60vh] md:min-h-[440px] md:max-h-[680px] shadow-2xl [--ground-station-size:2rem] md:[--ground-station-size:3rem]" onDragStart={event => event.preventDefault()}>
         {/* Air thickens toward the ground: space at the top, a blue haze over the cloud deck, a
             glow where the horizon would be. Painted before anything else so it never competes. */}
         <div className="ds-stars absolute inset-x-0 top-0 h-3/5 opacity-45" />
@@ -901,6 +901,7 @@ export function AltitudeScrollSection(props: AltitudeScrollSectionProps) {
               <img
                 src={airshipSrc}
                 alt={copy.airship}
+                draggable={false}
                 className="relative w-24 md:w-40 h-auto object-contain will-change-transform"
               />
             ) : <AirshipNode />}

@@ -69,7 +69,7 @@ const previewStyles = readFileSync(`${REPO}/design-system/dist/styles.css`, 'utf
 writeFileSync(join(OUT, 'styles.css'), readFileSync(join(REPO, 'static/fonts/preview-fonts.css'), 'utf8') + '\n' + previewStyles);
 copyFileSync(join(REPO, '.design-sync/connection-check.html'), join(OUT, 'connection-check.html'));
 mkdirSync(join(OUT, 'media'), { recursive: true });
-for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd.mp4', 'about-cfd-poster.webp', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp', 'about-cfd-clean.mp4', 'about-cfd-clean-poster.webp', 'about-control.mp4', 'about-control-poster.webp']) {
+for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-team.jpg', 'about-field-team-source.png', 'about-cfd.mp4', 'about-cfd-poster.webp', 'about-cfd-dark.mp4', 'about-cfd-dark-poster.webp', 'about-cfd-clean.mp4', 'about-cfd-clean-poster.webp', 'about-control.mp4', 'about-control-poster.webp', 'about-material-research-landscape.mp4', 'about-material-research-landscape-poster.webp']) {
   copyFileSync(join(REPO, 'static', 'about', f), join(OUT, 'media', f));
 }
 
@@ -91,11 +91,8 @@ const head = `<meta charset="utf-8"><meta name="viewport" content="width=device-
 // The page skeleton conventions.md defines - the five homepage sections, nothing else.
 writeFileSync(
   join(OUT, 'index.html'),
-  `<!doctype html><html lang="en"><head>${head}<title>ICARUS — homepage preview</title>
-<style>a.jump{position:fixed;z-index:60;right:16px;bottom:16px;padding:8px 14px;border-radius:999px;
-background:#8fd8ff;color:#02030a;font:600 13px system-ui;text-decoration:none}
-@media(max-width:767px){a.jump{display:none}}</style></head>
-<body>${loadingRoot()}<a class="jump" href="/anim.html">Scroll frames &rarr;</a><script>
+  `<!doctype html><html lang="en"><head>${head}<title>ICARUS — homepage preview</title></head>
+<body>${loadingRoot()}<script>
 window.addEventListener('DOMContentLoaded', () => {
 const D = window.IcarusDS, h = React.createElement;
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -3,7 +3,7 @@ import { careerRoles } from '../i18n/career';
 import { careerApplicationContent } from '../i18n/careerApplication';
 import { useLanguage } from '../i18n/language';
 import { containerClass } from '../primitives/container';
-import { newSubmissionId, submitForm } from '../utils/submitForm';
+import { newSubmissionId, submitForm, SubmissionError } from '../utils/submitForm';
 import { submissionMessage } from '../i18n/submission';
 
 export interface CareerApplicationPageProps {
@@ -52,7 +52,7 @@ export function CareerApplicationPage({ onSubmitApplication, submitUrl = '/api/a
   function fileError(file: File | undefined, field: 'resume' | 'portfolio') {
     if (!file || file.size === 0) return field === 'resume' ? copy.missingResume : undefined;
     if (file.size > MAX_FILE_SIZE) return copy.tooLarge;
-    const allowed = field === 'resume' ? /\.(pdf|doc|docx)$/i : /\.pdf$/i;
+    const allowed = /\.pdf$/i;
     if (!allowed.test(file.name)) return field === 'resume' ? copy.invalidResume : copy.invalidPortfolio;
     return undefined;
   }
@@ -105,11 +105,12 @@ export function CareerApplicationPage({ onSubmitApplication, submitUrl = '/api/a
     try {
       submissionId.current ??= newSubmissionId();
       if (onSubmitApplication) await onSubmitApplication(data);
-      else await submitForm(submitUrl, data, submissionId.current, controller.signal);
+      else await submitForm(submitUrl, data, submissionId.current, controller.signal, form.querySelector<HTMLElement>('[data-icarus-verification]'));
       setStatus('sent');
       setFiles({});
       submissionId.current = null;
     } catch (error) {
+      if (error instanceof SubmissionError && ['submission_expired', 'upload_failed'].includes(error.code)) submissionId.current = null;
       setFailureMessage(submissionMessage(error, language, copy.failed));
       setStatus('failed');
     } finally {
@@ -134,7 +135,7 @@ export function CareerApplicationPage({ onSubmitApplication, submitUrl = '/api/a
     <p id={`application-${field}-help`} className="ds-application-help">{field === 'resume' ? copy.resumeHelp : copy.portfolioHelp}</p>
     <div className={`ds-application-upload${errors[field] ? ' has-error' : ''}`}>
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-      <input id={`application-${field}`} name={field} type="file" accept={field === 'resume' ? '.pdf,.doc,.docx' : '.pdf'} required={field === 'resume'}
+      <input id={`application-${field}`} name={field} type="file" accept=".pdf,application/pdf" required={field === 'resume'}
         aria-invalid={errors[field] ? true : undefined}
         aria-describedby={`application-${field}-help${errors[field] ? ` application-${field}-error` : ''}`}
         onChange={event => changeFile(field, event.target.files?.[0])} />
@@ -181,6 +182,7 @@ export function CareerApplicationPage({ onSubmitApplication, submitUrl = '/api/a
             <div className="ds-application-privacy"><p>{copy.privacyDetail}</p><label htmlFor="application-consent"><input {...fieldProps('consent')} type="checkbox" required /><span>{copy.consent}<span aria-hidden="true"> *</span></span></label></div>
             {error('consent')}
           </fieldset>
+          <div data-icarus-verification hidden />
           <div className="ds-application-submit-row"><p>{copy.review}</p><button className="ds-career-action ds-career-apply" type="submit" disabled={status === 'sending'}>{status === 'sending' ? copy.sending : copy.submit}<span aria-hidden="true">→</span></button></div>
           {(status === 'preview' || status === 'failed') && <div ref={resultRef} tabIndex={-1} className="ds-application-result" role={status === 'failed' ? 'alert' : 'status'}>{status === 'preview' ? <><h2>{copy.previewTitle}</h2><p>{copy.preview}</p></> : <p>{failureMessage}</p>}</div>}
         </form>}

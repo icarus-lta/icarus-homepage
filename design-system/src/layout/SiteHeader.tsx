@@ -104,7 +104,7 @@ export function SiteHeader(props: SiteHeaderProps) {
                   onClick={link.onClick}
                   aria-current={activeHref === link.href ? 'page' : undefined}
                   className={cx(
-                    'py-3 text-sm lg:text-[15px] font-medium uppercase tracking-[0.05em] hover:text-white no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice',
+                    'py-3 text-[11pt] lg:text-[11.75pt] font-medium uppercase tracking-[0.05em] hover:text-white no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice',
                     activeHref === link.href ? 'text-ice' : 'text-mist',
                   )}
                 >
@@ -120,12 +120,12 @@ export function SiteHeader(props: SiteHeaderProps) {
                   href={ctaHref}
                   aria-current={activeHref === ctaHref ? 'page' : undefined}
                   onClick={onCtaClick}
-                  className="max-md:hidden lg:text-[15px] font-medium uppercase tracking-[0.05em] shrink-0"
+                  className="max-md:hidden md:text-[11pt] lg:text-[11.75pt] font-medium uppercase tracking-[0.05em] shrink-0"
                 >
                   {ctaLabel}
                 </Button>
               ) : null}
-              <div role="group" aria-label="Language / 언어" className="flex shrink-0 items-center text-sm lg:text-[15px] font-medium tracking-wide">
+              <div role="group" aria-label="Language / 언어" className="flex shrink-0 items-center text-[11pt] lg:text-[11.75pt] font-medium tracking-wide">
                 <button
                   type="button"
                   lang="en"
@@ -151,7 +151,7 @@ export function SiteHeader(props: SiteHeaderProps) {
                 aria-controls={menuId}
                 aria-label={language === 'ko' ? (menuOpen ? '메뉴 닫기' : '메뉴 열기') : (menuOpen ? 'Close menu' : 'Open menu')}
                 onClick={() => setMenuOpen((open) => !open)}
-                className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-sm px-1 text-xs font-medium text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice md:hidden"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-sm px-1 text-[9.5pt] font-medium text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ice md:hidden"
               >
                 <span>{language === 'ko' ? '메뉴' : 'Menu'}</span>
                 <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none" className={cx('transition-transform duration-200', menuOpen && 'rotate-180')}>
@@ -177,7 +177,7 @@ export function SiteHeader(props: SiteHeaderProps) {
                 link.onClick?.(event);
               }}
               className={cx(
-                'flex min-h-12 items-center border-b border-white/10 py-3 text-sm font-medium uppercase tracking-[0.05em] no-underline transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ice',
+                'flex min-h-12 items-center border-b border-white/10 py-3 text-[11pt] font-medium uppercase tracking-[0.05em] no-underline transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ice',
                 activeHref === link.href ? 'text-ice' : 'text-mist',
               )}
             >
@@ -194,7 +194,7 @@ export function SiteHeader(props: SiteHeaderProps) {
                 setMenuOpen(false);
                 onCtaClick?.(event);
               }}
-              className="mt-4 w-full min-h-11 font-medium uppercase tracking-[0.05em]"
+              className="mt-4 w-full min-h-11 max-md:text-[11pt] font-medium uppercase tracking-[0.05em]"
             >
               {ctaLabel}
             </Button>

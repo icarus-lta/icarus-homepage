@@ -417,13 +417,14 @@ export function EnduranceScrollSection(props: EnduranceScrollSectionProps) {
       <div className="ds-endurance-heading max-w-6xl">
         {eyebrow ? <Eyebrow className="mb-4">{eyebrow}</Eyebrow> : null}
         <h2 className="font-bold text-white tracking-tight leading-tight">{title}</h2>
-        {description ? <p className="text-mist tracking-[-0.015em] xl:whitespace-nowrap">{description}</p> : null}
+        {description ? <p className="font-semibold text-mist tracking-[-0.015em] xl:whitespace-nowrap">{description}</p> : null}
       </div>
 
       {/* The heading keeps its natural height; the frame takes the remaining viewport space. */}
       <div
-        className="ds-endurance-frame relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950 overflow-hidden shadow-2xl"
+        className="ds-endurance-frame ds-scroll-graphic relative w-full max-w-5xl mx-auto rounded-2xl border border-white/10 bg-space-950 overflow-hidden shadow-2xl"
         style={{ '--closing': closing } as CSSProperties}
+        onDragStart={event => event.preventDefault()}
       >
         <div className="ds-stars absolute inset-0 opacity-40" />
         <div

@@ -145,7 +145,7 @@ const ko: typeof en = {
   },
   footer: {
     address: '광주광역시 북구 첨단과기로 123, 광주과학기술원 창업진흥센터 A-318-1',
-    copyright: '© 2026 ICARUS LTA. 모든 권리 보유.',
+    copyright: '© 2026 ICARUS LTA. All rights reserved.',
   },
 };
 

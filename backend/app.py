@@ -7,7 +7,6 @@ from email.message import EmailMessage
 from email.policy import SMTP
 from email.utils import formataddr, format_datetime, make_msgid
 import hashlib
-import io
 import ipaddress
 import json
 import logging
@@ -20,7 +19,6 @@ import threading
 import time
 from urllib.parse import urlsplit
 import uuid
-import zipfile
 
 from dotenv import dotenv_values
 from flask import Flask, abort, jsonify, redirect, request, send_from_directory
@@ -158,7 +156,7 @@ def attachment(name, required=False):
     if not filename or len(filename) > 180 or any(ord(c) < 32 or ord(c) == 127 for c in filename):
         raise FormError("invalid_file", field=name)
     suffix = Path(filename).suffix.lower()
-    allowed = {".pdf", ".doc", ".docx"} if name == "resume" else {".pdf"}
+    allowed = {".pdf"}
     if suffix not in allowed:
         raise FormError("invalid_file", field=name)
     data = upload.read(MAX_FILE_BYTES + 1)
@@ -168,19 +166,6 @@ def attachment(name, required=False):
         raise FormError("required_file", field=name)
     mime = "application/pdf"
     valid = data.startswith(b"%PDF-")
-    if suffix == ".doc":
-        valid = data.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1")
-        mime = "application/msword"
-    elif suffix == ".docx":
-        mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        try:
-            # Inspect container names only; never extract/decompress uploaded documents.
-            with zipfile.ZipFile(io.BytesIO(data)) as archive:
-                names = set(archive.namelist())
-                valid = {"[Content_Types].xml", "word/document.xml"} <= names
-                valid = valid and not any(n.lower().endswith("vbaproject.bin") for n in names)
-        except (zipfile.BadZipFile, ValueError):
-            valid = False
     if not valid:
         raise FormError("invalid_file", field=name)
     return filename, mime, data
@@ -214,6 +199,10 @@ def create_app(settings=None, mailer=send_email, preview=None, roles_path=None):
     @app.errorhandler(HTTPException)
     def http_error(error):
         return jsonify(ok=False, error="request_too_large" if error.code == 413 else "invalid_request"), error.code
+
+    @app.get("/api/config")
+    def form_config():
+        return jsonify(ok=True, transport="multipart")
 
     @app.post("/api/contact")
     @app.post("/api/applications")

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'r
 import { companyContactEmail, contactContent } from '../i18n/contact';
 import { useLanguage } from '../i18n/language';
 import { containerClass } from '../primitives/container';
-import { newSubmissionId, submitForm } from '../utils/submitForm';
+import { newSubmissionId, submitForm, SubmissionError } from '../utils/submitForm';
 import { submissionMessage } from '../i18n/submission';
 
 type Fields = { name: string; email: string; subject: string; message: string };
@@ -46,6 +46,7 @@ export function ContactPage({ email = companyContactEmail, submitUrl = '/api/con
 
   const submitInquiry = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formElement = event.currentTarget;
     if (pendingRequest.current) return;
     const values = { name: fields.name.trim(), email: fields.email.trim(), subject: fields.subject.trim(), message: fields.message.trim() };
     const nextErrors: Partial<Record<Field, FieldError>> = {};
@@ -73,11 +74,12 @@ export function ContactPage({ email = companyContactEmail, submitUrl = '/api/con
       body.append('language', language);
       body.append('website', String(new FormData(event.currentTarget).get('website') || ''));
       submissionId.current ??= newSubmissionId();
-      await submitForm(submitUrl, body, submissionId.current, controller.signal);
+      await submitForm(submitUrl, body, submissionId.current, controller.signal, formElement.querySelector<HTMLElement>('[data-icarus-verification]'));
       setStatus('sent');
       setFields(emptyFields);
       submissionId.current = null;
     } catch (error) {
+      if (error instanceof SubmissionError && error.code === 'submission_expired') submissionId.current = null;
       setFailureMessage(submissionMessage(error, language, copy.failure));
       setStatus('failed');
     } finally {
@@ -96,8 +98,7 @@ export function ContactPage({ email = companyContactEmail, submitUrl = '/api/con
         <div className="ds-contact-form-wrap">
           {status === 'sent' ? (
             <div className="ds-contact-success" role="status" tabIndex={-1} ref={resultRef}>
-              <span className="ds-contact-success-mark" aria-hidden="true">✓</span>
-              <h2>{copy.successTitle}</h2>
+              <h2><svg className="ds-contact-success-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg><span>{copy.successTitle}</span></h2>
               <p>{copy.successDescription}</p>
               <button type="button" className="ds-contact-submit" onClick={() => setStatus('idle')}>{copy.another}</button>
             </div>
@@ -127,8 +128,8 @@ export function ContactPage({ email = companyContactEmail, submitUrl = '/api/con
                   </div>
                 );
               })}
+              <div data-icarus-verification hidden />
               <div className="ds-contact-form-bottom">
-                <p>{copy.replyNote}</p>
                 <button className="ds-contact-submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? copy.sending : copy.submit}<span aria-hidden="true">↗</span></button>
               </div>
               {status === 'preview' && <p className="ds-contact-preview-note" role="status">{copy.previewNotice}</p>}

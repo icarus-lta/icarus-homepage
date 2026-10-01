@@ -1,0 +1,4 @@
+# Local-only secrets. Never copy real values into wrangler.jsonc or frontend code.
+RESEND_API_KEY=replace-with-resend-key
+SIGNING_SECRET=replace-with-at-least-32-random-characters
+TURNSTILE_SECRET_KEY=replace-with-turnstile-secret

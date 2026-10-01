@@ -31,7 +31,7 @@ export function PageHero({ id, eyebrow, title, description, backgroundImage, cla
     >
       {backgroundImage ? (
         <>
-          <img src={backgroundImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+          <img src={backgroundImage} alt="" draggable={false} className="absolute inset-0 w-full h-full object-cover opacity-40" />
           <div className="absolute inset-0 bg-gradient-to-t from-space-950 via-space-950/70 to-space-950/40" />
         </>
       ) : (

@@ -13,6 +13,7 @@ ds-bundle/
 
 # Local design proposals, screenshots, and browser verification artifacts
 /output/
+/tmp/
 
 # Windows alternate-data-stream leftovers from dragging files into WSL
 *:Zone.Identifier
@@ -23,3 +24,13 @@ ds-bundle/
 .venv/
 __pycache__/
 *.pyc
+
+# Cloudflare: private configuration, local data, dependencies and generated files
+cloudflare/node_modules/
+cloudflare/.wrangler/
+cloudflare/.dev.vars
+cloudflare/.dev.vars.*
+!cloudflare/.dev.vars.example
+cloudflare/public/
+cloudflare/generated/
+cloudflare/test-output/

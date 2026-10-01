@@ -3,20 +3,21 @@
   .ds-career :where(h1, h2, p, ul) { margin: 0; }
   .ds-career a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
   .ds-career a:focus-visible, .ds-career button:focus-visible { outline: 2px solid var(--color-ice); outline-offset: 5px; }
+  .ds-career-post, .ds-career-post *, .ds-career-action, .ds-career-action *, .ds-career-step-node, .ds-career-step-node *, .ds-career-mission, .ds-career-mission *, .ds-career-facts, .ds-career-facts * { -webkit-user-select: none; user-select: none; }
   .ds-career[lang="ko"] { word-break: keep-all; }
   .ds-career-inner { max-width: 1248px; padding-top: 156px; padding-bottom: 112px; overflow-wrap: anywhere; }
   .ds-career-head { margin-bottom: 60px; }
   .ds-career h1 { color: #f5f8fc; font-size: clamp(36px, 3.4vw, 48px); font-weight: 600; line-height: 1.3; letter-spacing: -.035em; }
   .ds-career-head > p { margin-top: 16px; color: #e2e8f0; font-size: 17px; font-weight: 600; line-height: 1.8; }
-  .ds-career-list-label { display: flex; align-items: baseline; gap: 9px; padding-bottom: 18px; border-bottom: 1px solid #33404e; color: #edf1f6; font-size: 15px; font-weight: 500; }
-  .ds-career-list-label > span { color: #9caaba; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .ds-career-list-label { display: flex; align-items: baseline; gap: 9px; padding-bottom: 18px; border-bottom: 1px solid #526477; color: #f5f8fc; font-size: 18px; font-weight: 600; }
+  .ds-career-list-label > span { color: #d5dfeb; font-size: 18px; font-variant-numeric: tabular-nums; }
   .ds-career-list { padding: 0; list-style: none; }
-  .ds-career-list > li { border-bottom: 1px solid #202b37; }
+  .ds-career-list > li { border-bottom: 1px solid #3b4b5d; }
   .ds-career-post { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 30px 4px; transition: background-color .2s; }
   .ds-career-post > div { min-width: 0; }
   .ds-career-post h2 { color: #f5f8fc; font-size: 23px; line-height: 1.5; font-weight: 600; letter-spacing: -.025em; }
   .ds-career-field { margin-top: 9px; color: #a5b1bf; font-size: 14px; line-height: 1.6; }
-  .ds-career-deadline { flex-shrink: 0; margin-right: 20px; padding: 8px 14px; border: 1px solid #344658; border-radius: 6px; background: #111b27; color: #d5dfeb; font-size: 15px; font-weight: 500; line-height: 1.6; white-space: nowrap; }
+  .ds-career-deadline { flex-shrink: 0; margin-right: 20px; color: #e2e8f0; font-size: 16px; font-weight: 600; line-height: 1.6; white-space: nowrap; }
   .ds-career-post:hover { background: rgb(255 255 255 / 2%); }
   .ds-career-post:hover h2 { color: var(--color-ice); }
   .ds-career-back { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; margin-bottom: 28px; font-size: 18px; font-weight: 600; }
@@ -25,6 +26,7 @@
   .ds-career-detail { max-width: 1008px; padding-top: 132px; }
   .ds-career-post-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding-bottom: 32px; border-bottom: 1px solid #33404e; }
   .ds-career-post-head h1 { flex: 1 1 480px; min-width: 0; font-size: clamp(30px, 3vw, 40px); line-height: 1.4; }
+  .ds-career[lang="en"] .ds-career-post-head h1 { text-wrap: balance; }
   .ds-career-actions { display: flex; flex-shrink: 0; align-items: center; gap: 12px; }
   .ds-career .ds-career-action { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 11px 20px; border: 1px solid #3c4b5b; border-radius: 6px; background: #101923; color: #edf3fa; font: inherit; font-size: 16px; font-weight: 600; line-height: 1.5; white-space: nowrap; cursor: pointer; transition: background-color .2s, border-color .2s; }
   .ds-career .ds-career-share:hover { border-color: #8ba0b5; background: #1a2735; }
@@ -54,8 +56,10 @@
   .ds-career-step-node { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; width: 100%; max-width: 112px; aspect-ratio: 1; padding: 8px; border: 2px solid #526c83; border-radius: 50%; background: #111d2a; }
   .ds-career-step-number { color: #a9c5dc; font-size: 14px; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
   .ds-career-steps h3 { margin: 0; color: #f2f6fc; font-size: 16px; line-height: 1.45; font-weight: 650; text-wrap: balance; }
-  .ds-career[lang="en"] .ds-career-step-node { padding: 4px; }
-  .ds-career[lang="en"] .ds-career-steps h3 { font-size: 14px; overflow-wrap: normal; }
+  .ds-career[lang="en"] .ds-career-section--steps { display: block; }
+  .ds-career[lang="en"] .ds-career-section--steps > h2 { margin-bottom: 26px; }
+  .ds-career[lang="en"] .ds-career-step-node { display: grid; grid-template-rows: 14px 41px; justify-items: center; align-content: center; max-width: 156px; padding: 12px; }
+  .ds-career[lang="en"] .ds-career-steps h3 { max-width: 100%; align-self: center; font-size: 15px; line-height: 1.35; overflow-wrap: normal; }
   .ds-career-step-connector { position: absolute; top: calc(50% - 12px); left: calc(100% + 2px); display: grid; place-items: center; width: 24px; height: 24px; color: #a1b3c5; }
   .ds-career-body .ds-career-contact { margin-top: 44px; padding-top: 28px; border-top: 1px solid #33404e; }
   .ds-career-body .ds-career-contact-person { margin-top: 20px; font-size: 15px; color: #a5b1bf; }
@@ -84,12 +88,19 @@
   .ds-career-body--full ul > li + li { margin-top: 14px; }
   .ds-career-body--full .ds-career-facts { padding: 4px 28px; border: 1px solid #26323f; border-radius: 6px; background: #0b111a; }
   .ds-career-body--full .ds-career-facts > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: baseline; gap: 24px; padding: 20px 0; border-bottom: 1px solid #26323f; }
+  .ds-career[lang="en"] .ds-career-body--full .ds-career-facts > div { grid-template-columns: 216px minmax(0, 1fr); }
+  .ds-career[lang="en"] .ds-career-body--full .ds-career-facts dt { white-space: nowrap; overflow-wrap: normal; }
   .ds-career-body--full .ds-career-facts > div:last-child { border-bottom: 0; }
   .ds-career-body--full .ds-career-facts dt { color: #d5dfeb; font-size: 17px; font-weight: 600; line-height: 1.6; }
   .ds-career-body--full .ds-career-facts dd { color: #f0f4f9; font-size: 18px; font-weight: 500; line-height: 1.7; }
   @media (min-width: 1024px) {
     .ds-career-section { display: grid; grid-template-columns: 188px minmax(0, 1fr); align-items: start; gap: 24px; }
     .ds-career-section > h2 { margin: 0; }
+  }
+  @media (max-width: 979px) {
+    .ds-career[lang="en"] .ds-career-steps { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+    .ds-career[lang="en"] .ds-career-step-node { width: 156px; }
+    .ds-career[lang="en"] .ds-career-step-connector { top: calc(100% + 3px); left: calc(50% - 12px); transform: rotate(90deg); }
   }
   @media (max-width: 767px) {
     .ds-career-inner { padding-top: 112px; padding-bottom: 72px; }
@@ -98,7 +109,7 @@
     .ds-career-head > p { margin-top: 12px; font-size: 16px; }
     .ds-career-post { gap: 16px; padding: 25px 0; }
     .ds-career-post h2 { font-size: 20px; }
-    .ds-career-deadline { margin-right: 4px; padding: 7px 10px; font-size: 14px; }
+    .ds-career-deadline { margin-right: 4px; font-size: 15px; }
     .ds-career-field { margin-top: 8px; font-size: 13px; }
     .ds-career-detail { padding-top: 96px; }
     .ds-career-back { margin-bottom: 20px; }
@@ -123,11 +134,19 @@
     .ds-career-body--full ul > li + li { margin-top: 14px; }
     .ds-career-body--full .ds-career-facts { padding: 2px 20px; }
     .ds-career-body--full .ds-career-facts > div { grid-template-columns: 80px minmax(0, 1fr); gap: 14px; padding: 18px 0; }
+    .ds-career[lang="en"] .ds-career-body--full .ds-career-facts > div { grid-template-columns: 216px minmax(0, 1fr); }
     .ds-career-body--full .ds-career-facts dd { font-size: 17px; }
     .ds-career-steps { grid-template-columns: minmax(0, 1fr); gap: 30px; }
     .ds-career-step-node { width: 112px; }
     .ds-career-steps h3 { font-size: 17px; }
     .ds-career-step-connector { top: calc(100% + 3px); left: calc(50% - 12px); transform: rotate(90deg); }
+  }
+  @media (max-width: 599px) {
+    .ds-career[lang="en"] .ds-career-body--full .ds-career-facts > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  }
+  @media (max-width: 359px) {
+    .ds-career[lang="en"] .ds-career-post { flex-direction: column; align-items: flex-start; gap: 7px; }
+    .ds-career[lang="en"] .ds-career-deadline { margin-right: 0; font-size: 14px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .ds-career-post, .ds-career .ds-career-action, .ds-career-sticky-bar { transition: none; }

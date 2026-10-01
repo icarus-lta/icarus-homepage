@@ -14,7 +14,7 @@ function ShareIcon() {
 function JobSection({ section }: { section: CareerSection }) {
   const id = `career-${section.id}`;
   return (
-    <section className="ds-career-section" aria-labelledby={id}>
+    <section className={`ds-career-section${section.steps ? ' ds-career-section--steps' : ''}`} aria-labelledby={id}>
       <h2 id={id}>{section.heading}</h2>
       <div className="ds-career-section-content">
         {section.paragraphs?.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
@@ -120,7 +120,7 @@ export function CareerPage() {
 
   const actions = (top = false) => <div ref={top ? topActionsRef : undefined} className="ds-career-actions">
     <button className="ds-career-action ds-career-share" type="button" onClick={shareJob}><ShareIcon />{copy.share}</button>
-    <a className="ds-career-action ds-career-apply" href={applyHref}>{copy.apply}<Chevron /></a>
+    <a className="ds-career-action ds-career-apply" href={applyHref} draggable={false}>{copy.apply}<Chevron /></a>
   </div>;
 
   useEffect(() => {
@@ -179,7 +179,7 @@ export function CareerPage() {
             <ul className="ds-career-list" aria-label={copy.heading}>
               {careerRoles.map(item => (
                 <li key={item.id}>
-                  <a className="ds-career-post" href={`/career/?position=${item.id}&lang=${language}`}>
+                  <a className="ds-career-post" href={`/career/?position=${item.id}&lang=${language}`} draggable={false}>
                     <div>
                       <h2>{item[language].title}</h2>
                     </div>

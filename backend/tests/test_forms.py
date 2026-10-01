@@ -7,7 +7,6 @@ import threading
 import unittest
 from unittest.mock import Mock, patch
 import uuid
-import zipfile
 
 from werkzeug.datastructures import MultiDict
 from backend.app import MAX_FILE_BYTES, RECIPIENT, Settings, create_app, send_email
@@ -79,15 +78,14 @@ class FormTests(unittest.TestCase):
         self.assertEqual(attachments[0].get_payload(decode=True), b"%PDF-1.7\nresume")
         self.assertIn("Privacy consent: 동의 / Agreed", message.get_body().get_content())
 
-    def test_docx_and_optional_empty_portfolio(self):
-        file = io.BytesIO()
-        with zipfile.ZipFile(file, "w") as z:
-            z.writestr("[Content_Types].xml", "<Types/>")
-            z.writestr("word/document.xml", "<document/>")
-        file.seek(0)
-        response = self.post("/api/applications", self.application(resume=(file, "resume.docx"), portfolio=(io.BytesIO(), "")))
+    def test_pdf_with_optional_empty_portfolio_and_word_rejection(self):
+        response = self.post("/api/applications", self.application(portfolio=(io.BytesIO(), "")))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(list(self.messages[0].iter_attachments())), 1)
+        for extension in ("doc", "docx"):
+            response = self.post("/api/applications", self.application(resume=(io.BytesIO(b"%PDF-1.7"), "resume." + extension)))
+            self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(self.messages), 1)
 
     def test_name_email_and_header_injection_validation(self):
         for field, value in [("name", ""), ("email", "invalid"), ("subject", "x\r\nBcc: bad@example.test"), ("name", "x" * 101)]:

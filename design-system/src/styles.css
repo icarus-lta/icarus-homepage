@@ -133,6 +133,11 @@
   body {
     @apply bg-space-950 text-mist font-sans antialiased;
   }
+  img, video, svg, svg *, canvas {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
   html[lang='ko'] body {
     word-break: keep-all;
     overflow-wrap: break-word;
@@ -144,6 +149,14 @@
 }
 
 @layer components {
+  /* Scroll scenes and timeline labels are illustrations, not selectable page copy. */
+  .ds-scroll-graphic, .ds-scroll-graphic *, .ds-roadmap, .ds-roadmap * {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .ds-scroll-graphic, .ds-scroll-graphic * {
+    -webkit-user-drag: none;
+  }
   .ds-roadmap {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

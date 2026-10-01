@@ -9,7 +9,7 @@ const en = {
     description: 'Get in touch with ICARUS. Send us your name, email, subject, and inquiry.',
   },
   title: 'Contact',
-  description: 'Have a question or a proposal? We’d like to hear from you.',
+  description: 'Questions or proposals?\nWe’d love to hear from you.',
   requiredNote: 'Required fields',
   fields: {
     name: { label: 'Name', placeholder: 'Enter your name', required: 'Enter your name.' },
@@ -47,7 +47,7 @@ const ko: typeof en = {
   submit: '문의하기',
   sending: '전송 중…',
   successTitle: '문의가 접수되었습니다.',
-  successDescription: 'ICARUS에 연락해주셔서 감사합니다.',
+  successDescription: '빠른 시일 내에 회신 드리겠습니다.',
   another: '새 문의 작성',
   failure: '문의가 전송되지 않았습니다. 다시 시도하거나 이메일로 연락해주세요.',
   previewNotice: '디자인 미리보기입니다. 입력하신 내용은 전송되지 않습니다.',

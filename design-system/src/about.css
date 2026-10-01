@@ -52,6 +52,7 @@
   .ds-about-chapter-keyword { color: #9fdbfb; font-weight: 700; }
   .ds-about-chapter-body { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 9%; min-height: 345px; align-items: start; }
   .ds-about-chapter-visual { position: absolute; z-index: -1; inset: 0 auto 0 0; width: 72%; height: 100%; min-width: 0; margin: 0; }
+  .ds-about-chapter-visual, .ds-about-chapter-visual * { -webkit-user-select: none; user-select: none; }
   .ds-about-chapter-visual > img { display: block; width: 100%; height: 100%; object-fit: cover; }
   .ds-about-chapter-visual::after { position: absolute; content: ''; inset: 0; background: linear-gradient(90deg,rgba(6,10,16,.07),rgba(6,10,16,.15) 48%,#060a10 96%),linear-gradient(0deg,#060a10b3,transparent 34%,#060a1059); }
   .ds-about-chapter-visual > figcaption { position: absolute; z-index: 1; bottom: 28px; left: var(--chapter-gutter); max-width: 70%; color: #c4cedb; font-size: 12px; line-height: 1.7; letter-spacing: .02em; }
@@ -64,6 +65,7 @@
   .ds-about-chapter-claims { display: grid; gap: 22px; font-size: 26px; line-height: 1.35; letter-spacing: -.025em; }
   .ds-about-chapter-claim { display: block; text-wrap: balance; }
   .ds-about-chapter-claim > strong { display: block; width: fit-content; margin-bottom: 9px; padding: 3px 11px; border: 1px solid rgb(159 219 251 / 50%); border-radius: 999px; background: rgb(159 219 251 / 13%); color: #9fdbfb; font-size: 15px; font-weight: 700; line-height: 1.4; letter-spacing: .04em; }
+  .ds-about-chapter-claim > strong, .ds-about-capability, .ds-about-capability *, .ds-about-strength, .ds-about-strength * { -webkit-user-select: none; user-select: none; }
   .ds-about-chapter-claims + .ds-about-chapter-description { margin-top: 30px; }
   .ds-about-chapter-description { margin-top: 24px; color: #c4cedb; font-size: 18px; line-height: 1.9; }
   .ds-about-chapter-copy > .ds-about-chapter-description:first-child { margin-top: 0; }
@@ -99,18 +101,16 @@
   .ds-about-chapter--what .ds-about-chapter-visual { display: block; width: 100%; padding: 0; }
   .ds-about-chapter--what .ds-about-chapter-visual::after { content: ''; background: linear-gradient(90deg,rgba(6,10,16,.05),rgba(6,10,16,.1) 28%,rgba(6,10,16,.45) 46%,rgba(6,10,16,.9) 62%,#060a10 82%),linear-gradient(0deg,#060a10,transparent 20%,transparent 78%,rgba(6,10,16,.55)); }
   .ds-about-chapter--what .ds-about-chapter-visual > figcaption { position: absolute; max-width: 50%; bottom: 32px; }
-  /* Keep the complete simulation frames and original material photograph without cropping. */
+  /* Keep all three Why ICARUS films in the same 16:9 frame without cropping. */
   .ds-about-why-media { opacity: 0; visibility: hidden; transition: opacity .5s ease,visibility 0s linear .5s; }
   .ds-about-why-media.is-active { opacity: 1; visibility: visible; transition: opacity .5s ease; }
   .ds-about-chapter--what .ds-about-chapter-visual::after { transition: opacity .5s ease; }
-  .ds-about-chapter--what .ds-about-chapter-visual.is-framed-active::after,
-  .ds-about-chapter--what .ds-about-chapter-visual.is-photo-active::after { opacity: 0; }
+  .ds-about-chapter--what .ds-about-chapter-visual.is-framed-active::after { opacity: 0; }
   .ds-about-framed-viewport { position: absolute; inset: 0; }
   .ds-about-framed-viewport > video { position: absolute; display: block; left: var(--chapter-gutter); top: 50%; width: calc(58.6364% + var(--chapter-copy-offset,0px) - var(--chapter-gutter) - 48px); max-width: none; height: auto; aspect-ratio: 16 / 9; object-fit: contain; transform: translateY(-50%); border: 1px solid rgb(198 222 237 / 12%); border-radius: 12px; background: #060b12; box-shadow: 0 24px 64px -30px rgb(0 0 0 / 65%); }
   .ds-about-cfd-viewport > video { max-width: 800px; background: var(--chapter-bg); }
   .ds-about-control-viewport > video { filter: saturate(.72) brightness(.96); }
-  .ds-about-why-photo { position: absolute; top: 0; bottom: 0; left: var(--chapter-gutter); display: flex; align-items: center; justify-content: center; width: calc(58.6364% + var(--chapter-copy-offset,0px) - var(--chapter-gutter) - 48px); }
-  .ds-about-why-photo > img { display: block; width: 100%; max-width: 560px; height: auto; object-fit: contain; border: 1px solid rgb(198 222 237 / 12%); border-radius: 12px; filter: saturate(.85) brightness(.9); box-shadow: 0 24px 64px -30px rgb(0 0 0 / 65%); }
+  .ds-about-material-viewport > video { filter: saturate(.82) brightness(.74) contrast(1.13); }
   /* Mist blue numbers/titles on tinted glass. The selected panel lifts into the light,
      while a single capsule travels along the left track to its centre. */
   .ds-about-strengths { --strength-blue: #c6deed; position: relative; display: grid; gap: 16px; }
@@ -192,12 +192,12 @@
   .ds-about-chapter-place-heading, .ds-about-chapter-place-details { display: contents; }
   .ds-about-chapter-place h3, .ds-about-chapter-place-role { min-width: 0; margin: 0; color: #f1f6fb; font-size: 19px; font-weight: 600; line-height: 1.6; letter-spacing: -.01em; }
   .ds-about-chapter-place h3 { grid-column: 1; grid-row: 1; font-size: 30px; font-weight: 700; line-height: 1.2; letter-spacing: -.025em; }
-  .ds-about-chapter-place-role { grid-column: 2; grid-row: 1; }
+  .ds-about-chapter-place-role { grid-column: 2; grid-row: 1; font-size: 22px; }
   .ds-about-chapter-status { grid-column: 1; grid-row: 2; display: inline-flex; align-items: center; gap: 7px; margin: 0; color: #c1e7fa; font-size: 16px; font-weight: 600; line-height: 1.8; white-space: nowrap; }
   .ds-about-chapter-status > i { flex: none; width: 4px; height: 4px; border-radius: 50%; background: #a9ddfa; }
   .ds-about-chapter-status.is-planned { color: #cbd5df; }
   .ds-about-chapter-status.is-planned > i { width: 5px; height: 5px; border: 1px solid #a2afbc; background: transparent; }
-  .ds-about-chapter-place-description { grid-column: 2; grid-row: 2; min-width: 0; margin: 0; color: #cbd9e5; font-size: 16px; line-height: 1.8; text-wrap: pretty; }
+  .ds-about-chapter-place-description { grid-column: 2; grid-row: 2; min-width: 0; margin: 0; color: #cbd9e5; font-size: 18px; line-height: 1.8; text-wrap: pretty; }
   .ds-about[lang="en"] .ds-about-chapter-place { grid-template-columns: 128px minmax(0,1fr); column-gap: 24px; }
   .ds-about[lang="en"] .ds-about-chapter-place h3 { font-size: 24px; line-height: 1.4; }
   .ds-about[lang="ko"] { word-break: keep-all; overflow-wrap: break-word; }
@@ -239,8 +239,9 @@
     .ds-about-chapter--where .ds-about-chapter-visual { width: 47%; padding-left: 30px; }
     .ds-about-chapter-place { grid-template-columns: 82px minmax(0,1fr); column-gap: 22px; padding: 25px 0; }
     .ds-about-chapter-place h3 { font-size: 28px; }
-    .ds-about-chapter-place-role { font-size: 18px; }
-    .ds-about-chapter-status, .ds-about-chapter-place-description { font-size: 15px; }
+    .ds-about-chapter-place-role { font-size: 20px; }
+    .ds-about-chapter-status { font-size: 15px; }
+    .ds-about-chapter-place-description { font-size: 17px; }
     .ds-about[lang="en"] .ds-about-chapter-place { grid-template-columns: 112px minmax(0,1fr); column-gap: 18px; }
     .ds-about[lang="en"] .ds-about-chapter-place h3 { font-size: 22px; }
   }
@@ -308,10 +309,7 @@
     .ds-about-chapter--what .ds-about-chapter-visual > figcaption { bottom: 18px; max-width: none; }
     .ds-about-chapter-places { margin-top: 0; }
     .ds-about-chapter--what .ds-about-chapter-visual.is-framed-active { height: calc(56.25vw + 60px); }
-    .ds-about-chapter--what .ds-about-chapter-visual.is-photo-active { height: min(calc(100vw + 24px), 644px); }
     .ds-about-framed-viewport > video { left: 12px; top: 14px; width: calc(100% - 24px); transform: none; border-radius: 8px; }
-    .ds-about-why-photo { inset: 14px 24px 58px; width: auto; }
-    .ds-about-why-photo > img { border-radius: 8px; }
     .ds-about-strengths { gap: 16px; margin-top: 18px; }
     .ds-about-strength { padding: 18px 20px 19px 84px; border-radius: 12px; }
     .ds-about-strength.is-active { transform: translate(0,-3px); }
@@ -337,10 +335,20 @@
     .ds-about-location-figure { max-width: 460px; margin: 0 auto; }
     .ds-about-chapter-place { grid-template-columns: 80px minmax(0,1fr); column-gap: 24px; min-height: 144px; padding: 25px 0; }
     .ds-about-chapter-place h3 { font-size: 28px; }
-    .ds-about-chapter-place-role { font-size: 18px; }
-    .ds-about-chapter-status, .ds-about-chapter-place-description { font-size: 16px; }
+    .ds-about-chapter-place-role { font-size: 20px; }
+    .ds-about-chapter-status { font-size: 16px; }
+    .ds-about-chapter-place-description { font-size: 18px; }
     .ds-about[lang="en"] .ds-about-chapter-place { grid-template-columns: 112px minmax(0,1fr); column-gap: 18px; }
     .ds-about[lang="en"] .ds-about-chapter-place h3 { font-size: 22px; }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .ds-about[lang="en"] .ds-about-history,
+    .ds-about[lang="en"] .ds-about-history[data-year-count="3"] { grid-template-columns: minmax(0,1fr); grid-auto-flow: row; gap: 0; margin-top: 12px; padding: 4px 0 4px 24px; }
+    .ds-about[lang="en"] .ds-about-history::before { left: 4px; right: auto; top: 12px; bottom: 12px; width: 1px; height: auto; }
+    .ds-about[lang="en"] .ds-about-history-year { padding: 11px 0; }
+    .ds-about[lang="en"] .ds-about-history-marker { left: -24px; top: 22px; }
+    .ds-about[lang="en"] .ds-about-history-year > h3 { font-size: 28px; }
+    .ds-about[lang="en"] .ds-about-history-year > ul { row-gap: 12px; margin-top: 12px; }
   }
   @media (min-width: 768px) and (max-height: 800px) {
     .ds-about-hero-content { padding-top: 110px; }
@@ -357,6 +365,9 @@
   @media (max-width: 767px) and (max-height: 700px) {
     .ds-about-hero-content { padding-top: 88px; }
     .ds-about-hero-copy { padding-top: 32px; padding-bottom: 24px; }
+  }
+  @media (max-width: 359px) {
+    .ds-about[lang="en"] .ds-about-chapter-status { font-size: 14px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .ds-about *, .ds-about *::before, .ds-about *::after { scroll-behavior: auto !important; transition: none !important; }

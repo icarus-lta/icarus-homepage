@@ -25,3 +25,16 @@ To regenerate the display copy with FFmpeg installed:
 node .design-sync/build-cfd-clean.mjs
 ./build.sh
 ```
+
+## Envelope-material footage
+
+`about-material-research.mp4` is the 12.53-second web copy of the user-supplied
+`Video Project 38.mp4` (2026-09-30). It was scaled from 1920 × 1080 to
+1280 × 720, given a restrained cooler, darker grade to sit beside the other
+Why ICARUS films, encoded as H.264 with fast-start metadata, and stripped of
+audio for muted background playback. The original Downloads file is unchanged.
+
+The site uses `about-material-research-landscape.mp4`, which keeps frames 0–263
+(8.8 seconds) of the web copy. The next shot is portrait footage within a
+landscape frame, so it is omitted. Its matching
+`about-material-research-landscape-poster.webp` comes from 3.5 seconds.

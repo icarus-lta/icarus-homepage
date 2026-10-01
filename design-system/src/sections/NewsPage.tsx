@@ -20,21 +20,53 @@ function articleHref(article: NewsArticle, language: Language, page: number) {
 
 const date = (article: NewsArticle) => <time dateTime={article.date}>{article.date.replace(/-/g, '.')}</time>;
 
-/** One consistent row for every story. */
+function ArticleVisual({ article, language }: { article: NewsArticle; language: Language }) {
+  if (article.category === 'media') {
+    return article.image
+      ? <figure className="ds-news-article-image"><img src={images[article.image]} alt={article.content[language].imageAlt ?? ''} draggable={false} decoding="async" /></figure>
+      : null;
+  }
+
+  if (article.companyVisual === 'dk-emtech') {
+    return <figure className="ds-news-article-image ds-news-mou-photo">
+      <img src={images.newsDkEmtechMou} alt={article.content[language].imageAlt ?? ''} draggable={false} decoding="async" />
+    </figure>;
+  }
+
+  if (article.companyVisual === 'ansys' || article.companyVisual === 'tips') {
+    const tips = article.companyVisual === 'tips';
+    const label = tips
+      ? (language === 'ko' ? '이카루스 TIPS 선정' : 'ICARUS selected for TIPS')
+      : (language === 'ko' ? '이카루스와 Ansys 협업' : 'ICARUS and Ansys collaboration');
+    const partnerAlt = tips
+      ? (language === 'ko' ? 'TIPS KOREA 로고' : 'TIPS KOREA logo')
+      : (language === 'ko' ? 'Synopsys 소속 Ansys 로고' : 'Ansys, part of Synopsys logo');
+    return <figure className="ds-news-company-visual ds-news-collaboration" aria-label={label}>
+      <span className="ds-news-partner-logo"><img src={images.newsIcarusLogo} alt={language === 'ko' ? '이카루스 로고' : 'ICARUS logo'} draggable={false} decoding="async" /></span>
+      <span className="ds-news-collaboration-mark" aria-hidden="true">×</span>
+      <span className="ds-news-partner-logo"><img src={tips ? images.newsTipsLogo : images.newsAnsysLogo} alt={partnerAlt} draggable={false} decoding="async" /></span>
+    </figure>;
+  }
+
+  return <figure className="ds-news-company-visual ds-news-solo-logo">
+    <img src={images.newsIcarusLogo} alt={language === 'ko' ? '이카루스 로고' : 'ICARUS logo'} draggable={false} decoding="async" />
+  </figure>;
+}
+
+/** Source-backed stories retain their photos; company updates can be text-only. */
 function StoryItem({ article, first, page }: { article: NewsArticle; first: boolean; page: number }) {
   const { language } = useLanguage();
   const copy = newsContent[language];
   const entry = article.content[language];
   return (
-    <a className="ds-news-entry-link" href={articleHref(article, language, page)}>
-      <span className="ds-news-photo ds-news-entry-photo">
-        <img src={images[article.image]} alt="" loading={first ? 'eager' : 'lazy'} decoding="async" />
-      </span>
+    <a className={`ds-news-entry-link${article.image ? '' : ' is-text-only'}`} href={articleHref(article, language, page)}>
+      {article.image && <span className="ds-news-photo ds-news-entry-photo">
+        <img src={images[article.image]} alt="" draggable={false} loading={first ? 'eager' : 'lazy'} decoding="async" />
+      </span>}
       <div className="ds-news-entry-text">
         <p className="ds-news-meta">{date(article)}<span aria-hidden="true">·</span><span>{copy.categories[article.category]}</span></p>
         <h2>{entry.title}</h2>
         <p className="ds-news-summary">{entry.summary}</p>
-        <p className="ds-news-source">ICARUS LTA</p>
       </div>
       <span className="ds-news-read"><span>{copy.article}</span><Arrow /></span>
     </a>
@@ -80,7 +112,7 @@ export function NewsPage() {
               <p className="ds-news-meta">{date(article)}<span aria-hidden="true">·</span><span>{copy.categories[article.category]}</span></p>
               <h1>{entry.title}</h1>
             </header>
-            <figure className="ds-news-article-image"><img src={images[article.image]} alt={entry.imageAlt} decoding="async" /></figure>
+            <ArticleVisual article={article} language={language} />
             <div className="ds-news-article-body">{entry.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
             {article.sourceUrl && <aside className="ds-news-article-source" aria-label={copy.source}>
               <a href={article.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`${article.medium === 'video' ? copy.originalVideo : copy.originalArticle} (${copy.newWindow})`}>
@@ -130,7 +162,6 @@ export function NewsPage() {
       </div>
 
       <div className={`${containerClass} ds-news-strip`}>
-        <p>{copy.press.description}</p>
         <a href="/contact/" className="ds-news-strip-link">{copy.press.label}<span aria-hidden="true">↗</span></a>
       </div>
     </main>

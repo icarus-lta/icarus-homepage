@@ -1,0 +1,24 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "icarus-site",
+  "pages_build_output_dir": "../public",
+  "compatibility_date": "2026-09-29",
+  "vars": {
+    "SITE_ORIGIN": "https://www.icarus-airship.com",
+    "MAIL_FROM": "ICARUS Website <website@icarus-airship.com>",
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAFJC9620ubuERP3b"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "icarus-forms",
+      "database_id": "a7732666-e7e0-4870-9b07-668e45d419a8"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "UPLOADS",
+      "id": "1351dd968f6045d190a7577c27bbe642"
+    }
+  ]
+}

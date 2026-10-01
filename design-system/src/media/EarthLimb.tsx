@@ -20,7 +20,7 @@ export function EarthLimb({ imageSrc, horizon = '72%', scrim = 0.55, className }
   return (
     <div className={cx('absolute inset-0 overflow-hidden bg-space-950', className)} aria-hidden="true">
       {imageSrc ? (
-        <img src={imageSrc} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={imageSrc} alt="" draggable={false} className="absolute inset-0 w-full h-full object-cover" />
       ) : (
         <>
           <div className="absolute inset-0 bg-gradient-to-b from-space-950 via-space-950 to-space-900" />

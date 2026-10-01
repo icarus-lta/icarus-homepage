@@ -4,96 +4,110 @@ import type { Language } from './language';
 const en = {
   metadata: {
     title: 'About ICARUS LTA',
-    description: 'How ICARUS develops unmanned airships, the technology behind them, and where our work takes flight. Our capabilities, development sites and progress.',
+    description: 'Explore ICARUS’s unmanned airships and HAPS systems, our development work, and our sites in Gwangju, Jangseong, and Goheung.',
   },
   hero: {
     label: 'ICARUS',
     location: 'GWANGJU, SOUTH KOREA',
     title: 'ABOUT\nICARUS',
-    description: 'In airships, often seen as a technology of the past, we saw new possibilities.\nICARUS was founded to turn those possibilities into reality.',
+    description: 'We saw new possibilities in airships, long considered a technology of the past.\nICARUS was founded to make those possibilities real.',
     discover: 'EXPLORE ICARUS',
   },
   film: {
     watch: 'Watch our flight film', unavailable: 'Film unavailable',
-    caption: 'ICARUS · FLIGHT TEST FOOTAGE', title: 'ICARUS · Flight test footage',
+    caption: 'ICARUS · FLIGHT TEST FOOTAGE', title: 'ICARUS · Flight Test Footage',
     pause: 'Pause background video', play: 'Play background video',
     close: 'Close', closeLabel: 'Close film', label: 'ICARUS airship flight test film',
   },
   chapters: {
     label: 'INSIDE ICARUS', navigation: 'About page sections',
     items: [
-      { id: 'what-we-do', label: 'What we do' },
-      { id: 'why-us', label: 'Why us' },
-      { id: 'when-we-start', label: 'When we start' },
-      { id: 'where-are-we', label: 'Where are we' },
+      { id: 'what-we-do', label: 'What We Do' },
+      { id: 'why-us', label: 'Why Us' },
+      { id: 'when-we-start', label: 'When We Start' },
+      { id: 'where-are-we', label: 'Where We Work' },
     ],
   },
   /** 01 — the company stated plainly, over the ground-team photograph. */
   what: {
-    label: 'WHAT WE DO', title: 'What we do',
+    label: 'WHAT WE DO', title: 'What We Do',
     /** Each claim reads as one phrase; `only` is set as an ice-blue badge above it. */
     claims: [
-      { only: 'Korea’s only', text: 'unmanned airship system developer' },
-      { only: 'Korea’s only', text: 'stratospheric platform developer' },
+      { only: 'Korea’s Only', text: 'Unmanned Airship System Developer' },
+      { only: 'Korea’s Only', text: 'HAPS System Developer' },
     ],
-    description: 'ICARUS is Korea’s only developer of unmanned airships and stratospheric platforms, with capabilities spanning envelope materials, design, fabrication, control and operation.',
+    description: 'ICARUS is Korea’s only developer of unmanned airship systems and HAPS systems. We work across materials, design, fabrication, control, and operations.',
     imageAlt: 'The ground team carrying the full ICARUS airship across a lawn at the test site',
     imageCaption: 'ICARUS · FLIGHT TESTING',
     /** A large keyword and one short line each; Why us below carries the detail. */
     points: [
-      { title: 'Airframe', description: 'Design and analysis through fabrication and assembly' },
-      { title: 'Operations', description: 'Flight control and ground control through flight testing' },
-      { title: 'Materials', description: 'Light, strong envelopes that hold helium in' },
+      { title: 'Airframe', description: 'From airframe design to fabrication and validation' },
+      { title: 'Operations', description: 'From control software and ground control to airship operations' },
+      { title: 'Materials', description: 'Lightweight, high-strength gas-barrier composites developed in house' },
     ],
   },
   /** 02 — what we hold in house; choosing a capability changes the visual beside it. */
   why: {
-    label: 'WHY US', title: 'Why us',
+    label: 'WHY ICARUS', title: 'Why ICARUS',
     /** One card each: the title beside its number, and one line below. Choosing a card shows its
         visual on the left, described by `visual` and captioned `caption`. */
     points: [
       {
-        title: 'Design & fabrication', description: 'Hull geometry verified with CFD analysis, then built in house and confirmed in flight.',
+        title: 'Design & Fabrication', description: 'We handle the entire airframe development process, from analysis and design to fabrication and validation.',
         caption: 'ICARUS / COMPUTATIONAL FLUID DYNAMICS', visual: 'CFD simulation of airflow around the airship',
       },
       {
-        title: 'Flight control software', description: 'Autonomous flight control that began in drone research, applied to unmanned airships.',
+        title: 'Flight Control Software', description: 'We develop airship control software through dynamics simulation of unmanned airships.',
         caption: 'ICARUS / FLIGHT CONTROL SIMULATION', visual: 'Illustrative airship station-keeping simulation with wind, position error, power consumption and attitude response',
       },
       {
-        title: 'Materials', description: 'A lightweight, high-strength, gas-barrier composite that keeps the helium in.',
-        caption: 'ICARUS / ENVELOPE MATERIAL', visual: 'Envelope material running through a laminating line',
+        title: 'Airship Materials', description: 'We develop world-class lightweight, high-strength gas-barrier composites for unmanned airships.',
+        caption: 'ICARUS / ENVELOPE MATERIAL', visual: 'Footage of material-processing rollers and test equipment',
       },
     ],
   },
   /** 03 — the company history as a plain timeline, with no copy above it. The last year is the current one. */
   when: {
-    label: 'WHEN WE START', title: 'When we start',
+    label: 'WHEN WE START', title: 'When We Start',
     history: [
+      {
+        year: '2024',
+        entries: [
+          { date: '04', text: 'Selected for the Korea Institute of Startup & Entrepreneurship Development’s Startup-Centered University program (pre-startup track)' },
+          { date: '06', text: 'ICARUS founded' },
+          { date: '10', text: 'Selected for the Ministry of SMEs and Startups’ Didimdol R&D program' },
+          { date: '11', text: 'Grand Prize at the Korea Electric Power Corporation startup competition' },
+        ],
+      },
       {
         year: '2025',
         entries: [
-          { date: '06', text: 'Exhibited at the Gwangju Future Industry Expo; featured in YTN news coverage' },
-          { date: '10', text: 'Excellence Award, K-Deeptech competition (student startup category)' },
-          { date: '12', text: 'Unmanned airship envelope material developed with the Korea Textile Development Institute' },
+          { date: '04', text: 'Selected for the Global Corporate Collaboration Program (ANSYS SPACE KOREA)' },
+          { date: '07', text: 'Signed an MOU with DK MTech, a specialist supplier to the Korea Coast Guard' },
+          { date: '10', text: 'Excellence Award in the student startup category at the K-Deep Tech Championship' },
+          { date: '12', text: 'Developed unmanned airship envelope material with the Korea Textile Development Institute' },
         ],
       },
       {
         year: '2026',
         entries: [
-          { date: '', text: 'Small unmanned airship flight testing under way' },
+          { date: '02', text: 'Incorporated as ICARUS LTA' },
+          { date: '03', text: 'Established a corporate research institute' },
+          { date: '05', text: 'Secured seed investment' },
+          { date: '06', text: 'Selected for the follow-on Global Corporate Collaboration Program (ANSYS SPACE KOREA)' },
+          { date: '09', text: 'Selected for the TIPS program' },
         ],
       },
     ],
   },
   /** 04 — the three sites, over the schematic map. */
   where: {
-    label: 'WHERE ARE WE', title: 'Where are we',
-    description: 'Our work connects development and assembly in Gwangju with testing in Jangseong. Goheung will be our next location.',
+    label: 'WHERE WE WORK', title: 'Where We Work',
+    description: 'We conduct research and assemble airships in Gwangju, then test them in Jangseong. Goheung is our next step.',
     places: [
-      { name: 'Gwangju', english: 'GWANGJU', role: 'Office & assembly hangar', description: 'Where we develop ideas, design our systems, and assemble airships.', status: 'Active' },
-      { name: 'Jangseong', english: 'JANGSEONG', role: 'Test area', description: 'Where we test our airships and bring what we learn back into development.', status: 'Active' },
-      { name: 'Goheung', english: 'GOHEUNG', role: 'Future location', description: 'The next location for ICARUS is taking shape.', status: 'Coming soon' },
+      { name: 'Gwangju', english: 'GWANGJU', role: 'Headquarters & Production Facility', description: 'System design, airship fabrication, and integration.', status: 'Operational' },
+      { name: 'Jangseong', english: 'JANGSEONG', role: 'Flight Test Site', description: 'Flight testing to validate aircraft performance and operations.', status: 'Operational' },
+      { name: 'Goheung', english: 'GOHEUNG', role: 'Flight Test Site', description: 'Planned for 2027.', status: 'In preparation' },
     ],
   },
 };
@@ -119,10 +133,10 @@ const ko: typeof en = {
   chapters: {
     label: '회사 소개', navigation: '회사 소개 목차',
     items: [
-      { id: 'what-we-do', label: 'What we do' },
-      { id: 'why-us', label: 'Why us' },
-      { id: 'when-we-start', label: 'When we start' },
-      { id: 'where-are-we', label: 'Where are we' },
+      { id: 'what-we-do', label: 'What We Do' },
+      { id: 'why-us', label: 'Why Us' },
+      { id: 'when-we-start', label: 'When We Start' },
+      { id: 'where-are-we', label: 'Where We Are' },
     ],
   },
   what: {
@@ -155,7 +169,7 @@ const ko: typeof en = {
       },
       {
         title: '비행선 소재', description: '세계 최고 수준의 무인 비행선용 저중량 고강도 가스 차단성 복합 소재를 개발합니다.',
-        caption: 'ICARUS / ENVELOPE MATERIAL', visual: '적층 설비를 지나는 기낭 소재',
+        caption: 'ICARUS / ENVELOPE MATERIAL', visual: '소재 가공 롤러와 시험 장비를 보여주는 영상',
       },
     ],
   },
@@ -193,7 +207,7 @@ const ko: typeof en = {
     ],
   },
   where: {
-    label: 'WHERE WE ARE', title: 'Where we are',
+    label: 'WHERE WE ARE', title: 'Where We Are',
     description: '광주에서 연구하고 조립하며, 장성에서 시험합니다. 다음 걸음은 고흥으로 이어집니다.',
     places: [
       { name: '광주', english: 'GWANGJU', role: '본사 · 제작 시설', description: '시스템 설계 및 비행선 제작·통합 수행', status: '운영 중' },
