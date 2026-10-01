@@ -31,7 +31,7 @@ export function SiteFooter(props: SiteFooterProps) {
   const {
     brand = 'ICARUS',
     brandSuffix = 'LTA',
-    legal = 'ICARUS LTA Inc.',
+    legal = 'ICARUS LTA Inc. · 주식회사 이카루스엘티에이',
     address = copy.address,
     links = [...content[language].navigation.links, { label: content[language].navigation.contact, href: '/contact' }] as NonNullable<SiteFooterProps['links']>,
     credit = language === 'ko'
