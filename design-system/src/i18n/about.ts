@@ -107,7 +107,7 @@ const en = {
     places: [
       { name: 'Gwangju', english: 'GWANGJU', role: 'Headquarters & Production Facility', description: 'System design, airship fabrication, and integration.', status: 'Operational' },
       { name: 'Jangseong', english: 'JANGSEONG', role: 'Flight Test Site', description: 'Flight testing to validate aircraft performance and operations.', status: 'Operational' },
-      { name: 'Goheung', english: 'GOHEUNG', role: 'Flight Test Site', description: 'Planned for 2027.', status: 'In preparation' },
+      { name: 'Goheung', english: 'GOHEUNG', role: 'Flight Test Site', description: 'Planned.', status: 'In preparation' },
     ],
   },
 };
@@ -212,7 +212,7 @@ const ko: typeof en = {
     places: [
       { name: '광주', english: 'GWANGJU', role: '본사 · 제작 시설', description: '시스템 설계 및 비행선 제작·통합 수행', status: '운영 중' },
       { name: '장성', english: 'JANGSEONG', role: '시험 비행장', description: '실제 비행을 통한 기체 비행 성능 및 운용 성능 검증', status: '운영 중' },
-      { name: '고흥', english: 'GOHEUNG', role: '시험 비행장', description: '2027년 예정', status: '준비 중' },
+      { name: '고흥', english: 'GOHEUNG', role: '시험 비행장', description: '예정', status: '준비 중' },
     ],
   },
 };

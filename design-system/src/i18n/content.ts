@@ -69,7 +69,7 @@ const en = {
     secondaryLabel: 'Careers',
   },
   footer: {
-    address: 'Startup Center A-318-1, GIST, 123 Cheomdangwagi-ro, Buk-gu, Gwangju, Republic of Korea',
+    address: 'Startup Center A-318-1, GIST, 123 Cheomdangwagi-ro, Buk-gu, Jeonnam-Gwangju Special Metropolitan City, Republic of Korea',
     copyright: '© 2026 ICARUS LTA. All rights reserved.',
   },
 };
@@ -144,7 +144,7 @@ const ko: typeof en = {
     secondaryLabel: '채용 안내',
   },
   footer: {
-    address: '광주광역시 북구 첨단과기로 123, 광주과학기술원 창업진흥센터 A-318-1',
+    address: '전남광주통합특별시 북구 첨단과기로 123, 광주과학기술원 창업진흥센터 A-318-1',
     copyright: '© 2026 ICARUS LTA. All rights reserved.',
   },
 };

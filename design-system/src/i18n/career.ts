@@ -23,7 +23,7 @@ const mechanicalDesignRole: { id: string; ko: CareerRoleContent; en: CareerRoleC
   id: 'airship-structural-design',
   ko: {
     title: '비행선 기체 설계 엔지니어 (Mechanical)',
-    field: '신입·경력 · 정규직 · 광주광역시 북구',
+    field: '신입·경력 · 정규직 · 전남광주통합특별시 북구',
     introductionHeading: '회사 소개',
     introductionMission: '성층권 비행선을 통한 인류의 새로운 인프라 레이어 구축',
     introduction: '성층권에서 장기간 머무는 무인 비행선을 개발하는 ICARUS LTA의 기체 설계 엔지니어 채용',
@@ -79,7 +79,7 @@ const mechanicalDesignRole: { id: string; ko: CareerRoleContent; en: CareerRoleC
         id: 'conditions', heading: '근무 조건',
         facts: [
           { label: '고용 형태', value: '정규직' },
-          { label: '근무지', value: '광주광역시 북구 첨단과기로 123 창업진흥센터 A동', note: '(1인 오피스텔 제공)' },
+          { label: '근무지', value: '전남광주통합특별시 북구 첨단과기로 123 창업진흥센터 A동', note: '(1인 오피스텔 제공)' },
           { label: '연봉 및 스톡옵션', value: '면접 후 결정' },
         ],
       },
@@ -97,7 +97,7 @@ const mechanicalDesignRole: { id: string; ko: CareerRoleContent; en: CareerRoleC
   },
   en: {
     title: 'Airship Mechanical Design Engineer',
-    field: 'Entry-level or experienced · Permanent · Buk-gu, Gwangju',
+    field: 'Entry-level or experienced · Permanent · Buk-gu, Jeonnam-Gwangju Special Metropolitan City',
     introductionHeading: 'About ICARUS',
     introductionMission: 'Using stratospheric airships to build a new layer of infrastructure for humanity',
     introduction: 'Join ICARUS LTA as an airship design engineer and help develop uncrewed airships for long-duration stratospheric flight',
@@ -153,7 +153,7 @@ const mechanicalDesignRole: { id: string; ko: CareerRoleContent; en: CareerRoleC
         id: 'conditions', heading: 'Working conditions',
         facts: [
           { label: 'Employment type', value: 'Permanent' },
-          { label: 'Work location', value: 'Building A, Startup Promotion Center, 123 Cheomdangwagi-ro, Buk-gu, Gwangju', note: '(Private studio apartment provided)' },
+          { label: 'Work location', value: 'Building A, Startup Promotion Center, 123 Cheomdangwagi-ro, Buk-gu, Jeonnam-Gwangju Special Metropolitan City', note: '(Private studio apartment provided)' },
           { label: 'Salary & stock options', value: 'Discussed after interviews' },
         ],
       },
