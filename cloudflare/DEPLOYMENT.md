@@ -1,13 +1,21 @@
 # 배포 확인 기록 — 2026-09-29
 
-## 2026-10-01 도메인 교체 준비
+## 2026-10-01 도메인 교체 완료
 
 사용자가 기존 회사 홈페이지를 새 홈페이지로 교체하도록 요청했다.
 Cloudflare Pages `icarus-site`에 현재 프론트엔드와 동일한 API 코드를 배포하고
 `www.icarus-airship.com`을 사용자 도메인으로 등록했다.
-가비아의 `www` CNAME을 `icarus-site-1iq.pages.dev`로 바꾸면 회사 주소가
-새 사이트로 전환된다. 네임서버와 메일 DNS는 유지한다.
+사용자가 가비아의 `www` CNAME을 `icarus-site-1iq.pages.dev`로 변경했고
+Cloudflare의 도메인 확인 및 HTTPS 인증서 상태가 모두 `active`가 되었다.
+실제 `https://www.icarus-airship.com/`에서 새 사이트가 서비스된다.
+네임서버와 메일 DNS는 유지한다.
 기존 Worker는 매시간 D1 만료 정리를 계속 수행한다.
+
+- 홈·회사소개·소식·채용·지원서·문의와 JavaScript/CSS가 HTTP 200이며 현재 빌드와 바이트 단위로 일치한다.
+- `/api/config`는 백엔드 사용 가능 상태이며 PDF 한도 10MiB를 반환한다.
+- 실제 도메인의 문의·지원서 API가 빈 요청을 HTTP 400으로 검증한다. 접수 생성이나 메일 발송 없이 확인했다.
+- 영상 `bytes=0-15` 요청이 HTTP 206이며 원본 바이트와 일치한다.
+- 신뢰할 수 있는 인증서로 TLS 1.3 연결을 확인했고, HTTP 및 apex 주소가 운영 HTTPS `www` 주소로 리디렉션된다.
 
 - 확인 주소: https://icarus-homepage.icarus-airship.workers.dev
 - 기존 회사 홈페이지는 유지한다. 사용자가 요청하기 전까지 회사 도메인 연결, 네임서버 변경, 기존 웹 CNAME 교체를 진행하지 않는다.

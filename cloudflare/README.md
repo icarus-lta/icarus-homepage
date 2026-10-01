@@ -3,9 +3,10 @@
 ## 회사 도메인: Cloudflare Pages
 
 `www.icarus-airship.com`은 Pages 프로젝트 `icarus-site`에 사용자 도메인으로 등록되어 있습니다.
-가비아 DNS의 `www` CNAME 대상만 `icarus-site-1iq.pages.dev`로 바꿉니다.
-가비아 네임서버 및 다음 메일 MX/SPF/DKIM 레코드는 그대로 유지합니다.
-Cloudflare Pages의 인증서 상태가 활성화된 뒤 `https://www.icarus-airship.com/`을 확인합니다.
+2026-10-01 가비아 DNS의 `www` CNAME이 `icarus-site-1iq.pages.dev`로 변경되었고
+Cloudflare 도메인 확인 및 HTTPS 인증서가 활성화되었습니다.
+운영 주소는 `https://www.icarus-airship.com/`입니다. 가비아 네임서버 및 다음 메일
+MX/SPF/DKIM 레코드는 그대로 유지합니다.
 
 ```sh
 # 저장소 루트, Ubuntu/WSL

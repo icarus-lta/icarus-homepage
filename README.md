@@ -2,16 +2,17 @@
 
 ## Production website
 
-The current site is deployed to Cloudflare Pages at
-<https://icarus-site-1iq.pages.dev/>. Its Pages Function runs the same backend
+The production site is live at <https://www.icarus-airship.com/> on Cloudflare
+Pages, with <https://icarus-site-1iq.pages.dev/> as its Pages address. Its Pages
+Function runs the same backend
 implementation as the existing Worker, with the same D1 database, private KV,
 Turnstile widget, and Resend delivery. The existing Worker remains active for its
 hourly cleanup job and as a separate preview.
 
-`www.icarus-airship.com` is registered as a custom domain on the Pages project.
-At Gabia, set only the `www` CNAME to `icarus-site-1iq.pages.dev`. Keep the
-Gabia nameservers and all mail records. Until that DNS change, the existing
-GitHub Pages homepage continues to serve `www`.
+`www.icarus-airship.com` is active as a custom domain on the Pages project.
+Gabia's `www` CNAME points to `icarus-site-1iq.pages.dev`; its nameservers and
+mail records remain in place. HTTPS and the production pages/API were verified
+on 2026-10-01. The apex domain redirects to the production `www` address.
 
 To publish a new version from Ubuntu/WSL after committing it to GitHub:
 
@@ -127,8 +128,9 @@ npm ci --prefix design-system && npm run build --prefix design-system && node .d
 ```
 
 The repository-root `index.html` and `partials/` are the legacy HTMX homepage.
-The existing GitHub Pages configuration publishes that root from `main`; the
-current React work is on `dev`.
+The legacy GitHub Pages configuration publishes that root from `main`; the
+production domain serves the React build through Cloudflare Pages. Current
+source code is available on both `main` and `dev`.
 
 ## Cloudflare 무료 플랜으로 운영
 
