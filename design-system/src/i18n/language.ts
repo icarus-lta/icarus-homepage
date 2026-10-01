@@ -2,17 +2,18 @@ import { useEffect, useSyncExternalStore } from 'react';
 
 export type Language = 'en' | 'ko';
 const STORAGE_KEY = 'icarus-language';
+const DEFAULT_LANGUAGE: Language = 'ko';
 let currentLanguage: Language | undefined;
 const listeners = new Set<() => void>();
-const normalize = (value: string | null): Language => value === 'ko' ? 'ko' : 'en';
+const normalize = (value: string | null): Language => value === 'en' ? 'en' : DEFAULT_LANGUAGE;
 
 function getLanguage(): Language {
-  if (typeof window === 'undefined') return 'en';
+  if (typeof window === 'undefined') return DEFAULT_LANGUAGE;
   if (currentLanguage === undefined) {
     try {
       currentLanguage = normalize(window.localStorage.getItem(STORAGE_KEY));
     } catch {
-      currentLanguage = 'en';
+      currentLanguage = DEFAULT_LANGUAGE;
     }
   }
   return currentLanguage;
@@ -47,9 +48,9 @@ export function setLanguage(language: Language) {
   listeners.forEach((listener) => listener());
 }
 
-/** English is the initial default; a visitor's explicit selection persists across page loads. */
+/** Korean is the initial default; a visitor's explicit selection persists across page loads. */
 export function useLanguage() {
-  const language = useSyncExternalStore(subscribe, getLanguage, () => 'en' as const);
+  const language = useSyncExternalStore(subscribe, getLanguage, () => DEFAULT_LANGUAGE);
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);

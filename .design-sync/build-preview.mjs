@@ -91,7 +91,7 @@ const head = `<meta charset="utf-8"><meta name="viewport" content="width=device-
 // The page skeleton conventions.md defines - the five homepage sections, nothing else.
 writeFileSync(
   join(OUT, 'index.html'),
-  `<!doctype html><html lang="en"><head>${head}<title>ICARUS — homepage preview</title></head>
+  `<!doctype html><html lang="ko"><head>${head}<title>ICARUS — homepage preview</title></head>
 <body>${loadingRoot()}<script>
 window.addEventListener('DOMContentLoaded', () => {
 const D = window.IcarusDS, h = React.createElement;
@@ -107,7 +107,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 mkdirSync(join(OUT, 'about'), { recursive: true });
 writeFileSync(
   join(OUT, 'about', 'index.html'),
-  `<!doctype html><html lang="en"><head>${head}
+  `<!doctype html><html lang="ko"><head>${head}
 <title>About ICARUS LTA — The making of ICARUS</title>
 <meta name="description" content="The story of ICARUS: an overlooked possibility, a study of what came before, and a foundation in flight-control research.">
 <meta property="og:title" content="About ICARUS LTA — The making of ICARUS">
@@ -132,7 +132,7 @@ for (const page of [
   { path:'contact', component:'ContactPage', title:'Contact — ICARUS LTA', description:'Get in touch with ICARUS. Send us your email, subject, and inquiry.' },
 ]) {
   mkdirSync(join(OUT, page.path), { recursive:true });
-  writeFileSync(join(OUT, page.path, 'index.html'), `<!doctype html><html lang="en"><head>${head}
+  writeFileSync(join(OUT, page.path, 'index.html'), `<!doctype html><html lang="ko"><head>${head}
 <title>${page.title}</title>
 <meta name="description" content="${page.description}">
 <meta property="og:title" content="${page.title}">
