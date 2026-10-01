@@ -28,6 +28,8 @@ domain verification.
 
 The current bilingual homepage is built from the React components in
 `design-system/`. It includes the main page, About, Careers, Newsroom, and Contact.
+New visitors start in Korean. An explicit language selection persists, and
+`?lang=en` or `?lang=ko` selects the requested language.
 
 Career posts include sharing and application buttons in the header and a fixed
 bottom bar. Each links to `/career/apply/?position=<role-id>&lang=ko` (or `en`).
