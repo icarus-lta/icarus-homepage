@@ -12,7 +12,7 @@ export interface ContactCTAProps {
   /** Closing line of the page. */
   title?: ReactNode;
   description?: ReactNode;
-  /** Ice pill; defaults to a mailto link on `email`. */
+  /** Ice pill; displays `email` by default and opens the inquiry page. */
   primaryLabel?: string | null;
   email?: string;
   onPrimaryClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
@@ -49,7 +49,7 @@ export function ContactCTA(props: ContactCTAProps) {
       {description ? <p className="mt-6 text-base md:text-lg text-mist max-w-2xl mx-auto">{description}</p> : null}
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
         {primaryLabel !== null ? (
-          <Button href={`mailto:${email}`} onClick={onPrimaryClick}>
+          <Button href="/contact/" onClick={onPrimaryClick}>
             {primaryLabel ?? email}
           </Button>
         ) : null}
