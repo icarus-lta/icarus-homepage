@@ -76,6 +76,14 @@ for (const f of ['about-flight.mp4', 'about-flight-poster.jpg', 'about-flight-te
 const loadingRoot = (id = 'root') => `<div id="${id}"><div id="preview-status" role="status" style="padding:100px 24px;font:16px/1.8 system-ui,sans-serif">ICARUS LTA<br>페이지를 불러오는 중입니다… / Loading…</div></div>`;
 const assetVersion = createHash('sha256').update(readFileSync(join(OUT, '_ds_bundle.js'))).update(readFileSync(join(OUT, 'styles.css'))).digest('hex').slice(0, 12);
 const head = `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FZV9V0GQN4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-FZV9V0GQN4');
+</script>
 <style>html,body{margin:0;background:#02030a;color:#b9c9e2}</style>
 <link rel="stylesheet" href="/styles.css?v=${assetVersion}">
 <script defer src="/_ds_bundle.js?v=${assetVersion}"></script>
